@@ -10,9 +10,27 @@
 </head>
 <body>
 
+<div id="app" class="page">
+    <input type="checkbox" id="open-article">
+    <header>header</header>
+    <main>
+        <div class="map">
+            <div id="map"></div>
+        </div>
+
+        <article>
+            <header>
+                content
+            </header>
+            <div class="body">
+                <label for="open-article">close</label>
+            </div>
+        </article>
+    </main>
+</div>
 
 
-<script src="https://maps.googleapis.com/maps/api/js"></script>
 <script src="{{ asset('js/app.js') }}"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_APIKEY_BROWSER') }}&callback=initMap"></script>
 </body>
 </html>
