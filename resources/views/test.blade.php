@@ -31,6 +31,6 @@
 
 
 <script src="{{ asset('js/app.js') }}"></script>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_APIKEY_BROWSER') }}&callback=initMap"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_APIKEY_BROWSER') }}&libraries=geometry&callback=initMap"></script>
 </body>
 </html>

@@ -968,8 +968,11 @@ module.exports = __webpack_require__(39);
 
 /***/ }),
 /* 10 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_map__ = __webpack_require__(44);
 
 /**
  * First we will load all of this project's JavaScript dependencies which
@@ -993,26 +996,81 @@ window.Vue = __webpack_require__(36);
 //     el: '#app'
 // });
 
+
+
 window.initMap = function () {
-    var uluru = { lat: -25.363, lng: 131.044 };
-    var map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 4,
-        center: uluru,
-        mapTypeControlOptions: {
-            position: google.maps.ControlPosition.LEFT_BOTTOM
-        }
-    });
+    var mc = new __WEBPACK_IMPORTED_MODULE_0__lib_map__["a" /* default */](document.getElementById('map'));
 
-    var marker = new google.maps.Marker({
-        position: uluru,
-        map: map,
-        title: 'Hello World!'
-    });
+    // var currentCenter = null;
+    // var panPoint = null;
+    // map.addListener('zoom_changed', function(e) {
+    //     console.log(panPoint);
+    //     if (panPoint) {
+    //         var bounds = getPadBounds(0,0,0-(mapObj.height() * 0.7),0);
+    //         panPoint = bounds.getCenter();
+    //         console.log([panPoint.lat(),panPoint.lng()]);
+    //         map.panTo(panPoint);
+    //     }
+    // });
 
-    marker.addListener('click', function () {
-        var check = $('#open-article');
-        check.prop('checked', !check.is(':checked'));
-    });
+    // $('#open-article').on('change', function () {
+    //     var t = $(this);
+    //     var flag = t.is(':checked');
+
+    //     if (flag) {
+    //         currentCenter = map.getCenter();
+    //         map.setOptions({
+    //             gestureHandling: 'none'
+    //         });
+    //         var pad = mapObj.height() * 0.7;
+    //         var bounds = getPadBounds(0,0,pad,0);
+    //         panPoint = bounds.getCenter();
+    //         console.log([panPoint.lat(),panPoint.lng()]);
+    //         map.panTo(panPoint);
+    //     } else {
+    //         panPoint = null;
+    //         map.setOptions({
+    //             gestureHandling: 'greedy'
+    //         });
+    //         map.panTo(currentCenter);
+    //     }
+    // });
+
+    // marker.addListener('click', function() {
+    //     $('#open-article').click();
+    // });
+
+    // var getPadBounds = function (top, right, bottom, left) {
+    //     top = (('' + top).match(/^[0-9\.]+$/i) ? parseInt(top) : 0);
+    //     right = (('' + right).match(/^[0-9\.]+$/i) ? parseInt(right) : 0);
+    //     bottom = (('' + bottom).match(/^[0-9\.]+$/i) ? parseInt(bottom) : 0);
+    //     left = (('' + left).match(/^[0-9\.]+$/i) ? parseInt(left) : 0);
+    //     console.log([top, right, bottom, left]);
+
+    //     var bounds = map.getBounds();
+    //     var scale = Math.pow(2, map.getZoom());
+    //     var proj = map.getProjection();
+
+    //     var sw = proj.fromLatLngToPoint(bounds.getSouthWest());
+    //     var ne = proj.fromLatLngToPoint(bounds.getNorthEast());
+    //     sw = new google.maps.Point(
+    //         ((sw.x * scale) + right) / scale,
+    //         ((sw.y * scale) - top) / scale
+    //     );
+    //     ne = new google.maps.Point(
+    //         ((ne.x * scale) - left) / scale,
+    //         ((ne.y * scale) + bottom) / scale
+    //     );
+    //     var rect = new google.maps.LatLngBounds(proj.fromPointToLatLng(sw), proj.fromPointToLatLng(ne));
+
+    //     // // Debug: show rectangle
+    //     new google.maps.Rectangle({
+    //         bounds: rect,
+    //         map: map
+    //     });
+
+    //     return rect;
+    // };
 };
 
 /***/ }),
@@ -28461,7 +28519,7 @@ return jQuery;
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* WEBPACK VAR INJECTION */(function(global) {/**!
  * @fileOverview Kickass library to create and place poppers near their reference elements.
- * @version 1.12.5
+ * @version 1.12.6
  * @license
  * Copyright (c) 2016 Federico Zivolo and contributors
  *
@@ -28483,22 +28541,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var nativeHints = ['native code', '[object MutationObserverConstructor]'];
-
-/**
- * Determine if a function is implemented natively (as opposed to a polyfill).
- * @method
- * @memberof Popper.Utils
- * @argument {Function | undefined} fn the function to check
- * @returns {Boolean}
- */
-var isNative = (function (fn) {
-  return nativeHints.some(function (hint) {
-    return (fn || '').toString().indexOf(hint) > -1;
-  });
-});
-
-var isBrowser = typeof window !== 'undefined';
+var isBrowser = typeof window !== 'undefined' && typeof window.document !== 'undefined';
 var longerTimeoutBrowsers = ['Edge', 'Trident', 'Firefox'];
 var timeoutDuration = 0;
 for (var i = 0; i < longerTimeoutBrowsers.length; i += 1) {
@@ -28509,26 +28552,16 @@ for (var i = 0; i < longerTimeoutBrowsers.length; i += 1) {
 }
 
 function microtaskDebounce(fn) {
-  var scheduled = false;
-  var i = 0;
-  var elem = document.createElement('span');
-
-  // MutationObserver provides a mechanism for scheduling microtasks, which
-  // are scheduled *before* the next task. This gives us a way to debounce
-  // a function but ensure it's called *before* the next paint.
-  var observer = new MutationObserver(function () {
-    fn();
-    scheduled = false;
-  });
-
-  observer.observe(elem, { attributes: true });
-
+  var called = false;
   return function () {
-    if (!scheduled) {
-      scheduled = true;
-      elem.setAttribute('x-index', i);
-      i = i + 1; // don't use compund (+=) because it doesn't get optimized in V8
+    if (called) {
+      return;
     }
+    called = true;
+    Promise.resolve().then(function () {
+      called = false;
+      fn();
+    });
   };
 }
 
@@ -28545,11 +28578,7 @@ function taskDebounce(fn) {
   };
 }
 
-// It's common for MutationObserver polyfills to be seen in the wild, however
-// these rely on Mutation Events which only occur when an element is connected
-// to the DOM. The algorithm used in this module does not use a connected element,
-// and so we must ensure that a *native* MutationObserver is available.
-var supportsNativeMutationObserver = isBrowser && isNative(window.MutationObserver);
+var supportsMicroTasks = isBrowser && window.Promise;
 
 /**
 * Create a debounced version of a method, that's asynchronously deferred
@@ -28560,7 +28589,7 @@ var supportsNativeMutationObserver = isBrowser && isNative(window.MutationObserv
 * @argument {Function} fn
 * @returns {Function}
 */
-var debounce = supportsNativeMutationObserver ? microtaskDebounce : taskDebounce;
+var debounce = supportsMicroTasks ? microtaskDebounce : taskDebounce;
 
 /**
  * Check if the given variable is a function
@@ -28613,8 +28642,16 @@ function getParentNode(element) {
  */
 function getScrollParent(element) {
   // Return body, `getScroll` will take care to get the correct `scrollTop` from it
-  if (!element || ['HTML', 'BODY', '#document'].indexOf(element.nodeName) !== -1) {
+  if (!element) {
     return window.document.body;
+  }
+
+  switch (element.nodeName) {
+    case 'HTML':
+    case 'BODY':
+      return element.ownerDocument.body;
+    case '#document':
+      return element.body;
   }
 
   // Firefox want us to check `-x` and `-y` variations as well
@@ -28644,6 +28681,10 @@ function getOffsetParent(element) {
   var nodeName = offsetParent && offsetParent.nodeName;
 
   if (!nodeName || nodeName === 'BODY' || nodeName === 'HTML') {
+    if (element) {
+      return element.ownerDocument.documentElement;
+    }
+
     return window.document.documentElement;
   }
 
@@ -28739,8 +28780,8 @@ function getScroll(element) {
   var nodeName = element.nodeName;
 
   if (nodeName === 'BODY' || nodeName === 'HTML') {
-    var html = window.document.documentElement;
-    var scrollingElement = window.document.scrollingElement || html;
+    var html = element.ownerDocument.documentElement;
+    var scrollingElement = element.ownerDocument.scrollingElement || html;
     return scrollingElement[upperSide];
   }
 
@@ -28989,7 +29030,7 @@ function getOffsetRectRelativeToArbitraryNode(children, parent) {
 }
 
 function getViewportOffsetRectRelativeToArtbitraryNode(element) {
-  var html = window.document.documentElement;
+  var html = element.ownerDocument.documentElement;
   var relativeOffset = getOffsetRectRelativeToArbitraryNode(element, html);
   var width = Math.max(html.clientWidth, window.innerWidth || 0);
   var height = Math.max(html.clientHeight, window.innerHeight || 0);
@@ -29050,10 +29091,10 @@ function getBoundaries(popper, reference, padding, boundariesElement) {
     if (boundariesElement === 'scrollParent') {
       boundariesNode = getScrollParent(getParentNode(popper));
       if (boundariesNode.nodeName === 'BODY') {
-        boundariesNode = window.document.documentElement;
+        boundariesNode = popper.ownerDocument.documentElement;
       }
     } else if (boundariesElement === 'window') {
-      boundariesNode = window.document.documentElement;
+      boundariesNode = popper.ownerDocument.documentElement;
     } else {
       boundariesNode = boundariesElement;
     }
@@ -29294,10 +29335,11 @@ function runModifiers(modifiers, data, ends) {
   var modifiersToRun = ends === undefined ? modifiers : modifiers.slice(0, findIndex(modifiers, 'name', ends));
 
   modifiersToRun.forEach(function (modifier) {
-    if (modifier.function) {
+    if (modifier['function']) {
+      // eslint-disable-line dot-notation
       console.warn('`modifier.function` is deprecated, use `modifier.fn`!');
     }
-    var fn = modifier.function || modifier.fn;
+    var fn = modifier['function'] || modifier.fn; // eslint-disable-line dot-notation
     if (modifier.enabled && isFunction(fn)) {
       // Add properties to offsets to make them a complete clientRect object
       // we do this before each modifier to make sure the previous one doesn't
@@ -29424,9 +29466,19 @@ function destroy() {
   return this;
 }
 
+/**
+ * Get the window associated with the element
+ * @argument {Element} element
+ * @returns {Window}
+ */
+function getWindow(element) {
+  var ownerDocument = element.ownerDocument;
+  return ownerDocument ? ownerDocument.defaultView : window;
+}
+
 function attachToScrollParents(scrollParent, event, callback, scrollParents) {
   var isBody = scrollParent.nodeName === 'BODY';
-  var target = isBody ? window : scrollParent;
+  var target = isBody ? scrollParent.ownerDocument.defaultView : scrollParent;
   target.addEventListener(event, callback, { passive: true });
 
   if (!isBody) {
@@ -29444,7 +29496,7 @@ function attachToScrollParents(scrollParent, event, callback, scrollParents) {
 function setupEventListeners(reference, options, state, updateBound) {
   // Resize event listener on window
   state.updateBound = updateBound;
-  window.addEventListener('resize', state.updateBound, { passive: true });
+  getWindow(reference).addEventListener('resize', state.updateBound, { passive: true });
 
   // Scroll event listener on scroll parents
   var scrollElement = getScrollParent(reference);
@@ -29475,7 +29527,7 @@ function enableEventListeners() {
  */
 function removeEventListeners(reference, state) {
   // Remove resize event listener on window
-  window.removeEventListener('resize', state.updateBound);
+  getWindow(reference).removeEventListener('resize', state.updateBound);
 
   // Remove scroll event listener on scroll parents
   state.scrollParents.forEach(function (target) {
@@ -30777,8 +30829,8 @@ var Popper = function () {
     };
 
     // get reference and popper elements (allow jQuery wrappers)
-    this.reference = reference.jquery ? reference[0] : reference;
-    this.popper = popper.jquery ? popper[0] : popper;
+    this.reference = reference && reference.jquery ? reference[0] : reference;
+    this.popper = popper && popper.jquery ? popper[0] : popper;
 
     // Deep merge modifiers options
     this.options.modifiers = {};
@@ -46458,6 +46510,174 @@ exports.clearImmediate = clearImmediate;
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 40 */,
+/* 41 */,
+/* 42 */,
+/* 43 */,
+/* 44 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var _class = function () {
+    function _class(element) {
+        _classCallCheck(this, _class);
+
+        var self = this;
+
+        this.currentCenter = { lat: -25.363, lng: 131.044 };
+        this.currentZoom = 4;
+        this.showedArticle = false;
+        this.currentMarker = null;
+
+        this.map = new google.maps.Map(element, {
+            zoom: this.currentZoom,
+            center: this.currentCenter,
+            mapTypeControl: false,
+            fullscreenControl: false,
+            streetViewControl: false,
+            rotateControl: false,
+            zoomControlOptions: {
+                position: google.maps.ControlPosition.LEFT_TOP
+            }
+            //   mapTypeControlOptions: {
+            //     position: google.maps.ControlPosition.LEFT_BOTTOM
+            //     },
+        });
+        this.mapObj = $(element);
+
+        this.addMarker(this.currentCenter);
+
+        this.map.addListener('zoom_changed', function (e) {
+            if (self.showedArticle) {
+                // var proj = self.map.getProjection();
+                var rect = self.getPadBounds(self.mapObj.height() * 0.7, 0, 0, 0);
+                var oldPos = self.currentMarker.getPosition();
+                var newPos = rect.getCenter();
+                var center = self.map.getCenter();
+                var zoom = self.map.getZoom();
+                var len = google.maps.geometry.spherical.computeLength([oldPos, newPos]);
+                len = 0 - len;
+                var heading = google.maps.geometry.spherical.computeHeading(oldPos, newPos);
+
+                var panPos = google.maps.geometry.spherical.computeOffset(center, len, heading);
+                // self.addMarker(panPos);
+                self.map.setCenter(panPos);
+            }
+
+            self.currentZoom = self.map.getZoom();
+        });
+
+        $('#open-article').on('change', function () {
+            if ($(this).is(':checked')) {
+                self.showArticle();
+            } else {
+                self.hideArticle();
+            }
+        });
+    }
+
+    _createClass(_class, [{
+        key: 'addMarker',
+        value: function addMarker(position) {
+            var self = this;
+            var marker = new google.maps.Marker({
+                position: position,
+                map: this.map,
+                title: 'Hello World!'
+            });
+
+            marker.addListener('click', function () {
+                self.currentMarker = this;
+                $('#open-article').click();
+            });
+        }
+    }, {
+        key: 'rad',
+        value: function rad(x) {
+            return x * Math.PI / 180;
+        }
+    }, {
+        key: 'getDistance',
+        value: function getDistance(p1, p2) {
+            console.log([p1.lat(), p2.lat(), p1.lng(), p2.lng()]);
+            var R = 6378137; // Earth’s mean radius in meter
+            var dLat = this.rad(p2.lat() - p1.lat());
+            var dLong = this.rad(p2.lng() - p1.lng());
+            var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(this.rad(p1.lat())) * Math.cos(this.rad(p2.lat())) * Math.sin(dLong / 2) * Math.sin(dLong / 2);
+            var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            var d = R * c;
+            return d; // returns the distance in meter
+        }
+    }, {
+        key: 'getPadBounds',
+        value: function getPadBounds(top, right, bottom, left) {
+            top = ('' + top).match(/^[0-9\.]+$/i) ? parseInt(top) : 0;
+            right = ('' + right).match(/^[0-9\.]+$/i) ? parseInt(right) : 0;
+            bottom = ('' + bottom).match(/^[0-9\.]+$/i) ? parseInt(bottom) : 0;
+            left = ('' + left).match(/^[0-9\.]+$/i) ? parseInt(left) : 0;
+
+            var zoom = this.map.getZoom();
+            var bounds = this.map.getBounds();
+            var scale = Math.pow(2, this.map.getZoom());
+            var proj = this.map.getProjection();
+
+            var sw = proj.fromLatLngToPoint(bounds.getSouthWest());
+            var ne = proj.fromLatLngToPoint(bounds.getNorthEast());
+            sw = new google.maps.Point((sw.x * scale + right) / scale, (sw.y * scale - top) / scale);
+            ne = new google.maps.Point((ne.x * scale - left) / scale, (ne.y * scale + bottom) / scale);
+            var rect = new google.maps.LatLngBounds(proj.fromPointToLatLng(sw), proj.fromPointToLatLng(ne));
+
+            // // Debug: show rectangle
+            // new google.maps.Rectangle({
+            //     bounds: rect,
+            //     map: this.map
+            // });
+
+            return rect;
+        }
+    }, {
+        key: 'showArticle',
+        value: function showArticle() {
+            this.showedArticle = true;
+            this.currentCenter = this.map.getCenter();
+
+            var markerPos = this.currentMarker.getPosition();
+            this.map.setCenter(markerPos);
+
+            this.map.setOptions({
+                gestureHandling: 'none'
+            });
+            var pad = this.mapObj.height() * 0.7;
+            var bounds = this.getPadBounds(0, 0, pad, 0);
+            var panPoint = bounds.getCenter();
+            this.map.panTo(panPoint);
+
+            var proj = this.map.getProjection();
+            this.currentMarkerPos = proj.fromLatLngToPoint(markerPos);
+        }
+    }, {
+        key: 'hideArticle',
+        value: function hideArticle() {
+            this.showedArticle = false;
+            this.map.setOptions({
+                gestureHandling: 'greedy'
+            });
+            if (this.currentCenter) {
+                this.map.panTo(this.currentCenter);
+            }
+        }
+    }]);
+
+    return _class;
+}();
+
+/* harmony default export */ __webpack_exports__["a"] = (_class);
 
 /***/ })
 /******/ ]);

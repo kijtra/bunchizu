@@ -21,25 +21,82 @@ window.Vue = require('vue');
 //     el: '#app'
 // });
 
+import Map from './lib/map';
+
 window.initMap = () => {
-    var uluru = {lat: -25.363, lng: 131.044};
-    var map = new google.maps.Map(document.getElementById('map'), {
-      zoom: 4,
-      center: uluru,
-      mapTypeControlOptions: {
-        position: google.maps.ControlPosition.LEFT_BOTTOM
-        },
-    });
+    var mc = new Map(document.getElementById('map'));
 
-    var marker = new google.maps.Marker({
-        position: uluru,
-        map: map,
-        title: 'Hello World!'
-    });
+    
 
-    marker.addListener('click', function() {
-        var check = $('#open-article');
-        check.prop('checked', !check.is(':checked'));
-    });
+    // var currentCenter = null;
+    // var panPoint = null;
+    // map.addListener('zoom_changed', function(e) {
+    //     console.log(panPoint);
+    //     if (panPoint) {
+    //         var bounds = getPadBounds(0,0,0-(mapObj.height() * 0.7),0);
+    //         panPoint = bounds.getCenter();
+    //         console.log([panPoint.lat(),panPoint.lng()]);
+    //         map.panTo(panPoint);
+    //     }
+    // });
+
+    // $('#open-article').on('change', function () {
+    //     var t = $(this);
+    //     var flag = t.is(':checked');
+        
+    //     if (flag) {
+    //         currentCenter = map.getCenter();
+    //         map.setOptions({
+    //             gestureHandling: 'none'
+    //         });
+    //         var pad = mapObj.height() * 0.7;
+    //         var bounds = getPadBounds(0,0,pad,0);
+    //         panPoint = bounds.getCenter();
+    //         console.log([panPoint.lat(),panPoint.lng()]);
+    //         map.panTo(panPoint);
+    //     } else {
+    //         panPoint = null;
+    //         map.setOptions({
+    //             gestureHandling: 'greedy'
+    //         });
+    //         map.panTo(currentCenter);
+    //     }
+    // });
+
+    // marker.addListener('click', function() {
+    //     $('#open-article').click();
+    // });
+
+    // var getPadBounds = function (top, right, bottom, left) {
+    //     top = (('' + top).match(/^[0-9\.]+$/i) ? parseInt(top) : 0);
+    //     right = (('' + right).match(/^[0-9\.]+$/i) ? parseInt(right) : 0);
+    //     bottom = (('' + bottom).match(/^[0-9\.]+$/i) ? parseInt(bottom) : 0);
+    //     left = (('' + left).match(/^[0-9\.]+$/i) ? parseInt(left) : 0);
+    //     console.log([top, right, bottom, left]);
+    
+    //     var bounds = map.getBounds();
+    //     var scale = Math.pow(2, map.getZoom());
+    //     var proj = map.getProjection();
+    
+    //     var sw = proj.fromLatLngToPoint(bounds.getSouthWest());
+    //     var ne = proj.fromLatLngToPoint(bounds.getNorthEast());
+    //     sw = new google.maps.Point(
+    //         ((sw.x * scale) + right) / scale,
+    //         ((sw.y * scale) - top) / scale
+    //     );
+    //     ne = new google.maps.Point(
+    //         ((ne.x * scale) - left) / scale,
+    //         ((ne.y * scale) + bottom) / scale
+    //     );
+    //     var rect = new google.maps.LatLngBounds(proj.fromPointToLatLng(sw), proj.fromPointToLatLng(ne));
+    
+    //     // // Debug: show rectangle
+    //     new google.maps.Rectangle({
+    //         bounds: rect,
+    //         map: map
+    //     });
+    
+    //     return rect;
+    // };
 }
 
