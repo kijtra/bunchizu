@@ -1,4 +1,4 @@
-/*!
+@import url(https://fonts.googleapis.com/css?family=Material+Icons);/*!
  * Bootstrap v4.0.0-beta.2 (https://getbootstrap.com)
  * Copyright 2011-2017 The Bootstrap Authors
  * Copyright 2011-2017 Twitter, Inc.
@@ -9715,6 +9715,37 @@ a.text-dark:hover {
 
 .invisible {
   visibility: hidden !important;
+}
+
+#map .zoom-buttons {
+  margin: 10px;
+  border-radius: 0.25rem;
+  -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+#map .zoom-buttons .btn {
+  width: 27px;
+  height: 28px;
+  display: block;
+  padding: 0;
+  line-height: .8;
+  color: #495057;
+  cursor: pointer;
+}
+
+#map .zoom-buttons .btn:last-child {
+  border-top-color: #dae0e5;
+}
+
+#map .zoom-buttons .btn.disabled,
+#map .zoom-buttons .btn:disabled {
+  color: #adb5bd;
+}
+
+#map .zoom-buttons .btn .material-icons {
+  font-size: 18px;
+  margin-bottom: -1px;
 }
 
 html,

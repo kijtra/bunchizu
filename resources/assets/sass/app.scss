@@ -1,12 +1,16 @@
 
 // Fonts
-// @import url("https://fonts.googleapis.com/css?family=Raleway:300,400,600");
+@import url("https://fonts.googleapis.com/css?family=Material+Icons");
 
 // Variables
 @import "variables";
+// @import "~bootstrap/scss/variables";
+// @import "~bootstrap/scss/mixins";
 
 // Bootstrap
 @import "~bootstrap/scss/bootstrap";
+
+@import "components/map";
 
 html, body {
     height:100%;
