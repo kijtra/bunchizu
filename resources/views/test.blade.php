@@ -11,22 +11,24 @@
 <body>
 
 <div id="app" class="page">
-    <input type="checkbox" id="open-article">
-    <header>header</header>
-    <main>
-        <div class="map">
-            <div id="map"></div>
-        </div>
+    <input type="checkbox" id="show-article">
 
-        <article>
-            <header>
-                content
-            </header>
-            <div class="body">
-                <label for="open-article">close</label>
-            </div>
-        </article>
-    </main>
+    <div class="map">
+        <div id="map"></div>
+    </div>
+
+    <header>
+        header <label for="show-article" class="btn btn-sm btn-secodary">toggle</label>
+    </header>
+
+    <article id="js-article">
+        <header>
+            content
+        </header>
+        <div class="body">
+            <label for="show-article">close</label>
+        </div>
+    </article>
 </div>
 
 

@@ -1,0 +1,5 @@
+
+@mixin shadowed-box-variant() {
+    border-radius:$shadowed-box-radius;
+    box-shadow:$shadowed-box-shadow-x $shadowed-box-shadow-y $shadowed-box-shadow-length $shadowed-box-shadow-color;
+}

@@ -2,6 +2,11 @@ export default class {
     constructor (element) {
         var self = this;
 
+        if (!this.transitionEvent = this.getTransitionEvent()) {
+            alert('transitionEvent に対応していません');
+            return;
+        }
+
         this.option = {
             debug: true,
             defaultPosition: {
@@ -25,6 +30,9 @@ export default class {
         this.currentZoom = this.option.defaultZoom;
 
         this.article = null;
+
+        this.articleElement = document.getElementById('js-article');
+        this.toggleElement = document.getElementById('show-article');
 
         this.map = new google.maps.Map(this.mapElement, {
             zoom: this.option.defaultZoom,
@@ -109,13 +117,29 @@ export default class {
 
         this.addMarker(this.option.defaultPosition);
 
-        $('#open-article').on('change', function () {
+        $('#show-article').on('change', function () {
             if ($(this).is(':checked')) {
                 self.showArticle();
             } else {
                 self.hideArticle();
             }
         });
+    }
+
+    getTransitionEvent () {
+        var t, el = document.createElement("div");
+        var transitions = {
+            "transition"      : "transitionend",
+            "OTransition"     : "oTransitionEnd",
+            "MozTransition"   : "transitionend",
+            "WebkitTransition": "webkitTransitionEnd"
+        }
+
+        for (t in transitions){
+            if (el.style[t] !== undefined){
+                return transitions[t];
+            }
+        }
     }
 
     addCustomZoomControl () {
@@ -173,9 +197,9 @@ export default class {
             console.log('zoomIn', {from: from, to: to});
         }
 
-        if (this.article) {
-            this.setCenterByArticle(this.article, to);
-        }
+        // if (this.article) {
+        //     this.setCenterByArticle(this.article, to);
+        // }
     }
 
     onZoomOut (from, to) {
@@ -183,9 +207,9 @@ export default class {
             console.log('zoomOut', {from: from, to: to});
         }
 
-        if (this.article) {
-            this.setCenterByArticle(this.article, to);
-        }
+        // if (this.article) {
+        //     this.setCenterByArticle(this.article, to);
+        // }
     }
 
     addMarker (position) {
@@ -198,7 +222,7 @@ export default class {
 
         marker.addListener('click', function() {
             self.currentMarker = this;
-            $('#open-article').click();
+            $('#show-article').click();
         });
     }
 
@@ -274,7 +298,7 @@ export default class {
         var marker = this.currentMarker;
         var markerPosition = marker.getPosition();
 
-        this.map.setCenter(markerPosition);
+        // this.map.setCenter(markerPosition);
         
         this.map.setOptions({
             gestureHandling: 'none'
@@ -283,7 +307,7 @@ export default class {
         var padding = this.mapElement.clientHeight * this.option.articleRatioHeight;
         var bounds = this.getPadBounds(0, 0, padding, 0);
         var articleCenter = bounds.getCenter();
-        this.map.panTo(articleCenter);
+        // this.map.panTo(articleCenter);
 
         this.article = {
             marker: marker,
@@ -294,6 +318,27 @@ export default class {
             pointLength: google.maps.geometry.spherical.computeLength([articleCenter, markerPosition]),
             pointHeading: google.maps.geometry.spherical.computeHeading(articleCenter, markerPosition)
         };
+
+        this.articleElement.addEventListener(this.transitionEvent, function (e) {
+            if (self.article) {
+                google.maps.event.trigger(self.map, 'resize');
+                self.map.panTo(self.article.marker.getPosition());
+                self.articleElement.removeEventListener(self.transitionEvent);
+
+                if ($('#show-article').is(':checked')) {
+                    google.maps.event.trigger(self.map, 'resize');
+                    self.map.panTo(self.article.marker.getPosition());
+                } else {
+                    self.map.setOptions({
+                        gestureHandling: 'greedy'
+                    });
+                    self.map.setZoom(self.article.beforeZoom);
+                    self.map.panTo(self.article.beforeCenter);
+                    self.article = null;
+                }
+            }
+            
+        });
     }
 
     hideArticle () {
@@ -304,11 +349,23 @@ export default class {
             return;
         }
 
-        this.map.setOptions({
+        
+        
+    }
+
+    onArticleShowed () {
+        var self = this;
+        google.maps.event.trigger(self.map, 'resize');
+        self.map.panTo(self.article.marker.getPosition());
+    }
+
+    onArticleHided () {
+        var self = this;
+        self.map.setOptions({
             gestureHandling: 'greedy'
         });
-        this.map.setZoom(this.article.beforeZoom);
-        this.map.panTo(this.article.beforeCenter);
-        this.article = null;
+        self.map.setZoom(self.article.beforeZoom);
+        self.map.panTo(self.article.beforeCenter);
+        self.article = null;
     }
 }

@@ -2,13 +2,49 @@
 // Fonts
 @import url("https://fonts.googleapis.com/css?family=Material+Icons");
 
+// Bootstrap
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
+
 // Variables
 @import "variables";
-// @import "~bootstrap/scss/variables";
-// @import "~bootstrap/scss/mixins";
+@import "mixins";
 
 // Bootstrap
-@import "~bootstrap/scss/bootstrap";
+@import "~bootstrap/scss/root";
+@import "~bootstrap/scss/print";
+@import "~bootstrap/scss/reboot";
+@import "~bootstrap/scss/type";
+@import "~bootstrap/scss/images";
+@import "~bootstrap/scss/code";
+@import "~bootstrap/scss/grid";
+@import "~bootstrap/scss/tables";
+@import "~bootstrap/scss/forms";
+@import "~bootstrap/scss/buttons";
+@import "~bootstrap/scss/transitions";
+@import "~bootstrap/scss/dropdown";
+@import "~bootstrap/scss/button-group";
+@import "~bootstrap/scss/input-group";
+@import "~bootstrap/scss/custom-forms";
+@import "~bootstrap/scss/nav";
+@import "~bootstrap/scss/navbar";
+@import "~bootstrap/scss/card";
+@import "~bootstrap/scss/breadcrumb";
+@import "~bootstrap/scss/pagination";
+@import "~bootstrap/scss/badge";
+@import "~bootstrap/scss/jumbotron";
+@import "~bootstrap/scss/alert";
+@import "~bootstrap/scss/progress";
+@import "~bootstrap/scss/media";
+@import "~bootstrap/scss/list-group";
+@import "~bootstrap/scss/close";
+@import "~bootstrap/scss/modal";
+@import "~bootstrap/scss/tooltip";
+@import "~bootstrap/scss/popover";
+@import "~bootstrap/scss/carousel";
+@import "~bootstrap/scss/utilities";
+
 
 @import "components/map";
 
@@ -24,48 +60,127 @@ html, body {
     overflow:hidden;
 
     >input[type="checkbox"] {
+        display:none;
+    }
+
+    >.map {
         position:absolute;
-        z-index:10;
-        top:0;
-        left:50%;
+        top:$header-height + (map-get($spacers, 1) * 2);
+        left:map-get($spacers, 1);
+        right:map-get($spacers, 1);
+        bottom:map-get($spacers, 1);
+        transition:
+            left $article-anime-speed ease-in-out,
+            right $article-anime-speed ease-in-out,
+            bottom $article-anime-speed ease-in-out;
+        border-radius:$shadowed-box-radius;
+        overflow:hidden;
+
+        $shadow-size:$shadowed-box-shadow-y;
+        $shadow-color:rgba(0,0,0,.15);
+        $shadow-length:1px;
+        
+        &:before, &:after, >div:before, >div:after {
+            display:block;
+            position:absolute;
+            z-index:2;
+            content:'';
+            border-radius:$shadowed-box-radius;
+            pointer-events:none;
+        }
+
+        &:before {
+            height:$shadow-size * 2;
+            top:0;
+            left:0;
+            right:0;
+            box-shadow:inset 0 #{$shadow-size / 2} $shadow-length $shadow-color;
+        }
+
         &:after {
-            content:attr(id);
-            font-size:10px;
-            line-height:1;
-            white-space:nowrap;
+            width:$shadow-size * 2;
+            top:0;
+            right:0;
+            bottom:0;
+            box-shadow:inset -#{$shadow-size / 2} 0 $shadow-length $shadow-color;
+        }
+
+        >div:before {
+            height:$shadow-size * 2;
+            left:0;
+            right:0;
+            bottom:0;
+            box-shadow:inset 0 -#{$shadow-size / 2} $shadow-length $shadow-color;
+        }
+        
+        >div:after {
+            width:$shadow-size * 2;
+            top:0;
+            left:0;
+            bottom:0;
+            box-shadow:inset #{$shadow-size / 2} 0 $shadow-length $shadow-color;
+        }
+
+        @media only screen and (-webkit-min-device-pixel-ratio: 2) {
+            $shadow-size:$shadow-size * 2;
+            $shadow-length:$shadow-length * 2;
+    
+            &:before {
+                height:$shadow-size * 2;
+                box-shadow:inset 0 #{$shadow-size / 2} $shadow-length $shadow-color;
+            }
+    
+            &:after {
+                width:$shadow-size * 2;
+                box-shadow:inset -#{$shadow-size / 2} 0 $shadow-length $shadow-color;
+            }
+    
+            >div:before {
+                height:$shadow-size * 2;
+                box-shadow:inset 0 -#{$shadow-size / 2} $shadow-length $shadow-color;
+            }
+            
+            >div:after {
+                width:$shadow-size * 2;
+                box-shadow:inset #{$shadow-size / 2} 0 $shadow-length $shadow-color;
+            }
+        }
+
+        >div {
+            position:relative;
+            width:100%;
+            height:100%;
+            z-index:1;
         }
     }
 
     >header {
-        height:40px;
-        position:relative;
-        z-index:2;
-        box-shadow:0 1px 2px rgba(0,0,0,.15);
+        height:$header-height;
+        position:absolute;
+        top:map-get($spacers, 1);
+        left:map-get($spacers, 1);
+        right:map-get($spacers, 1);
+        z-index:#{$zindex-dropdown - 1};
+        // border-radius:$border-radius;
+        // background-color:$white;
+        // box-shadow:0 1px 2px rgba(0,0,0,.15);
+    }
+
+    >article {
+        height:0;
+        position:absolute;
+        overflow:hidden;
+        left:map-get($spacers, 2);
+        right:map-get($spacers, 2);
+        bottom:map-get($spacers, 1);
+        z-index:#{$zindex-dropdown - 2};
+        border-radius:$border-radius;
+        background-color:$white;
+        @include shadowed-box-variant;
+        transition:height $article-anime-speed ease-in-out;
     }
 
     >main {
-        position:relative;
-        z-index:1;
-        flex-grow:1;
-        overflow:hidden;
-
-        >.map {
-            position:absolute;
-            top:0;
-            left:0;
-            right:0;
-            bottom:0;
-            z-index:1;
-            background-color:#eee;
-
-            >div {
-                position:relative;
-                width:100%;
-                height:100%;
-                z-index:1;
-            }
-        }
-
         > article {
             display:flex;
             flex-direction:column;
@@ -95,6 +210,18 @@ html, body {
                 transform:translate(-50%, 100%);
             }
         }
+    }
+}
+
+#show-article:checked {
+    ~ .map {
+        left:map-get($spacers, 2);
+        right:map-get($spacers, 2);
+        bottom:60vh;
+    }
+
+    ~ article {
+        height:calc(60vh - #{map-get($spacers, 1)} - #{map-get($spacers, 2)});
     }
 }
 
