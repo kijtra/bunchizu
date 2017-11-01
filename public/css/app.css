@@ -9711,10 +9711,17 @@ a.text-dark:hover {
 }
 
 #map .zoom-buttons {
-  margin: 0.5rem;
+  margin-bottom: 0.5rem;
+  margin-right: 0.5rem;
   border-radius: 0.25rem;
   -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
           box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  -webkit-transform: translateX(0);
+          transform: translateX(0);
+  -webkit-transition: margin-right 0.2s ease-in-out, -webkit-transform 0.2s ease-in-out;
+  transition: margin-right 0.2s ease-in-out, -webkit-transform 0.2s ease-in-out;
+  transition: margin-right 0.2s ease-in-out, transform 0.2s ease-in-out;
+  transition: margin-right 0.2s ease-in-out, transform 0.2s ease-in-out, -webkit-transform 0.2s ease-in-out;
 }
 
 #map .zoom-buttons .btn {
@@ -9765,88 +9772,10 @@ body {
 
 #app > .map {
   position: absolute;
-  top: 3.25rem;
-  left: 0.25rem;
-  right: 0.25rem;
-  bottom: 0.25rem;
-  -webkit-transition: left 0.2s ease-in-out, right 0.2s ease-in-out, bottom 0.2s ease-in-out;
-  transition: left 0.2s ease-in-out, right 0.2s ease-in-out, bottom 0.2s ease-in-out;
-  border-radius: 0.25rem;
-  overflow: hidden;
-}
-
-#app > .map:before,
-#app > .map:after,
-#app > .map > div:before,
-#app > .map > div:after {
-  display: block;
-  position: absolute;
-  z-index: 2;
-  content: '';
-  border-radius: 0.25rem;
-  pointer-events: none;
-}
-
-#app > .map:before {
-  height: 0.2rem;
   top: 0;
   left: 0;
   right: 0;
-  -webkit-box-shadow: inset 0 0.05rem 1px rgba(0, 0, 0, 0.15);
-          box-shadow: inset 0 0.05rem 1px rgba(0, 0, 0, 0.15);
-}
-
-#app > .map:after {
-  width: 0.2rem;
-  top: 0;
-  right: 0;
   bottom: 0;
-  -webkit-box-shadow: inset -0.05rem 0 1px rgba(0, 0, 0, 0.15);
-          box-shadow: inset -0.05rem 0 1px rgba(0, 0, 0, 0.15);
-}
-
-#app > .map > div:before {
-  height: 0.2rem;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  -webkit-box-shadow: inset 0 -0.05rem 1px rgba(0, 0, 0, 0.15);
-          box-shadow: inset 0 -0.05rem 1px rgba(0, 0, 0, 0.15);
-}
-
-#app > .map > div:after {
-  width: 0.2rem;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  -webkit-box-shadow: inset 0.05rem 0 1px rgba(0, 0, 0, 0.15);
-          box-shadow: inset 0.05rem 0 1px rgba(0, 0, 0, 0.15);
-}
-
-@media only screen and (-webkit-min-device-pixel-ratio: 2) {
-  #app > .map:before {
-    height: 0.4rem;
-    -webkit-box-shadow: inset 0 0.1rem 2px rgba(0, 0, 0, 0.15);
-            box-shadow: inset 0 0.1rem 2px rgba(0, 0, 0, 0.15);
-  }
-
-  #app > .map:after {
-    width: 0.4rem;
-    -webkit-box-shadow: inset -0.1rem 0 2px rgba(0, 0, 0, 0.15);
-            box-shadow: inset -0.1rem 0 2px rgba(0, 0, 0, 0.15);
-  }
-
-  #app > .map > div:before {
-    height: 0.4rem;
-    -webkit-box-shadow: inset 0 -0.1rem 2px rgba(0, 0, 0, 0.15);
-            box-shadow: inset 0 -0.1rem 2px rgba(0, 0, 0, 0.15);
-  }
-
-  #app > .map > div:after {
-    width: 0.4rem;
-    -webkit-box-shadow: inset 0.1rem 0 2px rgba(0, 0, 0, 0.15);
-            box-shadow: inset 0.1rem 0 2px rgba(0, 0, 0, 0.15);
-  }
 }
 
 #app > .map > div {
@@ -9857,32 +9786,82 @@ body {
 }
 
 #app > header {
-  height: 2.75rem;
-  position: absolute;
-  top: 0.25rem;
-  left: 0.25rem;
-  right: 0.25rem;
+  position: relative;
   z-index: 999;
 }
 
-#app > article {
+#app > header .wrap {
+  background-color: #fff;
+  border-radius: 0.25rem;
+  -webkit-box-shadow: 0 0.1rem 2px rgba(0, 0, 0, 0.15);
+          box-shadow: 0 0.1rem 2px rgba(0, 0, 0, 0.15);
+}
+
+@media (min-width: 768px) {
+  #app > header .container {
+    padding: 1rem;
+  }
+
+  #app > header .wrap {
+    height: 3rem;
+  }
+}
+
+@media (max-width: 767px) {
+  #app > header .container {
+    padding: 0.25rem 0.5rem;
+  }
+
+  #app > header .wrap {
+    height: 2.5rem;
+  }
+}
+
+#app > main {
   height: 0;
-  position: absolute;
-  overflow: hidden;
-  left: 0.5rem;
-  right: 0.5rem;
-  bottom: 0.25rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  position: relative;
   z-index: 998;
+  overflow: hidden;
+  -webkit-transition: height 0s linear 0.2s;
+  transition: height 0s linear 0.2s;
+}
+
+#app > main article {
+  position: relative;
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
   border-radius: 0.25rem;
   background-color: #fff;
   border-radius: 0.25rem;
   -webkit-box-shadow: 0 0.1rem 2px rgba(0, 0, 0, 0.15);
           box-shadow: 0 0.1rem 2px rgba(0, 0, 0, 0.15);
-  -webkit-transition: height 0.2s ease-in-out;
-  transition: height 0.2s ease-in-out;
 }
 
-#app > main > article {
+@media (min-width: 768px) {
+  #app > main article {
+    width: 70%;
+    margin-left: auto;
+    right: -100vw;
+    margin-left: auto;
+    -webkit-transition: right 0.2s ease-in-out;
+    transition: right 0.2s ease-in-out;
+  }
+}
+
+@media (max-width: 767px) {
+  #app > main article {
+    top: 70vh;
+    margin-top: 30%;
+    -webkit-transition: top 0.2s ease-in-out;
+    transition: top 0.2s ease-in-out;
+  }
+}
+
+#app > main .container {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -9890,78 +9869,46 @@ body {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  max-width: 600px;
-  overflow: hidden;
-  position: absolute;
-  z-index: 3;
-  opacity: 0;
-  background-color: rgba(255, 255, 255, 0.6);
-  -webkit-transition: opacity 0s linear .3s, -webkit-transform .3s ease-in-out;
-  transition: opacity 0s linear .3s, -webkit-transform .3s ease-in-out;
-  transition: transform .3s ease-in-out, opacity 0s linear .3s;
-  transition: transform .3s ease-in-out, opacity 0s linear .3s, -webkit-transform .3s ease-in-out;
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
 }
 
 @media (min-width: 768px) {
-  #app > main > article {
-    height: calc(100% - 100px);
-    width: 60vw;
-    top: 50px;
-    bottom: 50px;
-    right: 0;
-    -webkit-transform: translateX(100%);
-            transform: translateX(100%);
+  #app > main .container {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
   }
 }
 
 @media (max-width: 767px) {
-  #app > main > article {
-    width: 100%;
-    height: 70%;
-    left: 50%;
-    right: 0;
-    bottom: 0;
-    -webkit-transform: translate(-50%, 100%);
-            transform: translate(-50%, 100%);
+  #app > main .container {
+    padding: 0 0.5rem 0.25rem;
   }
 }
 
-#show-article:checked ~ .map {
-  left: 0.5rem;
-  right: 0.5rem;
-  bottom: 60vh;
+#show-article:checked ~ .map .zoom-buttons {
+  margin-right: -0.5rem;
+  -webkit-transform: translateX(100%);
+          transform: translateX(100%);
 }
 
-#show-article:checked ~ article {
-  height: calc(60vh - 0.25rem - 0.5rem);
-}
-
-#open-article:checked ~ main > article,
-.open-article ~ main > article {
-  opacity: 1;
-  -webkit-transition: -webkit-transform .3s ease-in-out;
-  transition: -webkit-transform .3s ease-in-out;
-  transition: transform .3s ease-in-out;
-  transition: transform .3s ease-in-out, -webkit-transform .3s ease-in-out;
+#show-article:checked ~ main {
+  height: 100%;
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
 }
 
 @media (min-width: 768px) {
-  #open-article:checked ~ main > article,
-  .open-article ~ main > article {
-    -webkit-transform: translateX(0);
-            transform: translateX(0);
-    -webkit-box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.3);
-            box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.3);
+  #show-article:checked ~ main article {
+    right: 0;
   }
 }
 
 @media (max-width: 767px) {
-  #open-article:checked ~ main > article,
-  .open-article ~ main > article {
-    -webkit-transform: translate(-50%, 0%);
-            transform: translate(-50%, 0%);
-    -webkit-box-shadow: -1px 0 3px rgba(0, 0, 0, 0.3);
-            box-shadow: -1px 0 3px rgba(0, 0, 0, 0.3);
+  #show-article:checked ~ main article {
+    top: 0;
   }
 }
 

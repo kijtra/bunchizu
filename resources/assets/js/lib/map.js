@@ -1,12 +1,5 @@
 export default class {
     constructor (element) {
-        var self = this;
-
-        if (!this.transitionEvent = this.getTransitionEvent()) {
-            alert('transitionEvent に対応していません');
-            return;
-        }
-
         this.option = {
             debug: true,
             defaultPosition: {
@@ -16,29 +9,33 @@ export default class {
             defaultZoom: 14,
             zoomMin: 13,
             zoomMax: 19,
+            widthMax: 960,
             articleRatioHeight: 0.7,
             articleRatioWidth: 1,
+            breakPoint: {
+                mobile: 576,
+                desktop: 577
+            },
         };
 
+        this.headerElement = document.getElementById('header');
+        this.articleElement = document.getElementById('article');
+        this.toggleElement = document.getElementById('show-article');
+
         this.mapElement = element;
-        this.mapSize = {
-            width: element.clientWidth,
-            height: element.clientHeight,
-        };
 
         this.beforeZoom = this.option.defaultZoom;
         this.currentZoom = this.option.defaultZoom;
+        this.currentCenter = this.option.defaultPosition;
 
+        this.bounds = null;
         this.article = null;
-
-        this.articleElement = document.getElementById('js-article');
-        this.toggleElement = document.getElementById('show-article');
 
         this.map = new google.maps.Map(this.mapElement, {
             zoom: this.option.defaultZoom,
-            minZoom: this.option.zoomMin,
-            maxZoom: this.option.zoomMax,
-            center: this.option.defaultPosition,
+            // minZoom: this.option.zoomMin,
+            // maxZoom: this.option.zoomMax,
+            center: this.currentCenter,
             mapTypeControl: false,
             fullscreenControl: false,
             streetViewControl: false,
@@ -46,9 +43,15 @@ export default class {
             zoomControl: false
         });
 
-        this.addCustomZoomControl();
+        this.init();
+    }
 
-        this.map.addListener('zoom_changed', function(e) {
+    init () {
+        var self = this;
+
+        self.addCustomZoomControl();
+
+        self.map.addListener('zoom_changed', function(e) {
             self.beforeZoom = self.currentZoom;
             self.currentZoom = this.getZoom();
 
@@ -73,72 +76,47 @@ export default class {
                     self.zoomInButton.setAttribute('disabled', true);
                 }
             }
-
-            // if (zoom <= self.option.zoomMin || zoom >= self.option.zoomMax) {
-            //     return false;
-            // }
-
-            // if (self.showedArticle) {
-            //     // var proj = self.map.getProjection();
-            //     var rect = self.getPadBounds(self.mapObj.height() * 0.7,0,0,0);
-            //     var oldPos = self.currentMarker.getPosition();
-            //     var newPos = rect.getCenter();
-            //     var center = self.map.getCenter();
-                
-            //     var len = google.maps.geometry.spherical.computeLength([oldPos,newPos]);
-            //     len = 0 - len;
-            //     var heading = google.maps.geometry.spherical.computeHeading(oldPos, newPos);
-                
-            //     var panPos = google.maps.geometry.spherical.computeOffset(center, len, heading);
-            //     // self.addMarker(panPos);
-            //     self.map.setCenter(panPos);
-            // }
-
-            // self.currentZoom = self.map.getZoom();
         });
 
-        window.resizeTimer_ = false;
-        window.addEventListener('resize', function (e) {
-            if (this.resizeTimer_ !== false) {
-                clearTimeout(self.resizeTimer_);
+        google.maps.event.addDomListener(window, 'resize', function (e) {
+            google.maps.event.trigger(self.map, 'resize');
+            self.map.setCenter(self.currentCenter);
+        });
+
+        google.maps.event.addDomListener(self.toggleElement, 'click', function (e) {
+            if (!self.currentMarker) {
+                e.preventDefault();
+                return false;
             }
+        });
 
-            this.resizeTimer_ = setTimeout(function () {
-                self.mapSize = {
-                    width: self.mapElement.clientWidth,
-                    height: self.mapElement.clientHeight,
-                };
-
-                if (self.option.debug) {
-                    console.info('mapSize', self.mapSize);
+        google.maps.event.addDomListener(self.toggleElement, 'change', function (e) {
+            if (self.currentMarker) {
+                if (self.toggleElement.checked) {
+                    self.showArticle();
+                } else {
+                    self.hideArticle();
                 }
-            }, 200);// 最低でも16.6以上
-        });
-
-        this.addMarker(this.option.defaultPosition);
-
-        $('#show-article').on('change', function () {
-            if ($(this).is(':checked')) {
-                self.showArticle();
-            } else {
-                self.hideArticle();
             }
         });
+
+        self.addMarker(this.option.defaultPosition);
     }
 
-    getTransitionEvent () {
-        var t, el = document.createElement("div");
-        var transitions = {
-            "transition"      : "transitionend",
-            "OTransition"     : "oTransitionEnd",
-            "MozTransition"   : "transitionend",
-            "WebkitTransition": "webkitTransitionEnd"
-        }
-
-        for (t in transitions){
-            if (el.style[t] !== undefined){
-                return transitions[t];
-            }
+    triggerEvent(element, event) {
+        console.log(element, event);
+        if (window.Event) {
+            var evt = new Event(event, {bubbles:false, cancelable:false});
+            element.dispatchEvent(evt);
+        } else if (document.createEvent) {
+            // IE以外
+            var evt = document.createEvent('HTMLEvents');
+            evt.initEvent(event, true, true ); // event type, bubbling, cancelable
+            return element.dispatchEvent(evt);
+        } else {
+            // IE
+            var evt = document.createEventObject();
+            return element.fireEvent("on"+event, evt);
         }
     }
 
@@ -169,27 +147,9 @@ export default class {
         container.appendChild(zoomIn);
         container.appendChild(zoomOut);
 
-        this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(container);
+        this.map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(container);
         this.zoomInButton = zoomIn;
         this.zoomOutButton = zoomOut;
-    }
-
-    zoomIn () {
-        var current = this.map.getZoom();
-        var zoom = current + 1;
-
-        if (zoom <= this.option.zoomMax) {
-            this.map.setZoom(zoom);
-        }
-    }
-
-    zoomOut () {
-        var current = this.map.getZoom();
-        var zoom = current - 1;
-
-        if (zoom >= this.option.zoomMin) {
-            this.map.setZoom(zoom);
-        }
     }
 
     onZoomIn (from, to) {
@@ -212,77 +172,105 @@ export default class {
         // }
     }
 
-    addMarker (position) {
+    addMarker (position, conf) {
         var self = this;
-        var marker = new google.maps.Marker({
-            position: position,
-            map: this.map,
-            title: 'Hello World!'
-        });
+
+        var option = {};
+        if ('object' === typeof conf) {
+            option = conf;
+        }
+        option.position = position;
+        option.map = this.map;
+
+        var marker = new google.maps.Marker(option);
 
         marker.addListener('click', function() {
             self.currentMarker = this;
-            $('#show-article').click();
+            self.toggleElement.checked = true;
+            self.triggerEvent(self.toggleElement, 'change');
         });
     }
 
-    setCenterByArticle (article, zoom) {
-        var origin = article.markerPosition;
-        var range = article.beforeZoom - zoom;
-        var length = 0 - (article.pointLength * Math.pow(2, range));
-        var heading = article.pointHeading;
-        var position = google.maps.geometry.spherical.computeOffset(origin, length, heading);
-        this.map.setCenter(position);
+    setCenter (latlon, bounds) {
+        var position;
+
+        if (!bounds) {
+            position = latlon;
+        } else {
+            var spherical = google.maps.geometry.spherical;
+            var mapCenter = this.map.getCenter();
+            var boundsCenter = bounds.getCenter();
+            var target = latlon || mapCenter;
+
+            var length = spherical.computeLength([target, boundsCenter]);
+            var heading = spherical.computeHeading(boundsCenter, target);
+
+            position = spherical.computeOffset(mapCenter, length, heading);
+        }
+
+        this.map.panTo(position);
+
+        this.currentCenter = position;
     }
 
-    rad (x) {
-        return x * Math.PI / 180;
-    }
-
-    getDistance (p1, p2) {
-        console.log([p1.lat(),p2.lat(),p1.lng(),p2.lng()]);
-        var R = 6378137; // Earth’s mean radius in meter
-        var dLat = this.rad(p2.lat() - p1.lat());
-        var dLong = this.rad(p2.lng() - p1.lng());
-        var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-          Math.cos(this.rad(p1.lat())) * Math.cos(this.rad(p2.lat())) *
-          Math.sin(dLong / 2) * Math.sin(dLong / 2);
-        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        var d = R * c;
-        return d; // returns the distance in meter
-    }
-
-    getPadBounds (top, right, bottom, left, zoom) {
-        top = (('' + top).match(/^[0-9\.]+$/i) ? parseInt(top) : 0);
-        right = (('' + right).match(/^[0-9\.]+$/i) ? parseInt(right) : 0);
-        bottom = (('' + bottom).match(/^[0-9\.]+$/i) ? parseInt(bottom) : 0);
-        left = (('' + left).match(/^[0-9\.]+$/i) ? parseInt(left) : 0);
-    
-        var zoom = zoom || this.map.getZoom();
-        var bounds = this.map.getBounds();
-        var scale = Math.pow(2, zoom);
+    getPadBounds (requests, zoom) {
+        var width = this.mapElement.clientWidth;
+        var height = this.mapElement.clientHeight;
+        var max = this.option.widthMax;
+        var currentBounds = this.map.getBounds();
         var proj = this.map.getProjection();
+        var scale = Math.pow(2, zoom || this.map.getZoom());
+        var sw = proj.fromLatLngToPoint(currentBounds.getSouthWest());
+        var ne = proj.fromLatLngToPoint(currentBounds.getNorthEast());
 
-        var sw = proj.fromLatLngToPoint(bounds.getSouthWest());
-        var ne = proj.fromLatLngToPoint(bounds.getNorthEast());
-        sw = new google.maps.Point(
-            ((sw.x * scale) + right) / scale,
-            ((sw.y * scale) - top) / scale
-        );
-        ne = new google.maps.Point(
-            ((ne.x * scale) - left) / scale,
-            ((ne.y * scale) + bottom) / scale
-        );
-        var rect = new google.maps.LatLngBounds(proj.fromPointToLatLng(sw), proj.fromPointToLatLng(ne));
-        
+        var key, val, sizes = {top:0, right:0, bottom:0, left:0};
+        for (key in requests) {
+            val = '' + (requests[key] || 0);
+            if (/^\d+$/.test(val)) {
+                sizes[key] = parseInt(val);
+            } else if (/^\d+px$/.test(val)) {
+                sizes[key] = parseInt(val.slice(0, -2));
+            } else if (/^\d+\%$/.test(val)) {
+                val = parseInt(val.slice(0, -1));
+                if ('left' === key || 'right' === key) {
+                    sizes[key] = (Math.min(val, 100) / 100) * width;
+                } else {
+                    sizes[key] = (Math.min(val, 100) / 100) * height;
+                }
+            }
+        }
 
-        // // Debug: show rectangle
-        // new google.maps.Rectangle({
-        //     bounds: rect,
-        //     map: this.map
-        // });
-    
-        return rect;
+        if (this.option.debug) {
+            console.info('bounds size', requests, sizes);
+        }
+
+        if (width > max) {
+            var pad = (width - max) / 2;
+
+            if (sizes.left < pad) {
+                sizes.left = sizes.left + pad;
+            }
+
+            if (width - sizes.right > width - pad) {
+                sizes.right = sizes.right + pad;
+            }
+        }
+
+        var tr = new google.maps.Point(
+            ne.x - (sizes.right ? sizes.right / scale : 0),
+            ne.y + (sizes.top ? sizes.top / scale : 0)
+        );
+        var bl = new google.maps.Point(
+            sw.x + (sizes.left ? sizes.left / scale : 0),
+            sw.y - (sizes.bottom ? sizes.bottom / scale : 0)
+        );
+
+        var bounds = new google.maps.LatLngBounds(
+            proj.fromPointToLatLng(bl),
+            proj.fromPointToLatLng(tr)
+        );
+
+        return bounds;
     }
 
     showArticle () {
@@ -293,52 +281,28 @@ export default class {
             return;
         }
 
-        var currentCenter = this.map.getCenter();
-        var currentZoom = this.map.getZoom();
-        var marker = this.currentMarker;
-        var markerPosition = marker.getPosition();
-
-        // this.map.setCenter(markerPosition);
-        
         this.map.setOptions({
             gestureHandling: 'none'
         });
 
-        var padding = this.mapElement.clientHeight * this.option.articleRatioHeight;
-        var bounds = this.getPadBounds(0, 0, padding, 0);
-        var articleCenter = bounds.getCenter();
-        // this.map.panTo(articleCenter);
+        var marker = this.currentMarker;
+        var markerPosition = marker.getPosition();
 
         this.article = {
             marker: marker,
             markerPosition: markerPosition,
-            beforeZoom: currentZoom,
-            beforeCenter: currentCenter,
-            mapCenter: articleCenter,
-            pointLength: google.maps.geometry.spherical.computeLength([articleCenter, markerPosition]),
-            pointHeading: google.maps.geometry.spherical.computeHeading(articleCenter, markerPosition)
+            beforeZoom: this.map.getZoom(),
+            beforeCenter: this.map.getCenter(),
         };
 
-        this.articleElement.addEventListener(this.transitionEvent, function (e) {
-            if (self.article) {
-                google.maps.event.trigger(self.map, 'resize');
-                self.map.panTo(self.article.marker.getPosition());
-                self.articleElement.removeEventListener(self.transitionEvent);
+        this.map.setZoom(13);
 
-                if ($('#show-article').is(':checked')) {
-                    google.maps.event.trigger(self.map, 'resize');
-                    self.map.panTo(self.article.marker.getPosition());
-                } else {
-                    self.map.setOptions({
-                        gestureHandling: 'greedy'
-                    });
-                    self.map.setZoom(self.article.beforeZoom);
-                    self.map.panTo(self.article.beforeCenter);
-                    self.article = null;
-                }
-            }
-            
-        });
+        var size = {top: this.headerElement.clientHeight, bottom: '70%'};
+        if (document.body.clientWidth > this.option.breakPoint.mobile) {
+            size = {top: this.headerElement.clientHeight, right: '70%'};
+        }
+        var bounds = this.getPadBounds(size);
+        this.setCenter(marker.getPosition(), bounds);
     }
 
     hideArticle () {
@@ -349,23 +313,101 @@ export default class {
             return;
         }
 
-        
-        
-    }
+        this.map.setZoom(this.article.beforeZoom);
+        this.map.panTo(this.article.beforeCenter);
+        this.article = null;
 
-    onArticleShowed () {
-        var self = this;
-        google.maps.event.trigger(self.map, 'resize');
-        self.map.panTo(self.article.marker.getPosition());
-    }
-
-    onArticleHided () {
-        var self = this;
-        self.map.setOptions({
+        this.map.setOptions({
             gestureHandling: 'greedy'
         });
-        self.map.setZoom(self.article.beforeZoom);
-        self.map.panTo(self.article.beforeCenter);
-        self.article = null;
     }
+
+    // onArticleShowed () {
+    //     var self = this;
+    //     google.maps.event.trigger(self.map, 'resize');
+    //     self.map.panTo(self.article.marker.getPosition());
+    // }
+
+    // onArticleHided () {
+    //     var self = this;
+    //     self.map.setOptions({
+    //         gestureHandling: 'greedy'
+    //     });
+    //     self.map.setZoom(self.article.beforeZoom);
+    //     self.map.panTo(self.article.beforeCenter);
+    //     self.article = null;
+    // }
+
+    // getTransitionEvent () {
+    //     var t, el = document.createElement("div");
+    //     var transitions = {
+    //         "transition"      : "transitionend",
+    //         "OTransition"     : "oTransitionEnd",
+    //         "MozTransition"   : "transitionend",
+    //         "WebkitTransition": "webkitTransitionEnd"
+    //     }
+
+    //     for (t in transitions){
+    //         if (el.style[t] !== undefined){
+    //             return transitions[t];
+    //         }
+    //     }
+    // }
+
+    // setCenterByArticle (article, zoom) {
+    //     var origin = article.markerPosition;
+    //     var range = article.beforeZoom - zoom;
+    //     var length = 0 - (article.pointLength * Math.pow(2, range));
+    //     var heading = article.pointHeading;
+    //     var position = google.maps.geometry.spherical.computeOffset(origin, length, heading);
+    //     this.map.setCenter(position);
+    // }
+
+    // rad (x) {
+    //     return x * Math.PI / 180;
+    // }
+
+    // getDistance (p1, p2) {
+    //     var R = 6378137; // Earth’s mean radius in meter
+    //     var dLat = this.rad(p2.lat() - p1.lat());
+    //     var dLong = this.rad(p2.lng() - p1.lng());
+    //     var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    //       Math.cos(this.rad(p1.lat())) * Math.cos(this.rad(p2.lat())) *
+    //       Math.sin(dLong / 2) * Math.sin(dLong / 2);
+    //     var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    //     var d = R * c;
+    //     return d; // returns the distance in meter
+    // }
+
+    // getContainerBounds () {
+    //     var width = this.mapElement.clientWidth;
+    //     var height = this.mapElement.clientHeight;
+    //     var max = this.option.widthMax;
+    //     var bounds;
+
+    //     if (width > max) {
+    //         var currentBounds = this.map.getBounds();
+    //         var proj = this.map.getProjection();
+    //         var scale = Math.pow(2, this.map.getZoom());
+    //         var ne = currentBounds.getNorthEast();//北東
+    //         var sw = currentBounds.getSouthWest();//南西
+    //         var left = (width - max) / 2;
+    //         var right = left + max;
+
+    //         var x = proj.fromLatLngToPoint(sw).x;
+    //         var y = proj.fromLatLngToPoint(ne).y;
+
+    //         var tr = new google.maps.Point(right / scale + x, y);
+    //         var bl = new google.maps.Point(left / scale + x, height / scale + y);
+
+    //         bounds = new google.maps.LatLngBounds(
+    //             proj.fromPointToLatLng(bl),
+    //             proj.fromPointToLatLng(tr)
+    //         );
+    //     } else {
+    //         bounds = this.map.getBounds();
+    //     }
+
+    //     return bounds;
+    // }
 }

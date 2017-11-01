@@ -65,86 +65,10 @@ html, body {
 
     >.map {
         position:absolute;
-        top:$header-height + (map-get($spacers, 1) * 2);
-        left:map-get($spacers, 1);
-        right:map-get($spacers, 1);
-        bottom:map-get($spacers, 1);
-        transition:
-            left $article-anime-speed ease-in-out,
-            right $article-anime-speed ease-in-out,
-            bottom $article-anime-speed ease-in-out;
-        border-radius:$shadowed-box-radius;
-        overflow:hidden;
-
-        $shadow-size:$shadowed-box-shadow-y;
-        $shadow-color:rgba(0,0,0,.15);
-        $shadow-length:1px;
-        
-        &:before, &:after, >div:before, >div:after {
-            display:block;
-            position:absolute;
-            z-index:2;
-            content:'';
-            border-radius:$shadowed-box-radius;
-            pointer-events:none;
-        }
-
-        &:before {
-            height:$shadow-size * 2;
-            top:0;
-            left:0;
-            right:0;
-            box-shadow:inset 0 #{$shadow-size / 2} $shadow-length $shadow-color;
-        }
-
-        &:after {
-            width:$shadow-size * 2;
-            top:0;
-            right:0;
-            bottom:0;
-            box-shadow:inset -#{$shadow-size / 2} 0 $shadow-length $shadow-color;
-        }
-
-        >div:before {
-            height:$shadow-size * 2;
-            left:0;
-            right:0;
-            bottom:0;
-            box-shadow:inset 0 -#{$shadow-size / 2} $shadow-length $shadow-color;
-        }
-        
-        >div:after {
-            width:$shadow-size * 2;
-            top:0;
-            left:0;
-            bottom:0;
-            box-shadow:inset #{$shadow-size / 2} 0 $shadow-length $shadow-color;
-        }
-
-        @media only screen and (-webkit-min-device-pixel-ratio: 2) {
-            $shadow-size:$shadow-size * 2;
-            $shadow-length:$shadow-length * 2;
-    
-            &:before {
-                height:$shadow-size * 2;
-                box-shadow:inset 0 #{$shadow-size / 2} $shadow-length $shadow-color;
-            }
-    
-            &:after {
-                width:$shadow-size * 2;
-                box-shadow:inset -#{$shadow-size / 2} 0 $shadow-length $shadow-color;
-            }
-    
-            >div:before {
-                height:$shadow-size * 2;
-                box-shadow:inset 0 -#{$shadow-size / 2} $shadow-length $shadow-color;
-            }
-            
-            >div:after {
-                width:$shadow-size * 2;
-                box-shadow:inset #{$shadow-size / 2} 0 $shadow-length $shadow-color;
-            }
-        }
+        top:0;
+        left:0;
+        right:0;
+        bottom:0;
 
         >div {
             position:relative;
@@ -155,59 +79,77 @@ html, body {
     }
 
     >header {
-        height:$header-height;
-        position:absolute;
-        top:map-get($spacers, 1);
-        left:map-get($spacers, 1);
-        right:map-get($spacers, 1);
+        position:relative;
         z-index:#{$zindex-dropdown - 1};
-        // border-radius:$border-radius;
-        // background-color:$white;
-        // box-shadow:0 1px 2px rgba(0,0,0,.15);
-    }
 
-    >article {
-        height:0;
-        position:absolute;
-        overflow:hidden;
-        left:map-get($spacers, 2);
-        right:map-get($spacers, 2);
-        bottom:map-get($spacers, 1);
-        z-index:#{$zindex-dropdown - 2};
-        border-radius:$border-radius;
-        background-color:$white;
-        @include shadowed-box-variant;
-        transition:height $article-anime-speed ease-in-out;
+        .wrap {
+            background-color:$white;
+            @include shadowed-box-variant();
+        }
+
+        @include media-breakpoint-up(md) {
+            .container {
+                padding:$spacer;
+            }
+
+            .wrap {
+                height:$header-height-desktop;
+            }
+        }
+
+        @include media-breakpoint-down(sm) {
+            .container {
+                padding:map-get($spacers, 1) map-get($spacers, 2);
+            }
+
+            .wrap {
+                height:$header-height-mobile;
+            }
+        }
     }
 
     >main {
-        > article {
-            display:flex;
-            flex-direction:column;
-            max-width:600px;
-            overflow:hidden;
-            position:absolute;
-            z-index:3;
-            opacity:0;
-            background-color:rgba(255,255,255,.6);
-            transition:transform .3s ease-in-out, opacity 0s linear .3s;
+        height:0;
+        display:flex;
+        position:relative;
+        z-index:#{$zindex-dropdown - 2};
+        overflow:hidden;
+        transition:height 0s linear $article-anime-speed;
+
+        article {
+            position:relative;
+            flex-grow:1;
+            border-radius:$border-radius;
+            background-color:$white;
+            @include shadowed-box-variant;
     
             @include media-breakpoint-up(md) {
-                height:calc(100% - 100px);
-                width:60vw;
-                top:50px;
-                bottom:50px;
-                right:0;
-                transform:translateX(100%);
+                width:70%;
+                margin-left:auto;
+                right:-100vw;
+                margin-left:auto;
+                transition:right $article-anime-speed ease-in-out;
             }
     
             @include media-breakpoint-down(sm) {
-                width:100%;
-                height:70%;
-                left:50%;
-                right:0;
-                bottom:0;
-                transform:translate(-50%, 100%);
+                top:70vh;
+                margin-top:30%;
+                transition:top $article-anime-speed ease-in-out;
+            }
+        }
+
+        .container {
+            display:flex;
+            flex-direction:column;
+            flex-grow:1;
+
+            @include media-breakpoint-up(md) {
+                padding-top:$spacer;
+                padding-bottom:$spacer;
+            }
+    
+            @include media-breakpoint-down(sm) {
+                padding:0 map-get($spacers, 2) map-get($spacers, 1);
             }
         }
     }
@@ -215,38 +157,25 @@ html, body {
 
 #show-article:checked {
     ~ .map {
-        left:map-get($spacers, 2);
-        right:map-get($spacers, 2);
-        bottom:60vh;
-    }
-
-    ~ article {
-        height:calc(60vh - #{map-get($spacers, 1)} - #{map-get($spacers, 2)});
-    }
-}
-
-#open-article:checked,
-.open-article {
-    ~main {
-        >.map {
-            // pointer-events:none;
+        .zoom-buttons {
+            margin-right:-#{map-get($spacers, 2)};
+            transform:translateX(100%);
         }
+    }
 
-        >article {
-            opacity:1;
-            transition:transform .3s ease-in-out;
+    ~ main {
+        height:100%;
+        flex-grow:1;
 
+        article {
             @include media-breakpoint-up(md) {
-                // height:calc(100% - 100px);
-                transform:translateX(0);
-                box-shadow:0 -1px 3px rgba(0,0,0,.3);
+                right:0;
             }
-    
+
             @include media-breakpoint-down(sm) {
-                // height:65%;
-                transform:translate(-50%, 0%);
-                box-shadow:-1px 0 3px rgba(0,0,0,.3);
+                top:0;
             }
         }
     }
 }
+

@@ -17,18 +17,26 @@
         <div id="map"></div>
     </div>
 
-    <header>
-        header <label for="show-article" class="btn btn-sm btn-secodary">toggle</label>
+    <header id="header">
+        <div class="container">
+            <div class="wrap">
+                header <label for="show-article" class="btn btn-sm btn-secodary">toggle</label>
+            </div>
+        </div>
     </header>
 
-    <article id="js-article">
-        <header>
-            content
-        </header>
-        <div class="body">
-            <label for="show-article">close</label>
+    <main>
+        <div class="container">
+            <article id="article">
+                <header>
+                    content
+                </header>
+                <div class="body">
+                    <label for="show-article">close</label>
+                </div>
+            </article>
         </div>
-    </article>
+    </main>
 </div>
 
 
