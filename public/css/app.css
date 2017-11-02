@@ -143,7 +143,7 @@ body {
   line-height: 1.5;
   color: #212529;
   text-align: left;
-  background-color: #F2F2F2;
+  background-color: #fff;
 }
 
 [tabindex="-1"]:focus {
@@ -1977,7 +1977,7 @@ pre code {
 }
 
 .table .table {
-  background-color: #F2F2F2;
+  background-color: #fff;
 }
 
 .table-sm th,
@@ -9718,10 +9718,10 @@ a.text-dark:hover {
           box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
   -webkit-transform: translateX(0);
           transform: translateX(0);
-  -webkit-transition: margin-right 0.2s ease-in-out, -webkit-transform 0.2s ease-in-out;
-  transition: margin-right 0.2s ease-in-out, -webkit-transform 0.2s ease-in-out;
-  transition: margin-right 0.2s ease-in-out, transform 0.2s ease-in-out;
-  transition: margin-right 0.2s ease-in-out, transform 0.2s ease-in-out, -webkit-transform 0.2s ease-in-out;
+  -webkit-transition: margin-right 0.4s ease-in-out, -webkit-transform 0.4s ease-in-out;
+  transition: margin-right 0.4s ease-in-out, -webkit-transform 0.4s ease-in-out;
+  transition: margin-right 0.4s ease-in-out, transform 0.4s ease-in-out;
+  transition: margin-right 0.4s ease-in-out, transform 0.4s ease-in-out, -webkit-transform 0.4s ease-in-out;
 }
 
 #map .zoom-buttons .btn {
@@ -9751,117 +9751,24 @@ a.text-dark:hover {
 html,
 body {
   height: 100%;
-  overflow: hidden;
 }
 
-#app {
-  height: 100%;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  overflow: hidden;
-}
-
-#app > input[type="checkbox"] {
+body > input {
   display: none;
 }
 
-#app > .map {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-}
-
-#app > .map > div {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-}
-
-#app > header {
-  position: relative;
-  z-index: 999;
-}
-
-#app > header .wrap {
-  background-color: #fff;
-  border-radius: 0.25rem;
-  -webkit-box-shadow: 0 0.1rem 2px rgba(0, 0, 0, 0.15);
-          box-shadow: 0 0.1rem 2px rgba(0, 0, 0, 0.15);
-}
-
-@media (min-width: 768px) {
-  #app > header .container {
-    padding: 1rem;
-  }
-
-  #app > header .wrap {
-    height: 3rem;
-  }
-}
-
-@media (max-width: 767px) {
-  #app > header .container {
-    padding: 0.25rem 0.5rem;
-  }
-
-  #app > header .wrap {
-    height: 2.5rem;
-  }
-}
-
-#app > main {
-  height: 0;
+#app {
+  min-height: 100%;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  position: relative;
-  z-index: 998;
-  overflow: hidden;
-  -webkit-transition: height 0s linear 0.2s;
-  transition: height 0s linear 0.2s;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
 }
 
-#app > main article {
-  position: relative;
-  -webkit-box-flex: 1;
-      -ms-flex-positive: 1;
-          flex-grow: 1;
-  border-radius: 0.25rem;
-  background-color: #fff;
-  border-radius: 0.25rem;
-  -webkit-box-shadow: 0 0.1rem 2px rgba(0, 0, 0, 0.15);
-          box-shadow: 0 0.1rem 2px rgba(0, 0, 0, 0.15);
-}
-
-@media (min-width: 768px) {
-  #app > main article {
-    width: 70%;
-    margin-left: auto;
-    right: -100vw;
-    margin-left: auto;
-    -webkit-transition: right 0.2s ease-in-out;
-    transition: right 0.2s ease-in-out;
-  }
-}
-
-@media (max-width: 767px) {
-  #app > main article {
-    top: 70vh;
-    margin-top: 30%;
-    -webkit-transition: top 0.2s ease-in-out;
-    transition: top 0.2s ease-in-out;
-  }
-}
-
-#app > main .container {
+#app > .contents {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -9874,41 +9781,65 @@ body {
           flex-grow: 1;
 }
 
-@media (min-width: 768px) {
-  #app > main .container {
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-  }
+#app > .contents > header {
+  background-color: #fff;
+  border-bottom: 1px solid #e9ecef;
 }
 
-@media (max-width: 767px) {
-  #app > main .container {
-    padding: 0 0.5rem 0.25rem;
-  }
-}
-
-#show-article:checked ~ .map .zoom-buttons {
-  margin-right: -0.5rem;
-  -webkit-transform: translateX(100%);
-          transform: translateX(100%);
-}
-
-#show-article:checked ~ main {
-  height: 100%;
+#app > .contents > main {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
   -webkit-box-flex: 1;
       -ms-flex-positive: 1;
           flex-grow: 1;
+  -webkit-box-align: stretch;
+      -ms-flex-align: stretch;
+          align-items: stretch;
 }
 
-@media (min-width: 768px) {
-  #show-article:checked ~ main article {
-    right: 0;
-  }
+#app > .contents > main > .map {
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  background-color: #f2f2f2;
+  -ms-flex-preferred-size: 100%;
+      flex-basis: 100%;
+  -webkit-transition: -webkit-flex-basis 0.4s ease-in-out;
+  transition: -webkit-flex-basis 0.4s ease-in-out;
+  transition: flex-basis 0.4s ease-in-out;
+  transition: flex-basis 0.4s ease-in-out, -webkit-flex-basis 0.4s ease-in-out, -ms-flex-preferred-size 0.4s ease-in-out;
 }
 
-@media (max-width: 767px) {
-  #show-article:checked ~ main article {
-    top: 0;
-  }
+#app > .contents > main > .map > div {
+  height: 100%;
+}
+
+#app > .contents > main > article {
+  -webkit-box-flex: 0;
+      -ms-flex-positive: 0;
+          flex-grow: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+#toggle-article:checked ~ #app > .contents > main > .map {
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  border-bottom: 1px solid #e9ecef;
+}
+
+#toggle-article:checked ~ #app > .contents > main > article {
+  height: auto;
+  -webkit-box-flex: 2;
+      -ms-flex-positive: 2;
+          flex-grow: 2;
 }
 

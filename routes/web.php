@@ -14,6 +14,9 @@
 Route::get('/', function () {
     return view('test');
 });
+Route::get('/test{id}', function ($id) {
+    return view('test'.$id);
+});
 
 Auth::routes();
 
