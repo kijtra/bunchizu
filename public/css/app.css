@@ -9757,6 +9757,15 @@ body > input {
   display: none;
 }
 
+#map .infobox {
+  max-width: 70vw;
+}
+
+#map .infobox-inner {
+  border: 1px solid red;
+  background-color: #fff;
+}
+
 #app {
   min-height: 100%;
   display: -webkit-box;
@@ -9768,78 +9777,56 @@ body > input {
           flex-direction: column;
 }
 
-#app > .contents {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  -webkit-box-flex: 1;
-      -ms-flex-positive: 1;
-          flex-grow: 1;
-}
-
-#app > .contents > header {
-  background-color: #fff;
+#app > header {
   border-bottom: 1px solid #e9ecef;
+  height: 2.5rem;
 }
 
-#app > .contents > main {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: row;
-          flex-direction: row;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
+@media (min-width: 576px) {
+  #app > header {
+    height: 2.5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  #app > header {
+    height: 2.75rem;
+  }
+}
+
+@media (min-width: 992px) {
+  #app > header {
+    height: 3rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  #app > header {
+    height: 3rem;
+  }
+}
+
+#app > main {
+  position: relative;
   -webkit-box-flex: 1;
       -ms-flex-positive: 1;
           flex-grow: 1;
-  -webkit-box-align: stretch;
-      -ms-flex-align: stretch;
-          align-items: stretch;
-}
-
-#app > .contents > main > .map {
-  -webkit-box-flex: 1;
-      -ms-flex-positive: 1;
-          flex-grow: 1;
-  background-color: #f2f2f2;
-  -ms-flex-preferred-size: 100%;
-      flex-basis: 100%;
-  -webkit-transition: -webkit-flex-basis 0.4s ease-in-out;
-  transition: -webkit-flex-basis 0.4s ease-in-out;
-  transition: flex-basis 0.4s ease-in-out;
-  transition: flex-basis 0.4s ease-in-out, -webkit-flex-basis 0.4s ease-in-out, -ms-flex-preferred-size 0.4s ease-in-out;
-}
-
-#app > .contents > main > .map > div {
-  height: 100%;
-}
-
-#app > .contents > main > article {
-  -webkit-box-flex: 0;
-      -ms-flex-positive: 0;
-          flex-grow: 0;
-  height: 0;
   overflow: hidden;
 }
 
-#toggle-article:checked ~ #app > .contents > main > .map {
-  -webkit-box-flex: 1;
-      -ms-flex-positive: 1;
-          flex-grow: 1;
-  border-bottom: 1px solid #e9ecef;
+#app > main > #map {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 
-#toggle-article:checked ~ #app > .contents > main > article {
-  height: auto;
-  -webkit-box-flex: 2;
-      -ms-flex-positive: 2;
-          flex-grow: 2;
+#app > main > article {
+  height: 100%;
+  position: absolute;
+  left: 100%;
+  overflow: hidden;
+  background-color: #fff;
 }
 

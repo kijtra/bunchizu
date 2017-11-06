@@ -1,5 +1,6 @@
+// https://github.com/googlemaps/v3-utility-library/blob/master/infobox/src/infobox.js
 export default class {
-    constructor (element) {
+    constructor(element) {
         this.option = {
             debug: true,
             defaultPosition: {
@@ -46,12 +47,12 @@ export default class {
         this.init();
     }
 
-    init () {
+    init() {
         var self = this;
 
         self.addCustomZoomControl();
 
-        self.map.addListener('zoom_changed', function(e) {
+        self.map.addListener('zoom_changed', function (e) {
             self.beforeZoom = self.currentZoom;
             self.currentZoom = this.getZoom();
 
@@ -83,44 +84,62 @@ export default class {
             self.map.setCenter(self.currentCenter);
         });
 
-        google.maps.event.addDomListener(self.toggleElement, 'click', function (e) {
-            if (!self.currentMarker) {
-                e.preventDefault();
-                return false;
-            }
+        // google.maps.event.addDomListener(self.toggleElement, 'click', function (e) {
+        //     if (!self.currentMarker) {
+        //         e.preventDefault();
+        //         return false;
+        //     }
+        // });
+
+        // google.maps.event.addDomListener(self.toggleElement, 'change', function (e) {
+        //     if (self.currentMarker) {
+        //         if (self.toggleElement.checked) {
+        //             self.showArticle();
+        //         } else {
+        //             self.hideArticle();
+        //         }
+        //     }
+        // });
+
+        var marker = self.addMarker(this.option.defaultPosition, {
+            draggable: true
         });
 
-        google.maps.event.addDomListener(self.toggleElement, 'change', function (e) {
-            if (self.currentMarker) {
-                if (self.toggleElement.checked) {
-                    self.showArticle();
-                } else {
-                    self.hideArticle();
-                }
-            }
-        });
+        // var infowindow = new google.maps.InfoWindow({
+        //     content: '<div>content</div>'
+        // });
+        var content = '<div class="info-window">content</div>';
+        // var infowindow = new InfoBox({
+        //     content: content
+        // });
 
-        self.addMarker(this.option.defaultPosition);
+        var infobox = new Baloon();
+        infobox.setContent(content);
+        infobox.open(this.map, marker);
+        // infowindow.open(this.map, marker);
     }
 
     triggerEvent(element, event) {
         console.log(element, event);
         if (window.Event) {
-            var evt = new Event(event, {bubbles:false, cancelable:false});
+            var evt = new Event(event, {
+                bubbles: false,
+                cancelable: false
+            });
             element.dispatchEvent(evt);
         } else if (document.createEvent) {
             // IE以外
             var evt = document.createEvent('HTMLEvents');
-            evt.initEvent(event, true, true ); // event type, bubbling, cancelable
+            evt.initEvent(event, true, true); // event type, bubbling, cancelable
             return element.dispatchEvent(evt);
         } else {
             // IE
             var evt = document.createEventObject();
-            return element.fireEvent("on"+event, evt);
+            return element.fireEvent("on" + event, evt);
         }
     }
 
-    addCustomZoomControl () {
+    addCustomZoomControl() {
         var self = this;
         var zoom = this.map.getZoom();
 
@@ -141,8 +160,12 @@ export default class {
             zoomOut.setAttribute('disabled', true);
         }
 
-        zoomIn.addEventListener('click', function () { self.zoomIn(); });
-        zoomOut.addEventListener('click', function () { self.zoomOut(); });
+        zoomIn.addEventListener('click', function () {
+            self.zoomIn();
+        });
+        zoomOut.addEventListener('click', function () {
+            self.zoomOut();
+        });
 
         container.appendChild(zoomIn);
         container.appendChild(zoomOut);
@@ -152,9 +175,12 @@ export default class {
         this.zoomOutButton = zoomOut;
     }
 
-    onZoomIn (from, to) {
+    onZoomIn(from, to) {
         if (this.option.debug) {
-            console.log('zoomIn', {from: from, to: to});
+            console.log('zoomIn', {
+                from: from,
+                to: to
+            });
         }
 
         // if (this.article) {
@@ -162,9 +188,12 @@ export default class {
         // }
     }
 
-    onZoomOut (from, to) {
+    onZoomOut(from, to) {
         if (this.option.debug) {
-            console.log('zoomOut', {from: from, to: to});
+            console.log('zoomOut', {
+                from: from,
+                to: to
+            });
         }
 
         // if (this.article) {
@@ -172,7 +201,7 @@ export default class {
         // }
     }
 
-    addMarker (position, conf) {
+    addMarker(position, conf) {
         var self = this;
 
         var option = {};
@@ -182,16 +211,18 @@ export default class {
         option.position = position;
         option.map = this.map;
 
-        var marker = new google.maps.Marker(option);
+        var marker = new Marker(option);
 
-        marker.addListener('click', function() {
+        marker.addListener('click', function () {
             self.currentMarker = this;
             self.toggleElement.checked = true;
             self.triggerEvent(self.toggleElement, 'change');
         });
+
+        return marker;
     }
 
-    setCenter (latlon, bounds) {
+    setCenter(latlon, bounds) {
         var position;
 
         if (!bounds) {
@@ -213,7 +244,7 @@ export default class {
         this.currentCenter = position;
     }
 
-    getPadBounds (requests, zoom) {
+    getPadBounds(requests, zoom) {
         var width = this.mapElement.clientWidth;
         var height = this.mapElement.clientHeight;
         var max = this.option.widthMax;
@@ -223,7 +254,12 @@ export default class {
         var sw = proj.fromLatLngToPoint(currentBounds.getSouthWest());
         var ne = proj.fromLatLngToPoint(currentBounds.getNorthEast());
 
-        var key, val, sizes = {top:0, right:0, bottom:0, left:0};
+        var key, val, sizes = {
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0
+        };
         for (key in requests) {
             val = '' + (requests[key] || 0);
             if (/^\d+$/.test(val)) {
@@ -273,7 +309,7 @@ export default class {
         return bounds;
     }
 
-    showArticle () {
+    showArticle() {
         if (!this.currentMarker) {
             if (this.option.debug) {
                 console.error('Target marker is not defined');
@@ -297,15 +333,21 @@ export default class {
 
         this.map.setZoom(13);
 
-        var size = {top: this.headerElement.clientHeight, bottom: '70%'};
+        var size = {
+            top: this.headerElement.clientHeight,
+            bottom: '70%'
+        };
         if (document.body.clientWidth > this.option.breakPoint.mobile) {
-            size = {top: this.headerElement.clientHeight, right: '70%'};
+            size = {
+                top: this.headerElement.clientHeight,
+                right: '70%'
+            };
         }
         var bounds = this.getPadBounds(size);
         this.setCenter(marker.getPosition(), bounds);
     }
 
-    hideArticle () {
+    hideArticle() {
         if (!this.article) {
             if (this.option.debug) {
                 console.error('Article is not defined');

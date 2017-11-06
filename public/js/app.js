@@ -963,7 +963,7 @@ module.exports = Cancel;
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(10);
-module.exports = __webpack_require__(40);
+module.exports = __webpack_require__(42);
 
 
 /***/ }),
@@ -972,8 +972,7 @@ module.exports = __webpack_require__(40);
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_map__ = __webpack_require__(39);
-
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_Map__ = __webpack_require__(39);
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -999,7 +998,11 @@ window.Vue = __webpack_require__(36);
 
 
 window.initMap = function () {
-    var mc = new __WEBPACK_IMPORTED_MODULE_0__lib_map__["a" /* default */](document.getElementById('map'));
+    window.AbstractInfoBox = __webpack_require__(40);
+    window.Baloon = __webpack_require__(41);
+    window.Marker = __webpack_require__(47);
+    // window.Baloon = require('./lib/baloon');
+    var mc = new __WEBPACK_IMPORTED_MODULE_0__lib_Map__["a" /* default */](document.getElementById('map'));
 
     // var currentCenter = null;
     // var panPoint = null;
@@ -28519,7 +28522,7 @@ return jQuery;
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* WEBPACK VAR INJECTION */(function(global) {/**!
  * @fileOverview Kickass library to create and place poppers near their reference elements.
- * @version 1.12.6
+ * @version 1.12.5
  * @license
  * Copyright (c) 2016 Federico Zivolo and contributors
  *
@@ -28541,7 +28544,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var isBrowser = typeof window !== 'undefined' && typeof window.document !== 'undefined';
+var nativeHints = ['native code', '[object MutationObserverConstructor]'];
+
+/**
+ * Determine if a function is implemented natively (as opposed to a polyfill).
+ * @method
+ * @memberof Popper.Utils
+ * @argument {Function | undefined} fn the function to check
+ * @returns {Boolean}
+ */
+var isNative = (function (fn) {
+  return nativeHints.some(function (hint) {
+    return (fn || '').toString().indexOf(hint) > -1;
+  });
+});
+
+var isBrowser = typeof window !== 'undefined';
 var longerTimeoutBrowsers = ['Edge', 'Trident', 'Firefox'];
 var timeoutDuration = 0;
 for (var i = 0; i < longerTimeoutBrowsers.length; i += 1) {
@@ -28552,16 +28570,26 @@ for (var i = 0; i < longerTimeoutBrowsers.length; i += 1) {
 }
 
 function microtaskDebounce(fn) {
-  var called = false;
+  var scheduled = false;
+  var i = 0;
+  var elem = document.createElement('span');
+
+  // MutationObserver provides a mechanism for scheduling microtasks, which
+  // are scheduled *before* the next task. This gives us a way to debounce
+  // a function but ensure it's called *before* the next paint.
+  var observer = new MutationObserver(function () {
+    fn();
+    scheduled = false;
+  });
+
+  observer.observe(elem, { attributes: true });
+
   return function () {
-    if (called) {
-      return;
+    if (!scheduled) {
+      scheduled = true;
+      elem.setAttribute('x-index', i);
+      i = i + 1; // don't use compund (+=) because it doesn't get optimized in V8
     }
-    called = true;
-    Promise.resolve().then(function () {
-      called = false;
-      fn();
-    });
   };
 }
 
@@ -28578,7 +28606,11 @@ function taskDebounce(fn) {
   };
 }
 
-var supportsMicroTasks = isBrowser && window.Promise;
+// It's common for MutationObserver polyfills to be seen in the wild, however
+// these rely on Mutation Events which only occur when an element is connected
+// to the DOM. The algorithm used in this module does not use a connected element,
+// and so we must ensure that a *native* MutationObserver is available.
+var supportsNativeMutationObserver = isBrowser && isNative(window.MutationObserver);
 
 /**
 * Create a debounced version of a method, that's asynchronously deferred
@@ -28589,7 +28621,7 @@ var supportsMicroTasks = isBrowser && window.Promise;
 * @argument {Function} fn
 * @returns {Function}
 */
-var debounce = supportsMicroTasks ? microtaskDebounce : taskDebounce;
+var debounce = supportsNativeMutationObserver ? microtaskDebounce : taskDebounce;
 
 /**
  * Check if the given variable is a function
@@ -28642,16 +28674,8 @@ function getParentNode(element) {
  */
 function getScrollParent(element) {
   // Return body, `getScroll` will take care to get the correct `scrollTop` from it
-  if (!element) {
+  if (!element || ['HTML', 'BODY', '#document'].indexOf(element.nodeName) !== -1) {
     return window.document.body;
-  }
-
-  switch (element.nodeName) {
-    case 'HTML':
-    case 'BODY':
-      return element.ownerDocument.body;
-    case '#document':
-      return element.body;
   }
 
   // Firefox want us to check `-x` and `-y` variations as well
@@ -28681,10 +28705,6 @@ function getOffsetParent(element) {
   var nodeName = offsetParent && offsetParent.nodeName;
 
   if (!nodeName || nodeName === 'BODY' || nodeName === 'HTML') {
-    if (element) {
-      return element.ownerDocument.documentElement;
-    }
-
     return window.document.documentElement;
   }
 
@@ -28780,8 +28800,8 @@ function getScroll(element) {
   var nodeName = element.nodeName;
 
   if (nodeName === 'BODY' || nodeName === 'HTML') {
-    var html = element.ownerDocument.documentElement;
-    var scrollingElement = element.ownerDocument.scrollingElement || html;
+    var html = window.document.documentElement;
+    var scrollingElement = window.document.scrollingElement || html;
     return scrollingElement[upperSide];
   }
 
@@ -29030,7 +29050,7 @@ function getOffsetRectRelativeToArbitraryNode(children, parent) {
 }
 
 function getViewportOffsetRectRelativeToArtbitraryNode(element) {
-  var html = element.ownerDocument.documentElement;
+  var html = window.document.documentElement;
   var relativeOffset = getOffsetRectRelativeToArbitraryNode(element, html);
   var width = Math.max(html.clientWidth, window.innerWidth || 0);
   var height = Math.max(html.clientHeight, window.innerHeight || 0);
@@ -29091,10 +29111,10 @@ function getBoundaries(popper, reference, padding, boundariesElement) {
     if (boundariesElement === 'scrollParent') {
       boundariesNode = getScrollParent(getParentNode(popper));
       if (boundariesNode.nodeName === 'BODY') {
-        boundariesNode = popper.ownerDocument.documentElement;
+        boundariesNode = window.document.documentElement;
       }
     } else if (boundariesElement === 'window') {
-      boundariesNode = popper.ownerDocument.documentElement;
+      boundariesNode = window.document.documentElement;
     } else {
       boundariesNode = boundariesElement;
     }
@@ -29335,11 +29355,10 @@ function runModifiers(modifiers, data, ends) {
   var modifiersToRun = ends === undefined ? modifiers : modifiers.slice(0, findIndex(modifiers, 'name', ends));
 
   modifiersToRun.forEach(function (modifier) {
-    if (modifier['function']) {
-      // eslint-disable-line dot-notation
+    if (modifier.function) {
       console.warn('`modifier.function` is deprecated, use `modifier.fn`!');
     }
-    var fn = modifier['function'] || modifier.fn; // eslint-disable-line dot-notation
+    var fn = modifier.function || modifier.fn;
     if (modifier.enabled && isFunction(fn)) {
       // Add properties to offsets to make them a complete clientRect object
       // we do this before each modifier to make sure the previous one doesn't
@@ -29466,19 +29485,9 @@ function destroy() {
   return this;
 }
 
-/**
- * Get the window associated with the element
- * @argument {Element} element
- * @returns {Window}
- */
-function getWindow(element) {
-  var ownerDocument = element.ownerDocument;
-  return ownerDocument ? ownerDocument.defaultView : window;
-}
-
 function attachToScrollParents(scrollParent, event, callback, scrollParents) {
   var isBody = scrollParent.nodeName === 'BODY';
-  var target = isBody ? scrollParent.ownerDocument.defaultView : scrollParent;
+  var target = isBody ? window : scrollParent;
   target.addEventListener(event, callback, { passive: true });
 
   if (!isBody) {
@@ -29496,7 +29505,7 @@ function attachToScrollParents(scrollParent, event, callback, scrollParents) {
 function setupEventListeners(reference, options, state, updateBound) {
   // Resize event listener on window
   state.updateBound = updateBound;
-  getWindow(reference).addEventListener('resize', state.updateBound, { passive: true });
+  window.addEventListener('resize', state.updateBound, { passive: true });
 
   // Scroll event listener on scroll parents
   var scrollElement = getScrollParent(reference);
@@ -29527,7 +29536,7 @@ function enableEventListeners() {
  */
 function removeEventListeners(reference, state) {
   // Remove resize event listener on window
-  getWindow(reference).removeEventListener('resize', state.updateBound);
+  window.removeEventListener('resize', state.updateBound);
 
   // Remove scroll event listener on scroll parents
   state.scrollParents.forEach(function (target) {
@@ -30829,8 +30838,8 @@ var Popper = function () {
     };
 
     // get reference and popper elements (allow jQuery wrappers)
-    this.reference = reference && reference.jquery ? reference[0] : reference;
-    this.popper = popper && popper.jquery ? popper[0] : popper;
+    this.reference = reference.jquery ? reference[0] : reference;
+    this.popper = popper.jquery ? popper[0] : popper;
 
     // Deep merge modifiers options
     this.options.modifiers = {};
@@ -46516,6 +46525,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+// https://github.com/googlemaps/v3-utility-library/blob/master/infobox/src/infobox.js
 var _class = function () {
     function _class(element) {
         _classCallCheck(this, _class);
@@ -46605,31 +46615,49 @@ var _class = function () {
                 self.map.setCenter(self.currentCenter);
             });
 
-            google.maps.event.addDomListener(self.toggleElement, 'click', function (e) {
-                if (!self.currentMarker) {
-                    e.preventDefault();
-                    return false;
-                }
+            // google.maps.event.addDomListener(self.toggleElement, 'click', function (e) {
+            //     if (!self.currentMarker) {
+            //         e.preventDefault();
+            //         return false;
+            //     }
+            // });
+
+            // google.maps.event.addDomListener(self.toggleElement, 'change', function (e) {
+            //     if (self.currentMarker) {
+            //         if (self.toggleElement.checked) {
+            //             self.showArticle();
+            //         } else {
+            //             self.hideArticle();
+            //         }
+            //     }
+            // });
+
+            var marker = self.addMarker(this.option.defaultPosition, {
+                draggable: true
             });
 
-            google.maps.event.addDomListener(self.toggleElement, 'change', function (e) {
-                if (self.currentMarker) {
-                    if (self.toggleElement.checked) {
-                        self.showArticle();
-                    } else {
-                        self.hideArticle();
-                    }
-                }
-            });
+            // var infowindow = new google.maps.InfoWindow({
+            //     content: '<div>content</div>'
+            // });
+            var content = '<div class="info-window">content</div>';
+            // var infowindow = new InfoBox({
+            //     content: content
+            // });
 
-            self.addMarker(this.option.defaultPosition);
+            var infobox = new Baloon();
+            infobox.setContent(content);
+            infobox.open(this.map, marker);
+            // infowindow.open(this.map, marker);
         }
     }, {
         key: 'triggerEvent',
         value: function triggerEvent(element, event) {
             console.log(element, event);
             if (window.Event) {
-                var evt = new Event(event, { bubbles: false, cancelable: false });
+                var evt = new Event(event, {
+                    bubbles: false,
+                    cancelable: false
+                });
                 element.dispatchEvent(evt);
             } else if (document.createEvent) {
                 // IE以外
@@ -46683,7 +46711,10 @@ var _class = function () {
         key: 'onZoomIn',
         value: function onZoomIn(from, to) {
             if (this.option.debug) {
-                console.log('zoomIn', { from: from, to: to });
+                console.log('zoomIn', {
+                    from: from,
+                    to: to
+                });
             }
 
             // if (this.article) {
@@ -46694,7 +46725,10 @@ var _class = function () {
         key: 'onZoomOut',
         value: function onZoomOut(from, to) {
             if (this.option.debug) {
-                console.log('zoomOut', { from: from, to: to });
+                console.log('zoomOut', {
+                    from: from,
+                    to: to
+                });
             }
 
             // if (this.article) {
@@ -46713,13 +46747,15 @@ var _class = function () {
             option.position = position;
             option.map = this.map;
 
-            var marker = new google.maps.Marker(option);
+            var marker = new Marker(option);
 
             marker.addListener('click', function () {
                 self.currentMarker = this;
                 self.toggleElement.checked = true;
                 self.triggerEvent(self.toggleElement, 'change');
             });
+
+            return marker;
         }
     }, {
         key: 'setCenter',
@@ -46758,7 +46794,12 @@ var _class = function () {
 
             var key,
                 val,
-                sizes = { top: 0, right: 0, bottom: 0, left: 0 };
+                sizes = {
+                top: 0,
+                right: 0,
+                bottom: 0,
+                left: 0
+            };
             for (key in requests) {
                 val = '' + (requests[key] || 0);
                 if (/^\d+$/.test(val)) {
@@ -46824,9 +46865,15 @@ var _class = function () {
 
             this.map.setZoom(13);
 
-            var size = { top: this.headerElement.clientHeight, bottom: '70%' };
+            var size = {
+                top: this.headerElement.clientHeight,
+                bottom: '70%'
+            };
             if (document.body.clientWidth > this.option.breakPoint.mobile) {
-                size = { top: this.headerElement.clientHeight, right: '70%' };
+                size = {
+                    top: this.headerElement.clientHeight,
+                    right: '70%'
+                };
             }
             var bounds = this.getPadBounds(size);
             this.setCenter(marker.getPosition(), bounds);
@@ -46950,7 +46997,564 @@ var _class = function () {
 /* 40 */
 /***/ (function(module, exports) {
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+/**
+ * https://github.com/googlemaps/v3-utility-library/tree/master/infobox
+ */
+module.exports = function (_google$maps$OverlayV) {
+    _inherits(_class, _google$maps$OverlayV);
+
+    function _class(conf) {
+        _classCallCheck(this, _class);
+
+        var _this = _possibleConstructorReturn(this, (_class.__proto__ || Object.getPrototypeOf(_class)).call(this));
+
+        conf = conf || {};
+
+        google.maps.OverlayView.apply(_this, arguments);
+
+        // Standard options (in common with google.maps.InfoWindow):
+        _this.maxWidth_ = conf.maxWidth || 0;
+        _this.maxHeight_ = conf.maxHeight || 0;
+        _this.pixelOffset_ = conf.pixelOffset || new google.maps.Size(0, 0);
+        _this.zIndex_ = conf.zIndex || null;
+
+        _this.content_ = conf.content || "";
+        _this.position_ = conf.position || new google.maps.LatLng(0, 0);
+        _this.marker_ = null;
+
+        // Additional options (unique to InfoBox):
+        _this.boxClass_ = conf.boxClass || "";
+        _this.innerClass_ = conf.innerClass || "";
+
+        _this.infoBoxClearance_ = conf.infoBoxClearance || new google.maps.Size(1, 1);
+
+        if (typeof conf.visible === 'undefined') {
+            if (typeof conf.isHidden === 'undefined') {
+                conf.visible = true;
+            } else {
+                conf.visible = !conf.isHidden;
+            }
+        }
+
+        _this.isHidden_ = !conf.visible;
+
+        _this.alignBottom_ = conf.alignBottom || false;
+        _this.pane_ = conf.pane || 'floatPane';
+
+        _this.box_ = null;
+        _this.boxInner_ = null;
+        _this.closeListeners_ = null;
+        _this.moveListener_ = null;
+        _this.mapListener_ = null;
+        _this.fixedWidthSet_ = null;
+
+        _this.contentBefore_ = '';
+        _this.contentAfter_ = '';
+        return _this;
+    }
+
+    _createClass(_class, [{
+        key: "createInfoBox_",
+        value: function createInfoBox_(content) {
+            if (this.box_) {
+                return;
+            }
+
+            this.createBoxElement_();
+            this.setBoxContent_(this.content_);
+
+            // Add the InfoBox DIV to the DOM
+            this.getPanes()[this.pane_].appendChild(this.box_);
+
+            var projection = this.getProjection();
+            var width = this.box_.style.width;
+            var height = this.box_.style.height;
+            var sizes;
+
+            if (width) {
+                this.fixedWidthSet_ = true;
+                width = parseFloat(width.replace(/[^\d]+/g, ''));
+            } else {
+                if (this.maxWidth_ !== 0 && this.box_.offsetWidth > this.maxWidth_) {
+                    width = this.maxWidth_;
+                    this.fixedWidthSet_ = true;
+                } else {
+                    // The following code is needed to overcome problems with MSIE
+                    sizes = this.getElementWidths_(this.box_);
+                    width = this.box_.offsetWidth - sizes.left - sizes.right;
+                    this.fixedWidthSet_ = false;
+                }
+            }
+            console.log(height);
+            if (height) {
+                height = parseFloat(height.replace(/[^\d]+/g, ''));
+            } else {
+                if (this.maxHeight_ !== 0 && this.box_.offsetHeight > this.maxHeight_) {
+                    height = this.maxHeight_;
+                } else {
+                    // The following code is needed to overcome problems with MSIE
+                    if (!sizes) {
+                        sizes = this.getElementWidths_(this.box_);
+                    }
+                    height = this.box_.offsetHeight - sizes.top - sizes.bottom;
+                }
+            }
+
+            this.box_.style.width = width + 'px';
+            // this.box_.style.height = height + 'px';
+
+            // this.panBox_();
+            this.box_.style.marginLeft = 0 - width / 2 + 'px';
+
+            if (this.marker_) {
+                var offsetY = this.marker_.height + height;
+                this.box_.style.marginTop = '-' + offsetY + 'px';
+            }
+
+            google.maps.event.trigger(this, 'domready');
+        }
+    }, {
+        key: "createBoxElement_",
+        value: function createBoxElement_() {
+            var box = document.createElement('div');
+            box.setAttribute('class', this.boxClass_);
+            box.style.cssText = '';
+            box.style.WebkitTransform = 'translateZ(0)';
+            box.style.transform = 'translateZ(0)';
+            box.style.position = 'absolute';
+            box.style.visibility = 'hidden';
+            if (this.zIndex_ !== null) {
+                box.style.zIndex = this.zIndex_;
+            }
+
+            this.box_ = box;
+
+            return box;
+        }
+    }, {
+        key: "setBoxContent_",
+        value: function setBoxContent_(content) {
+            var self = this;
+            var i, l;
+
+            this.removeCloseHandler_();
+
+            // Odd code required to make things work with MSIE.
+            if (!this.fixedWidthSet_) {
+                this.box_.style.width = '';
+            }
+
+            if (typeof content.nodeType === 'undefined') {
+                var html = this.contentBefore_;
+                html += '<div class="' + this.innerClass_ + '">';
+                html += content;
+                html += '</div>';
+                html += this.contentAfter_;
+                this.box_.innerHTML = html;
+            } else {
+                var inner = document.createElement('div');
+                inner.setAttribute('class', this.innerClass_);
+                inner.appendChild(content);
+                this.box_.innerHTML = this.contentBefore_;
+                this.box_.appendChild(inner);
+                this.box_.innerHTML = this.box_.innerHTML + this.contentAfter_;
+            }
+
+            var closes = this.box_.querySelectorAll('.close');
+            if (closes.length) {
+                this.closeListeners_ = [];
+                var closeHandle = function closeHandle(e) {
+                    e.cancelBubble = true;
+                    if (e.stopPropagation) {
+                        e.stopPropagation();
+                    }
+                    google.maps.event.trigger(self, 'closeclick');
+                    self.close();
+                };
+                for (i = 0, l = closes.length; i < l; i++) {
+                    this.closeListeners_.push(google.maps.event.addDomListener(closes[i], 'click', closeHandle));
+                }
+            }
+        }
+    }, {
+        key: "removeCloseHandler_",
+        value: function removeCloseHandler_() {
+            if (this.closeListener_) {
+                google.maps.event.removeListener(this.closeListener_);
+                this.closeListener_ = null;
+            }
+
+            if (this.closeListeners_) {
+                for (i = 0, l = this.closeListeners_.length; i < l; i++) {
+                    google.maps.event.removeListener(this.closeListeners_[i]);
+                }
+                this.closeListeners_ = null;
+            }
+        }
+    }, {
+        key: "panBox_",
+        value: function panBox_() {
+            var map = this.getMap();
+
+            // Only pan if attached to map, not panorama
+            if (!map instanceof google.maps.Map) {
+                return;
+            }
+
+            if (!map.getBounds().contains(this.position_)) {
+                // Marker not in visible area of map, so set center
+                // of map to the marker position first.
+                map.setCenter(this.position_);
+            }
+
+            var xOffset = 0,
+                yOffset = 0;
+            var bounds = map.getBounds();
+
+            var mapDiv = map.getDiv();
+            var mapWidth = mapDiv.offsetWidth;
+            var mapHeight = mapDiv.offsetHeight;
+            var iwOffsetX = this.pixelOffset_.width;
+            var iwOffsetY = this.pixelOffset_.height;
+            var iwWidth = this.box_.offsetWidth;
+            var iwHeight = this.box_.offsetHeight;
+            var padX = this.infoBoxClearance_.width;
+            var padY = this.infoBoxClearance_.height;
+            var pixPosition = this.getProjection().fromLatLngToContainerPixel(this.position_);
+
+            if (pixPosition.x < -iwOffsetX + padX) {
+                xOffset = pixPosition.x + iwOffsetX - padX;
+            } else if (pixPosition.x + iwWidth + iwOffsetX + padX > mapWidth) {
+                xOffset = pixPosition.x + iwWidth + iwOffsetX + padX - mapWidth;
+            }
+
+            if (this.alignBottom_) {
+                if (pixPosition.y < -iwOffsetY + padY + iwHeight) {
+                    yOffset = pixPosition.y + iwOffsetY - padY - iwHeight;
+                } else if (pixPosition.y + iwOffsetY + padY > mapHeight) {
+                    yOffset = pixPosition.y + iwOffsetY + padY - mapHeight;
+                }
+            } else {
+                if (pixPosition.y < -iwOffsetY + padY) {
+                    yOffset = pixPosition.y + iwOffsetY - padY;
+                } else if (pixPosition.y + iwHeight + iwOffsetY + padY > mapHeight) {
+                    yOffset = pixPosition.y + iwHeight + iwOffsetY + padY - mapHeight;
+                }
+            }
+
+            if (!(xOffset === 0 && yOffset === 0)) {
+                // Move the map to the shifted center.
+                var c = map.getCenter();
+                map.panBy(xOffset, yOffset);
+            }
+        }
+    }, {
+        key: "getElementWidths_",
+        value: function getElementWidths_(element) {
+            var widths = {
+                top: 0,
+                bottom: 0,
+                left: 0,
+                right: 0
+            };
+
+            var style;
+            if (document.defaultView && document.defaultView.getComputedStyle) {
+                style = element.ownerDocument.defaultView.getComputedStyle(element, '');
+            } else if (document.documentElement.currentStyle) {
+                // MSIE
+                style = element.currentStyle;
+            }
+
+            if (style) {
+                widths.top = parseInt(style.borderTopWidth, 10) || 0;
+                widths.bottom = parseInt(style.borderBottomWidth, 10) || 0;
+                widths.left = parseInt(style.borderLeftWidth, 10) || 0;
+                widths.right = parseInt(style.borderRightWidth, 10) || 0;
+            }
+
+            return widths;
+        }
+    }, {
+        key: "onRemove",
+        value: function onRemove() {
+            if (this.box_) {
+                this.box_.parentNode.removeChild(this.box_);
+                this.box_ = null;
+            }
+        }
+    }, {
+        key: "draw",
+        value: function draw() {
+            this.createInfoBox_();
+            var box = this.box_;
+
+            var pixPosition = this.getProjection().fromLatLngToDivPixel(this.position_);
+
+            box.style.left = pixPosition.x + this.pixelOffset_.width + 'px';
+
+            if (this.alignBottom_) {
+                box.style.bottom = -(pixPosition.y + this.pixelOffset_.height) + 'px';
+            } else {
+                box.style.top = pixPosition.y + this.pixelOffset_.height + 'px';
+            }
+
+            if (this.isHidden_) {
+                box.style.visibility = 'hidden';
+            } else {
+                box.style.visibility = 'visible';
+            }
+        }
+    }, {
+        key: "setOptions",
+        value: function setOptions(conf) {
+            if (typeof conf.content !== 'undefined') {
+                this.setContent(conf.content);
+            }
+            if (typeof conf.disableAutoPan !== 'undefined') {
+                this.disableAutoPan_ = conf.disableAutoPan;
+            }
+            if (typeof conf.maxWidth !== 'undefined') {
+                this.maxWidth_ = conf.maxWidth;
+            }
+            if (typeof conf.pixelOffset !== 'undefined') {
+                this.pixelOffset_ = conf.pixelOffset;
+            }
+            if (typeof conf.alignBottom !== 'undefined') {
+                this.alignBottom_ = conf.alignBottom;
+            }
+            if (typeof conf.position !== 'undefined') {
+                this.setPosition(conf.position);
+            }
+            if (typeof conf.zIndex !== 'undefined') {
+                this.setZIndex(conf.zIndex);
+            }
+            if (typeof conf.infoBoxClearance !== 'undefined') {
+                this.infoBoxClearance_ = conf.infoBoxClearance;
+            }
+            if (typeof conf.isHidden !== 'undefined') {
+                this.isHidden_ = conf.isHidden;
+            }
+            if (typeof conf.visible !== 'undefined') {
+                this.isHidden_ = !conf.visible;
+            }
+
+            if (this.box_) {
+                this.draw();
+            }
+        }
+    }, {
+        key: "setContent",
+        value: function setContent(content) {
+            this.content_ = content;
+
+            if (this.box_) {
+                if (!this.fixedWidthSet_) {
+                    this.box_.style.width = this.box_.offsetWidth + 'px';
+                }
+                this.setBoxContent_(content);
+            }
+
+            google.maps.event.trigger(this, 'content_changed');
+        }
+    }, {
+        key: "setPosition",
+        value: function setPosition(latlng) {
+            this.position_ = latlng;
+
+            if (this.box_) {
+
+                this.draw();
+            }
+
+            google.maps.event.trigger(this, 'position_changed');
+        }
+    }, {
+        key: "setVisible",
+        value: function setVisible(isVisible) {
+            this.isHidden_ = !isVisible;
+            if (this.box_) {
+                this.box_.style.visibility = this.isHidden_ ? 'hidden' : 'visible';
+            }
+        }
+    }, {
+        key: "getContent",
+        value: function getContent() {
+            return this.content_;
+        }
+    }, {
+        key: "getPosition",
+        value: function getPosition() {
+            return this.position_;
+        }
+    }, {
+        key: "getZIndex",
+        value: function getZIndex() {
+            return this.zIndex_;
+        }
+    }, {
+        key: "getVisible",
+        value: function getVisible() {
+            var isVisible;
+
+            if (typeof this.getMap() === 'undefined' || this.getMap() === null) {
+                isVisible = false;
+            } else {
+                isVisible = !this.isHidden_;
+            }
+            return isVisible;
+        }
+    }, {
+        key: "show",
+        value: function show() {
+            this.isHidden_ = false;
+            if (this.box_) {
+                this.box_.style.visibility = 'visible';
+            }
+        }
+    }, {
+        key: "hide",
+        value: function hide() {
+            this.isHidden_ = true;
+            if (this.box_) {
+                this.box_.style.visibility = 'hidden';
+            }
+        }
+    }, {
+        key: "open",
+        value: function open(map, marker) {
+            var self = this;
+
+            if (marker) {
+                this.position_ = marker.getPosition();
+                this.marker_ = marker;
+                this.moveListener_ = google.maps.event.addListener(marker, 'position_changed', function () {
+                    self.setPosition(this.getPosition());
+                });
+
+                this.mapListener_ = google.maps.event.addListener(marker, 'map_changed', function () {
+                    self.setMap(this.map);
+                });
+            }
+
+            this.setMap(map);
+
+            if (this.box_) {
+                this.panBox_();
+            }
+        }
+    }, {
+        key: "close",
+        value: function close() {
+            this.removeCloseHandler_();
+
+            if (this.moveListener_) {
+                google.maps.event.removeListener(this.moveListener_);
+                this.moveListener_ = null;
+            }
+
+            if (this.mapListener_) {
+                google.maps.event.removeListener(this.mapListener_);
+                this.mapListener_ = null;
+            }
+
+            this.setMap(null);
+        }
+    }]);
+
+    return _class;
+}(google.maps.OverlayView);
+
+/***/ }),
+/* 41 */
+/***/ (function(module, exports) {
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+/**
+ * https://github.com/googlemaps/v3-utility-library/tree/master/infobox
+ */
+module.exports = function (_AbstractInfoBox) {
+    _inherits(Baloon, _AbstractInfoBox);
+
+    function Baloon(conf) {
+        _classCallCheck(this, Baloon);
+
+        var _this = _possibleConstructorReturn(this, (Baloon.__proto__ || Object.getPrototypeOf(Baloon)).call(this));
+
+        opt_opts = conf || {};
+
+        _this.boxClass_ = opt_opts.boxClass || "infobox";
+        _this.innerClass_ = opt_opts.innerClass || "infobox-inner";
+
+        _this.contentBefore_ = '<button class="close"><i class="material-icons">&#xE5CD;</i></button>';
+        _this.contentAfter_ = '';
+        return _this;
+    }
+
+    return Baloon;
+}(AbstractInfoBox);
+
+/***/ }),
+/* 42 */
+/***/ (function(module, exports) {
+
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 43 */,
+/* 44 */,
+/* 45 */,
+/* 46 */,
+/* 47 */
+/***/ (function(module, exports) {
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+module.exports = function (_google$maps$Marker) {
+    _inherits(Marker, _google$maps$Marker);
+
+    function Marker(conf) {
+        _classCallCheck(this, Marker);
+
+        var _this = _possibleConstructorReturn(this, (Marker.__proto__ || Object.getPrototypeOf(Marker)).call(this));
+
+        _this.icon = 'https://maps.gstatic.com/mapfiles/api-3/images/spotlight-poi.png';
+        _this.width = 22;
+        _this.height = 40;
+        conf = conf || new google.maps.MarkerOptions();
+        conf.icon = _this.icon;
+        google.maps.Marker.apply(_this, [conf]);
+        return _this;
+    }
+
+    _createClass(Marker, [{
+        key: 'getHeight',
+        value: function getHeight() {
+            return this.height;
+        }
+    }]);
+
+    return Marker;
+}(google.maps.Marker);
 
 /***/ })
 /******/ ]);

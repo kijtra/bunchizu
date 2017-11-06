@@ -3,8 +3,13 @@
 $body-bg:$white;
 
 
-$header-height-mobile:2.5rem;
-$header-height-desktop:3rem;
+$header-heights: (
+    xs: 2.5rem,
+    sm: 2.5rem,
+    md: 2.75rem,
+    lg: 3rem,
+    xl: 3rem
+);
 
 $shadowed-box-radius:$border-radius;
 $shadowed-box-shadow-x:0;

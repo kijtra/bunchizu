@@ -1,4 +1,3 @@
-
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -21,12 +20,16 @@ window.Vue = require('vue');
 //     el: '#app'
 // });
 
-import Map from './lib/map';
+import Map from './lib/Map';
 
 window.initMap = () => {
+    window.AbstractInfoBox = require('./lib/AbstractInfoBox');
+    window.Baloon = require('./lib/Baloon');
+    window.Marker = require('./lib/Marker');
+    // window.Baloon = require('./lib/baloon');
     var mc = new Map(document.getElementById('map'));
 
-    
+
 
     // var currentCenter = null;
     // var panPoint = null;
@@ -43,7 +46,7 @@ window.initMap = () => {
     // $('#open-article').on('change', function () {
     //     var t = $(this);
     //     var flag = t.is(':checked');
-        
+
     //     if (flag) {
     //         currentCenter = map.getCenter();
     //         map.setOptions({
@@ -73,11 +76,11 @@ window.initMap = () => {
     //     bottom = (('' + bottom).match(/^[0-9\.]+$/i) ? parseInt(bottom) : 0);
     //     left = (('' + left).match(/^[0-9\.]+$/i) ? parseInt(left) : 0);
     //     console.log([top, right, bottom, left]);
-    
+
     //     var bounds = map.getBounds();
     //     var scale = Math.pow(2, map.getZoom());
     //     var proj = map.getProjection();
-    
+
     //     var sw = proj.fromLatLngToPoint(bounds.getSouthWest());
     //     var ne = proj.fromLatLngToPoint(bounds.getNorthEast());
     //     sw = new google.maps.Point(
@@ -89,14 +92,13 @@ window.initMap = () => {
     //         ((ne.y * scale) + bottom) / scale
     //     );
     //     var rect = new google.maps.LatLngBounds(proj.fromPointToLatLng(sw), proj.fromPointToLatLng(ne));
-    
+
     //     // // Debug: show rectangle
     //     new google.maps.Rectangle({
     //         bounds: rect,
     //         map: map
     //     });
-    
+
     //     return rect;
     // };
 }
-
