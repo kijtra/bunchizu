@@ -963,7 +963,7 @@ module.exports = Cancel;
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(10);
-module.exports = __webpack_require__(42);
+module.exports = __webpack_require__(43);
 
 
 /***/ }),
@@ -1000,7 +1000,7 @@ window.Vue = __webpack_require__(36);
 window.initMap = function () {
     window.AbstractInfoBox = __webpack_require__(40);
     window.Baloon = __webpack_require__(41);
-    window.Marker = __webpack_require__(47);
+    window.Marker = __webpack_require__(42);
     // window.Baloon = require('./lib/baloon');
     var mc = new __WEBPACK_IMPORTED_MODULE_0__lib_Map__["a" /* default */](document.getElementById('map'));
 
@@ -47511,16 +47511,6 @@ module.exports = function (_AbstractInfoBox) {
 /* 42 */
 /***/ (function(module, exports) {
 
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 43 */,
-/* 44 */,
-/* 45 */,
-/* 46 */,
-/* 47 */
-/***/ (function(module, exports) {
-
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -47555,6 +47545,12 @@ module.exports = function (_google$maps$Marker) {
 
     return Marker;
 }(google.maps.Marker);
+
+/***/ }),
+/* 43 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
 
 /***/ })
 /******/ ]);

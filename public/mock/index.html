@@ -1,37 +1,41 @@
 <!doctype html>
 <html lang="{{ app()->getLocale() }}">
+
 <head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="csrf-token" content="aaa">
-<title>Sample</title>
-<link href="../css/app.css" rel="stylesheet">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="aaa">
+    <title>Sample</title>
+    <link href="../css/app.css" rel="stylesheet">
 </head>
+
 <body>
 
-<div id="app" class="page">
-    <header>
-            header <label for="toggle-article" class="btn btn-sm btn-secodary">toggle</label>
-    </header>
+    <div id="app" class="page">
+        <header>
+            header
+            <label for="toggle-article" class="btn btn-sm btn-secodary">toggle</label>
+        </header>
 
-    <main>
-        <div id="map">aa</div>
+        <main>
+            <div id="map">aa</div>
 
-        <article id="article">
-            <header>
-                content
-            </header>
-            <div class="body">
-                <label for="toggle-article">close</label>
-                <div style="width:50%;height:1000px;background:green;"></div>
-            </div>
-        </article>
-    </main>
-</div>
+            <article id="article">
+                <header>
+                    content
+                </header>
+                <div class="body">
+                    <label for="toggle-article">close</label>
+                    <div style="width:50%;height:1000px;background:green;"></div>
+                </div>
+            </article>
+        </main>
+    </div>
 
 
-<script src="../js/app.js"></script>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCe3QWJTF7YzCaOtwqCoXTIZwN8c84lItc&libraries=geometry&callback=initMap"></script>
+    <script src="../js/app.js"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCe3QWJTF7YzCaOtwqCoXTIZwN8c84lItc&libraries=geometry&callback=initMap"></script>
 </body>
+
 </html>
