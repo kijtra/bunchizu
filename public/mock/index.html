@@ -15,27 +15,34 @@
     <div id="app" class="page">
         <header>
             header
-            <label for="toggle-article" class="btn btn-sm btn-secodary">toggle</label>
+            <label for="toggle" class="btn btn-sm btn-secodary">toggle</label>
+            <button id="tgl" class="toggle-article">tgl</button>
         </header>
 
-        <main>
-            <div id="map">aa</div>
+        <main id="js-main">
 
             <article id="article">
                 <header>
                     content
                 </header>
+                <div class="map" id="js-map-wrapper">
+                    <div class="inner" id="js-map-container">
+                        <div id="js-map">aa</div>
+                    </div>
+                </div>
                 <div class="body">
-                    <label for="toggle-article">close</label>
+                    body
                     <div style="width:50%;height:1000px;background:green;"></div>
+                    <button id="tgl" class="toggle-article">tgl</button>
                 </div>
             </article>
+
         </main>
     </div>
 
-
     <script src="../js/app.js"></script>
+    <!--
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCe3QWJTF7YzCaOtwqCoXTIZwN8c84lItc&libraries=geometry&callback=initMap"></script>
+-->
 </body>
-
 </html>

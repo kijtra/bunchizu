@@ -1,20 +1,10 @@
-
 // $body-bg:#F2F2F2;
 $body-bg:$white;
-
-
-$header-heights: (
-    xs: 2.5rem,
-    sm: 2.5rem,
-    md: 2.75rem,
-    lg: 3rem,
-    xl: 3rem
-);
-
+$header-heights: ( xs: 2.5rem, sm: 2.5rem, md: 2.75rem, lg: 3rem, xl: 3rem);
 $shadowed-box-radius:$border-radius;
 $shadowed-box-shadow-x:0;
 $shadowed-box-shadow-y:.1rem;
 $shadowed-box-shadow-length:2px;
-$shadowed-box-shadow-color:rgba(0,0,0,.15);
-
-$article-anime-speed:.4s;
+$shadowed-box-shadow-color:rgba(0, 0, 0, .15);
+$toggle-map-anime-speed:.2s;
+$map-zoombutton-anime-speed:.4s;

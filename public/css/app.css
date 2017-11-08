@@ -9753,6 +9753,10 @@ body {
   height: 100%;
 }
 
+body {
+  overflow-y: scroll;
+}
+
 body > input {
   display: none;
 }
@@ -9766,7 +9770,7 @@ body > input {
   background-color: #fff;
 }
 
-.index2 #app {
+#app {
   height: 100%;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -9777,7 +9781,46 @@ body > input {
           flex-direction: column;
 }
 
-.index2 main {
+#app > header {
+  border-bottom: 1px solid #e9ecef;
+  -webkit-box-flex: 0;
+      -ms-flex: 0 0 2.5rem;
+          flex: 0 0 2.5rem;
+}
+
+@media (min-width: 576px) {
+  #app > header {
+    -webkit-box-flex: 0;
+        -ms-flex: 0 0 2.5rem;
+            flex: 0 0 2.5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  #app > header {
+    -webkit-box-flex: 0;
+        -ms-flex: 0 0 2.75rem;
+            flex: 0 0 2.75rem;
+  }
+}
+
+@media (min-width: 992px) {
+  #app > header {
+    -webkit-box-flex: 0;
+        -ms-flex: 0 0 3rem;
+            flex: 0 0 3rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  #app > header {
+    -webkit-box-flex: 0;
+        -ms-flex: 0 0 3rem;
+            flex: 0 0 3rem;
+  }
+}
+
+main {
   -webkit-box-flex: 1;
       -ms-flex-positive: 1;
           flex-grow: 1;
@@ -9791,9 +9834,12 @@ body > input {
   position: relative;
 }
 
-.index2 article {
-  width: 300px;
-  margin: 0 auto;
+article {
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
   -webkit-box-flex: 1;
       -ms-flex-positive: 1;
           flex-grow: 1;
@@ -9801,43 +9847,91 @@ body > input {
   overflow: hidden;
 }
 
-.index2 article > .map {
+@media (min-width: 576px) {
+  article {
+    max-width: 540px;
+  }
+}
+
+@media (min-width: 768px) {
+  article {
+    max-width: 720px;
+  }
+}
+
+@media (min-width: 992px) {
+  article {
+    max-width: 960px;
+  }
+}
+
+@media (min-width: 1200px) {
+  article {
+    max-width: 1140px;
+  }
+}
+
+article > .map {
   height: 30vh;
 }
 
-.index2 article > .map .inner {
+article > .map .inner {
   width: 100%;
   height: 100%;
-  max-height: 100vh;
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   background: #eee;
-  -webkit-transition: all .3s ease-in-out;
-  transition: all .3s ease-in-out;
+  -webkit-transition: width 0.2s ease-in-out, height 0.2s ease-in-out, top 0.2s ease-in-out, left 0.2s ease-in-out, border-radius 0.2s ease-in-out;
+  transition: width 0.2s ease-in-out, height 0.2s ease-in-out, top 0.2s ease-in-out, left 0.2s ease-in-out, border-radius 0.2s ease-in-out;
+  will-change: width, height, top, left, border-radius;
 }
 
-.index2 article > .map .inner > div {
+article > .map .inner > div {
   height: 100%;
 }
 
-body.article-open #app {
+body.article-showing #app {
   height: auto;
 }
 
-body.article-open #app article {
+body.article-showing #app article {
+  overflow: visible;
+  border-radius: 0.25rem;
+}
+
+body.article-show #app {
+  height: auto;
+}
+
+body.article-show #app article {
   overflow: visible;
 }
 
-body.article-open #app article > .map .inner {
-  height: 30vh;
-}
-
-body.article-opened #app article > .map .inner {
+body.article-show #app article > .map .inner {
   position: relative;
   -webkit-transition: none;
   transition: none;
+  border-radius: 0.25rem;
+}
+
+body.article-hiding #app {
+  height: 100%;
+}
+
+body.article-hiding #app article {
+  overflow: hidden;
+}
+
+body.article-hiding #app article > .map .inner {
+  position: absolute !important;
+  width: 100% !important;
+  height: 100% !important;
+  top: 0 !important;
+  left: 0 !important;
+  -webkit-transition: width 0.2s ease-in-out, height 0.2s ease-in-out, top 0.2s ease-in-out, left 0.2s ease-in-out, border-radius 0.2s ease-in-out;
+  transition: width 0.2s ease-in-out, height 0.2s ease-in-out, top 0.2s ease-in-out, left 0.2s ease-in-out, border-radius 0.2s ease-in-out;
 }
 

@@ -10,83 +10,35 @@
     <link href="../css/app.css" rel="stylesheet">
 </head>
 
-<body class="index2">
-    <input type="checkbox" id="toggle">
+<body>
 
     <div id="app" class="page">
         <header>
             header
             <label for="toggle" class="btn btn-sm btn-secodary">toggle</label>
-            <button id="tgl">tgl</button>
+            <button id="tgl" class="toggle-article">tgl</button>
         </header>
 
-        <main>
+        <main id="js-main">
 
             <article id="article">
                 <header>
                     content
                 </header>
-                <div class="map">
-                    <div class="inner">
-                        <div id="map">aa</div>
-                    </div>
-                </div>
+
                 <div class="body">
                     body
                     <div style="width:50%;height:1000px;background:green;"></div>
+                    <button id="tgl" class="toggle-article">tgl</button>
                 </div>
             </article>
 
         </main>
     </div>
 
-
     <script src="../js/app.js"></script>
     <!--
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCe3QWJTF7YzCaOtwqCoXTIZwN8c84lItc&libraries=geometry&callback=initMap"></script>
 -->
-    <script>
-        var body = $('body');
-        var head = $('#article>header');
-        var btn = $('#tgl');
-        var map = $('#article>.map').first();
-        var inner = map.find('.inner').first();
-
-        var toggle = false;
-        var style = null;
-        btn.on('click', function (e) {
-            e.preventDefault();
-            if (!toggle) {
-                toggle = true;
-                var offset = map.offset();
-                style = {
-                    width: map.width(),
-                    top: map.position().top,
-                    left: offset.left
-                };
-                inner.css(style);
-                body.removeClass('article-close').addClass('article-open');
-            } else {
-                toggle = false;
-                inner.css(style);
-                body.removeClass('article-open article-opened').addClass('article-close');
-
-            }
-        });
-
-        inner.on('webkitTransitionEnd transitionEnd', function () {
-            if (toggle) {
-
-                body.addClass('article-opened');
-            }
-            inner.css({
-                top: '',
-                left: '',
-                width: ''
-            });
-        });
-
-    </script>
 </body>
-
 </html>

@@ -973,6 +973,7 @@ module.exports = __webpack_require__(43);
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_Map__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_ToggleArticle__ = __webpack_require__(48);
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -997,83 +998,18 @@ window.Vue = __webpack_require__(36);
 
 
 
+
+var article = new __WEBPACK_IMPORTED_MODULE_1__lib_ToggleArticle__["a" /* default */]();
+article.listen('.toggle-article');
+article.onShow(function () {
+  console.log('onShow');
+});
+
 window.initMap = function () {
-    window.AbstractInfoBox = __webpack_require__(40);
-    window.Baloon = __webpack_require__(41);
-    window.Marker = __webpack_require__(42);
-    // window.Baloon = require('./lib/baloon');
-    var mc = new __WEBPACK_IMPORTED_MODULE_0__lib_Map__["a" /* default */](document.getElementById('map'));
-
-    // var currentCenter = null;
-    // var panPoint = null;
-    // map.addListener('zoom_changed', function(e) {
-    //     console.log(panPoint);
-    //     if (panPoint) {
-    //         var bounds = getPadBounds(0,0,0-(mapObj.height() * 0.7),0);
-    //         panPoint = bounds.getCenter();
-    //         console.log([panPoint.lat(),panPoint.lng()]);
-    //         map.panTo(panPoint);
-    //     }
-    // });
-
-    // $('#open-article').on('change', function () {
-    //     var t = $(this);
-    //     var flag = t.is(':checked');
-
-    //     if (flag) {
-    //         currentCenter = map.getCenter();
-    //         map.setOptions({
-    //             gestureHandling: 'none'
-    //         });
-    //         var pad = mapObj.height() * 0.7;
-    //         var bounds = getPadBounds(0,0,pad,0);
-    //         panPoint = bounds.getCenter();
-    //         console.log([panPoint.lat(),panPoint.lng()]);
-    //         map.panTo(panPoint);
-    //     } else {
-    //         panPoint = null;
-    //         map.setOptions({
-    //             gestureHandling: 'greedy'
-    //         });
-    //         map.panTo(currentCenter);
-    //     }
-    // });
-
-    // marker.addListener('click', function() {
-    //     $('#open-article').click();
-    // });
-
-    // var getPadBounds = function (top, right, bottom, left) {
-    //     top = (('' + top).match(/^[0-9\.]+$/i) ? parseInt(top) : 0);
-    //     right = (('' + right).match(/^[0-9\.]+$/i) ? parseInt(right) : 0);
-    //     bottom = (('' + bottom).match(/^[0-9\.]+$/i) ? parseInt(bottom) : 0);
-    //     left = (('' + left).match(/^[0-9\.]+$/i) ? parseInt(left) : 0);
-    //     console.log([top, right, bottom, left]);
-
-    //     var bounds = map.getBounds();
-    //     var scale = Math.pow(2, map.getZoom());
-    //     var proj = map.getProjection();
-
-    //     var sw = proj.fromLatLngToPoint(bounds.getSouthWest());
-    //     var ne = proj.fromLatLngToPoint(bounds.getNorthEast());
-    //     sw = new google.maps.Point(
-    //         ((sw.x * scale) + right) / scale,
-    //         ((sw.y * scale) - top) / scale
-    //     );
-    //     ne = new google.maps.Point(
-    //         ((ne.x * scale) - left) / scale,
-    //         ((ne.y * scale) + bottom) / scale
-    //     );
-    //     var rect = new google.maps.LatLngBounds(proj.fromPointToLatLng(sw), proj.fromPointToLatLng(ne));
-
-    //     // // Debug: show rectangle
-    //     new google.maps.Rectangle({
-    //         bounds: rect,
-    //         map: map
-    //     });
-
-    //     return rect;
-    // };
+  window.AbstractInfoBox = __webpack_require__(40);
+  window.Baloon = __webpack_require__(41);
+  window.Marker = __webpack_require__(42);
+  var mc = new __WEBPACK_IMPORTED_MODULE_0__lib_Map__["a" /* default */](document.getElementById('js-map'));
 };
 
 /***/ }),
@@ -28522,7 +28458,7 @@ return jQuery;
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* WEBPACK VAR INJECTION */(function(global) {/**!
  * @fileOverview Kickass library to create and place poppers near their reference elements.
- * @version 1.12.5
+ * @version 1.12.6
  * @license
  * Copyright (c) 2016 Federico Zivolo and contributors
  *
@@ -28544,22 +28480,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var nativeHints = ['native code', '[object MutationObserverConstructor]'];
-
-/**
- * Determine if a function is implemented natively (as opposed to a polyfill).
- * @method
- * @memberof Popper.Utils
- * @argument {Function | undefined} fn the function to check
- * @returns {Boolean}
- */
-var isNative = (function (fn) {
-  return nativeHints.some(function (hint) {
-    return (fn || '').toString().indexOf(hint) > -1;
-  });
-});
-
-var isBrowser = typeof window !== 'undefined';
+var isBrowser = typeof window !== 'undefined' && typeof window.document !== 'undefined';
 var longerTimeoutBrowsers = ['Edge', 'Trident', 'Firefox'];
 var timeoutDuration = 0;
 for (var i = 0; i < longerTimeoutBrowsers.length; i += 1) {
@@ -28570,26 +28491,16 @@ for (var i = 0; i < longerTimeoutBrowsers.length; i += 1) {
 }
 
 function microtaskDebounce(fn) {
-  var scheduled = false;
-  var i = 0;
-  var elem = document.createElement('span');
-
-  // MutationObserver provides a mechanism for scheduling microtasks, which
-  // are scheduled *before* the next task. This gives us a way to debounce
-  // a function but ensure it's called *before* the next paint.
-  var observer = new MutationObserver(function () {
-    fn();
-    scheduled = false;
-  });
-
-  observer.observe(elem, { attributes: true });
-
+  var called = false;
   return function () {
-    if (!scheduled) {
-      scheduled = true;
-      elem.setAttribute('x-index', i);
-      i = i + 1; // don't use compund (+=) because it doesn't get optimized in V8
+    if (called) {
+      return;
     }
+    called = true;
+    Promise.resolve().then(function () {
+      called = false;
+      fn();
+    });
   };
 }
 
@@ -28606,11 +28517,7 @@ function taskDebounce(fn) {
   };
 }
 
-// It's common for MutationObserver polyfills to be seen in the wild, however
-// these rely on Mutation Events which only occur when an element is connected
-// to the DOM. The algorithm used in this module does not use a connected element,
-// and so we must ensure that a *native* MutationObserver is available.
-var supportsNativeMutationObserver = isBrowser && isNative(window.MutationObserver);
+var supportsMicroTasks = isBrowser && window.Promise;
 
 /**
 * Create a debounced version of a method, that's asynchronously deferred
@@ -28621,7 +28528,7 @@ var supportsNativeMutationObserver = isBrowser && isNative(window.MutationObserv
 * @argument {Function} fn
 * @returns {Function}
 */
-var debounce = supportsNativeMutationObserver ? microtaskDebounce : taskDebounce;
+var debounce = supportsMicroTasks ? microtaskDebounce : taskDebounce;
 
 /**
  * Check if the given variable is a function
@@ -28674,8 +28581,16 @@ function getParentNode(element) {
  */
 function getScrollParent(element) {
   // Return body, `getScroll` will take care to get the correct `scrollTop` from it
-  if (!element || ['HTML', 'BODY', '#document'].indexOf(element.nodeName) !== -1) {
+  if (!element) {
     return window.document.body;
+  }
+
+  switch (element.nodeName) {
+    case 'HTML':
+    case 'BODY':
+      return element.ownerDocument.body;
+    case '#document':
+      return element.body;
   }
 
   // Firefox want us to check `-x` and `-y` variations as well
@@ -28705,6 +28620,10 @@ function getOffsetParent(element) {
   var nodeName = offsetParent && offsetParent.nodeName;
 
   if (!nodeName || nodeName === 'BODY' || nodeName === 'HTML') {
+    if (element) {
+      return element.ownerDocument.documentElement;
+    }
+
     return window.document.documentElement;
   }
 
@@ -28800,8 +28719,8 @@ function getScroll(element) {
   var nodeName = element.nodeName;
 
   if (nodeName === 'BODY' || nodeName === 'HTML') {
-    var html = window.document.documentElement;
-    var scrollingElement = window.document.scrollingElement || html;
+    var html = element.ownerDocument.documentElement;
+    var scrollingElement = element.ownerDocument.scrollingElement || html;
     return scrollingElement[upperSide];
   }
 
@@ -29050,7 +28969,7 @@ function getOffsetRectRelativeToArbitraryNode(children, parent) {
 }
 
 function getViewportOffsetRectRelativeToArtbitraryNode(element) {
-  var html = window.document.documentElement;
+  var html = element.ownerDocument.documentElement;
   var relativeOffset = getOffsetRectRelativeToArbitraryNode(element, html);
   var width = Math.max(html.clientWidth, window.innerWidth || 0);
   var height = Math.max(html.clientHeight, window.innerHeight || 0);
@@ -29111,10 +29030,10 @@ function getBoundaries(popper, reference, padding, boundariesElement) {
     if (boundariesElement === 'scrollParent') {
       boundariesNode = getScrollParent(getParentNode(popper));
       if (boundariesNode.nodeName === 'BODY') {
-        boundariesNode = window.document.documentElement;
+        boundariesNode = popper.ownerDocument.documentElement;
       }
     } else if (boundariesElement === 'window') {
-      boundariesNode = window.document.documentElement;
+      boundariesNode = popper.ownerDocument.documentElement;
     } else {
       boundariesNode = boundariesElement;
     }
@@ -29355,10 +29274,11 @@ function runModifiers(modifiers, data, ends) {
   var modifiersToRun = ends === undefined ? modifiers : modifiers.slice(0, findIndex(modifiers, 'name', ends));
 
   modifiersToRun.forEach(function (modifier) {
-    if (modifier.function) {
+    if (modifier['function']) {
+      // eslint-disable-line dot-notation
       console.warn('`modifier.function` is deprecated, use `modifier.fn`!');
     }
-    var fn = modifier.function || modifier.fn;
+    var fn = modifier['function'] || modifier.fn; // eslint-disable-line dot-notation
     if (modifier.enabled && isFunction(fn)) {
       // Add properties to offsets to make them a complete clientRect object
       // we do this before each modifier to make sure the previous one doesn't
@@ -29485,9 +29405,19 @@ function destroy() {
   return this;
 }
 
+/**
+ * Get the window associated with the element
+ * @argument {Element} element
+ * @returns {Window}
+ */
+function getWindow(element) {
+  var ownerDocument = element.ownerDocument;
+  return ownerDocument ? ownerDocument.defaultView : window;
+}
+
 function attachToScrollParents(scrollParent, event, callback, scrollParents) {
   var isBody = scrollParent.nodeName === 'BODY';
-  var target = isBody ? window : scrollParent;
+  var target = isBody ? scrollParent.ownerDocument.defaultView : scrollParent;
   target.addEventListener(event, callback, { passive: true });
 
   if (!isBody) {
@@ -29505,7 +29435,7 @@ function attachToScrollParents(scrollParent, event, callback, scrollParents) {
 function setupEventListeners(reference, options, state, updateBound) {
   // Resize event listener on window
   state.updateBound = updateBound;
-  window.addEventListener('resize', state.updateBound, { passive: true });
+  getWindow(reference).addEventListener('resize', state.updateBound, { passive: true });
 
   // Scroll event listener on scroll parents
   var scrollElement = getScrollParent(reference);
@@ -29536,7 +29466,7 @@ function enableEventListeners() {
  */
 function removeEventListeners(reference, state) {
   // Remove resize event listener on window
-  window.removeEventListener('resize', state.updateBound);
+  getWindow(reference).removeEventListener('resize', state.updateBound);
 
   // Remove scroll event listener on scroll parents
   state.scrollParents.forEach(function (target) {
@@ -30838,8 +30768,8 @@ var Popper = function () {
     };
 
     // get reference and popper elements (allow jQuery wrappers)
-    this.reference = reference.jquery ? reference[0] : reference;
-    this.popper = popper.jquery ? popper[0] : popper;
+    this.reference = reference && reference.jquery ? reference[0] : reference;
+    this.popper = popper && popper.jquery ? popper[0] : popper;
 
     // Deep merge modifiers options
     this.options.modifiers = {};
@@ -47551,6 +47481,212 @@ module.exports = function (_google$maps$Marker) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 44 */,
+/* 45 */,
+/* 46 */,
+/* 47 */,
+/* 48 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var _class = function () {
+    function _class() {
+        _classCallCheck(this, _class);
+
+        this.classNames = {
+            showing: 'article-showing',
+            showed: 'article-show',
+            hiding: 'article-hiding',
+            hided: ''
+        };
+
+        this.callOnShow = [];
+        this.callOnShowed = [];
+        this.callOnHide = [];
+        this.callOnHided = [];
+
+        this.body = document.getElementsByTagName('body')[0];
+
+        this.isOpen = this.body.classList.contains(this.classNames.showed);
+        this.isAnimating = false;
+
+        this.mapWrapper = document.getElementById('js-map-wrapper');
+        this.mapContainer = document.getElementById('js-map-container');
+
+        this.enabled = true;
+        if (!this.mapWrapper) {
+            this.enabled = false;
+            return;
+        }
+
+        var me = this;
+        ['transitionend', 'webkitTransitionEnd', 'mozTransitionEnd'].forEach(function (transition) {
+            me.mapContainer.addEventListener(transition, function (e) {
+                me.transitionEnd(e);
+            }, false);
+        });
+    }
+
+    _createClass(_class, [{
+        key: 'listen',
+        value: function listen(className) {
+            if (!this.enabled) {
+                return;
+            }
+
+            var me = this;
+            document.querySelectorAll(className).forEach(function (element) {
+                element.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    me.toggle();
+                }, false);
+            });
+        }
+    }, {
+        key: 'toggle',
+        value: function toggle() {
+            if (!this.enabled || this.isAnimating) {
+                return;
+            }
+
+            if (!this.isOpen) {
+                this.show();
+            } else {
+                this.hide();
+            }
+        }
+    }, {
+        key: 'show',
+        value: function show() {
+            if (!this.enabled || this.isOpen || this.isAnimating) {
+                return;
+            }
+
+            this.isAnimating = true;
+
+            var me = this;
+            var style = this.getWrapperStyle();
+            this.mapContainer.setAttribute('style', style);
+
+            this.isOpen = true;
+            this.body.classList.add(this.classNames.showing);
+
+            if (this.callOnShow.length) {
+                this.callOnShow.forEach(function (callback) {
+                    callback(me);
+                });
+            }
+        }
+    }, {
+        key: 'hide',
+        value: function hide() {
+            if (!this.enabled || !this.isOpen || this.isAnimating) {
+                return;
+            }
+
+            this.isAnimating = true;
+            this.isOpen = false;
+
+            var me = this;
+            var style = this.getWrapperStyle();
+            style += 'position:absolute;';
+            this.mapContainer.setAttribute('style', style);
+            setTimeout(function () {
+                me.body.classList.add(me.classNames.hiding);
+            }, 5);
+
+            if (this.callOnHide.length) {
+                this.callOnHide.forEach(function (callback) {
+                    callback(me);
+                });
+            }
+        }
+    }, {
+        key: 'getWrapperStyle',
+        value: function getWrapperStyle() {
+            var doc = this.mapWrapper && this.mapWrapper.ownerDocument;
+            if (!doc) {
+                return;
+            }
+            var docElem = doc.documentElement;
+            var rect = this.mapWrapper.getBoundingClientRect();
+            var style = '';
+            style += 'width:' + this.mapWrapper.offsetWidth + 'px;';
+            style += 'height:' + this.mapWrapper.offsetHeight + 'px;';
+            style += 'top:' + this.mapWrapper.offsetTop + 'px;';
+            style += 'left:' + (rect.left + window.pageXOffset - docElem.clientLeft) + 'px;';
+            return style;
+        }
+    }, {
+        key: 'transitionEnd',
+        value: function transitionEnd(e) {
+            var me = this;
+            if (this.isOpen) {
+                this.body.classList.remove(this.classNames.showing, this.classNames.hiding);
+                this.body.classList.add(this.classNames.showed);
+
+                if (this.callOnShowed.length) {
+                    this.callOnShowed.forEach(function (callback) {
+                        callback(me);
+                    });
+                }
+            } else {
+                this.body.classList.remove(this.classNames.showing, this.classNames.showed, this.classNames.hiding);
+
+                if (this.callOnHided.length) {
+                    this.callOnHided.forEach(function (callback) {
+                        callback(me);
+                    });
+                }
+            }
+
+            this.mapContainer.setAttribute('style', '');
+            this.isAnimating = false;
+        }
+    }, {
+        key: 'onShow',
+        value: function onShow(callback) {
+            if ('function' !== typeof callback) {
+                return;
+            }
+            this.callOnShow.push(callback);
+        }
+    }, {
+        key: 'onShowed',
+        value: function onShowed(callback) {
+            if ('function' !== typeof callback) {
+                return;
+            }
+            this.callOnShowed.push(callback);
+        }
+    }, {
+        key: 'onHide',
+        value: function onHide(callback) {
+            if ('function' !== typeof callback) {
+                return;
+            }
+            this.callOnHide.push(callback);
+        }
+    }, {
+        key: 'onHided',
+        value: function onHided(callback) {
+            if ('function' !== typeof callback) {
+                return;
+            }
+            this.callOnHided.push(callback);
+        }
+    }]);
+
+    return _class;
+}();
+
+/* harmony default export */ __webpack_exports__["a"] = (_class);
 
 /***/ })
 /******/ ]);
