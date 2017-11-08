@@ -9755,6 +9755,7 @@ body {
 
 body {
   overflow-y: scroll;
+  word-break: break-all;
 }
 
 body > input {
@@ -9843,7 +9844,7 @@ article {
   -webkit-box-flex: 1;
       -ms-flex-positive: 1;
           flex-grow: 1;
-  background: red;
+  padding-top: 2rem;
   overflow: hidden;
 }
 
@@ -9891,6 +9892,108 @@ article > .map .inner {
 
 article > .map .inner > div {
   height: 100%;
+}
+
+article > header {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e9ecef;
+}
+
+article > header h1 {
+  margin: 0;
+  padding: 0;
+  font-size: 1.3em;
+  line-height: 1.4;
+}
+
+article > header .share {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: nowrap;
+      flex-wrap: nowrap;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  margin-top: 1.5rem;
+  line-height: 1;
+}
+
+article > header .share small {
+  display: inline-block;
+  margin-right: 0.25rem;
+  white-space: nowrap;
+}
+
+article > header .share a {
+  width: 1.5em;
+  height: 1.5em;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  border-radius: 50%;
+  background: #000;
+}
+
+article > header .share a:not(:first-of-type) {
+  margin-left: 1rem;
+}
+
+@media (min-width: 768px) {
+  article > header {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: nowrap;
+        flex-wrap: nowrap;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+            flex-direction: row;
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+  }
+
+  article > header h1 {
+    font-size: 1.6em;
+    line-height: 1.4;
+  }
+
+  article > header .share {
+    margin-top: 0;
+    margin-left: 2rem;
+  }
+
+  article > header .share a {
+    width: 2em;
+    height: 2em;
+  }
+
+  article > header .share a:not(:first-of-type) {
+    margin-left: 0.5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  article {
+    padding-top: 4rem;
+  }
 }
 
 body.article-showing #app {

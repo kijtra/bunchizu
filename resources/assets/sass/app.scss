@@ -48,6 +48,7 @@ body {
 
 body {
     overflow-y: scroll;
+    word-break : break-all;
 }
 
 body>input {
@@ -91,7 +92,7 @@ article {
     @include make-container();
     @include make-container-max-widths();
     flex-grow: 1;
-    background: red;
+    padding-top:#{$spacer * 2};
     overflow: hidden;
 
     >.map {
@@ -118,7 +119,82 @@ article {
             }
         }
     }
-}
+
+    >header {
+        margin-bottom:map-get($spacers, 4);
+        padding-bottom:map-get($spacers, 3);
+        border-bottom:1px solid $border-color;
+
+        h1 {
+            margin:0;
+            padding:0;
+            font-size:1.3em;
+            line-height:1.4;
+        }
+
+        .share {
+            display:flex;
+            flex-wrap: nowrap;
+            align-items:center;
+            justify-content:center;
+            margin-top:map-get($spacers, 4);
+            line-height:1;
+
+            small {
+                display:inline-block;
+                margin-right:map-get($spacers, 1);
+                white-space:nowrap;
+            }
+
+            a {
+                width:1.5em;
+                height:1.5em;
+                display:inline-flex;
+                align-items:center;
+                justify-content:center;
+                border-radius:50%;
+                background:#000;
+
+                &:not(:first-of-type) {
+                    margin-left:map-get($spacers, 3);
+                }
+            }
+        }
+
+        @include media-breakpoint-up(md, $grid-breakpoints) {
+            display:flex;
+            flex-wrap: nowrap;
+            flex-direction:row;
+            justify-content:space-between;
+            align-items:center;
+            margin-bottom:#{$spacer * 2};
+            padding-bottom:#{$spacer * 2};
+
+            h1 {
+                font-size:1.6em;
+                line-height:1.4;
+            }
+
+            .share {
+                margin-top:0;
+                margin-left:#{$spacer * 2};
+    
+                a {
+                    width:2em;
+                    height:2em;
+
+                    &:not(:first-of-type) {
+                        margin-left:map-get($spacers, 2);
+                    }
+                }
+            }
+        }
+    }
+
+    @include media-breakpoint-up(md, $grid-breakpoints) {
+        padding-top:#{$spacer * 4};
+    }
+}// article
 
 body.article-showing #app {
     height: auto;
