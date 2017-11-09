@@ -136,7 +136,7 @@ article {
     >header {
         
         margin-bottom:map-get($spacers, 4);
-        padding-bottom:map-get($spacers, 3);
+        padding-bottom:map-get($spacers, 4);
         border-bottom:1px solid $border-color;
 
         h1 {
@@ -146,12 +146,17 @@ article {
             line-height:1.4;
         }
 
+        p {
+            margin:map-get($spacers, 3) 0 0;
+            // font-size:1.1em;
+        }
+
         .meta {
             display:flex;
             flex-direction:row;
             align-items:center;
             margin-top:map-get($spacers, 3);
-            font-size:.7em;
+            font-size:.8em;
             line-height:1;
 
             .btn {
@@ -162,11 +167,33 @@ article {
                 line-height:inherit;
             }
 
+            time {
+                display:inline-flex;
+                align-items:center;
+                color:$gray-600;
+
+                i {
+                    margin-right:.1em;
+                    font-size:1.3em;
+                    line-height:inherit;
+                }
+            }
+
             .share {
                 margin-left:auto;
 
                 .buttons {
                     @include popper();
+
+                    a {
+                        display:block;
+                        text-align:left;
+                        font-size:1em;
+
+                        & + a {
+                            margin-top:map-get($spacers, 2);
+                        }
+                    }
                 }
             }
         }

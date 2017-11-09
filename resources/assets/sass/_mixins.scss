@@ -4,18 +4,17 @@
     box-shadow:$shadowed-box-shadow-x $shadowed-box-shadow-y $shadowed-box-shadow-length $shadowed-box-shadow-color;
 }
 
-@mixin popper($background: #FFC107, $arrow: 9px) {
+@mixin popper($background: #FFF, $arrow: 9px) {
     $diagonal:round(sqrt(pow(strip-unit($arrow), 2) + pow(strip-unit($arrow), 2))) + 0px;
-    $nega:round($diagonal / 2) - 2px;
+    $nega:round($diagonal / 2) - 3px;
+
     display:none;
+    padding: map-get($spacers, 2);
     position: absolute;
     background: $background;
-    color: black;
     width: 150px;
     border-radius: $border-radius;
     box-shadow: 0 0 2px rgba(0,0,0,0.5);
-    padding: map-get($spacers, 2);
-    text-align: center;
 
     &:before, &:after {
         content:'';
