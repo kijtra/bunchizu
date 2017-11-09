@@ -9748,6 +9748,10 @@ a.text-dark:hover {
   margin-bottom: -1px;
 }
 
+.material-icons {
+  font-size: inherit;
+}
+
 html,
 body {
   height: 100%;
@@ -9903,90 +9907,155 @@ article > header {
 article > header h1 {
   margin: 0;
   padding: 0;
-  font-size: 1.3em;
+  font-size: 1.2em;
   line-height: 1.4;
 }
 
-article > header .share {
+article > header .meta {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -ms-flex-wrap: nowrap;
-      flex-wrap: nowrap;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  margin-top: 1.5rem;
+  margin-top: 1rem;
+  font-size: .7em;
   line-height: 1;
 }
 
-article > header .share small {
-  display: inline-block;
-  margin-right: 0.25rem;
-  white-space: nowrap;
-}
-
-article > header .share a {
-  width: 1.5em;
-  height: 1.5em;
+article > header .meta .btn {
   display: -webkit-inline-box;
   display: -ms-inline-flexbox;
   display: inline-flex;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  border-radius: 50%;
-  background: #000;
+  padding: 0.25rem;
+  font-size: inherit;
+  line-height: inherit;
 }
 
-article > header .share a:not(:first-of-type) {
-  margin-left: 1rem;
+article > header .meta .share {
+  margin-left: auto;
+}
+
+article > header .meta .share .buttons {
+  display: none;
+  position: absolute;
+  background: #FFC107;
+  color: black;
+  width: 150px;
+  border-radius: 0.25rem;
+  -webkit-box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+          box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+  padding: 0.5rem;
+  text-align: center;
+}
+
+article > header .meta .share .buttons:before,
+article > header .meta .share .buttons:after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  background: #FFC107;
+}
+
+article > header .meta .share .buttons:before {
+  width: 9px;
+  height: 9px;
+  -webkit-box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+          box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+  -webkit-transform: rotate(45deg);
+          transform: rotate(45deg);
+}
+
+article > header .meta .share .buttons:after {
+  width: 17px;
+  height: 17px;
+}
+
+article > header .meta .share .buttons[x-placement] {
+  display: inline-block;
+}
+
+article > header .meta .share .buttons[x-placement^="top"] {
+  margin-bottom: 9px;
+}
+
+article > header .meta .share .buttons[x-placement^="top"]:before {
+  bottom: -5px;
+  left: calc(50% - 3px);
+}
+
+article > header .meta .share .buttons[x-placement^="top"]:after {
+  bottom: 0;
+  left: calc(50% - 7px);
+}
+
+article > header .meta .share .buttons[x-placement^="bottom"] {
+  margin-top: 9px;
+}
+
+article > header .meta .share .buttons[x-placement^="bottom"]:before {
+  top: -5px;
+  left: calc(50% - 3px);
+}
+
+article > header .meta .share .buttons[x-placement^="bottom"]:after {
+  top: 0;
+  left: calc(50% - 7px);
+}
+
+article > header .meta .share .buttons[x-placement^="right"] {
+  margin-left: 9px;
+}
+
+article > header .meta .share .buttons[x-placement^="right"]:before {
+  left: -5px;
+  top: calc(50% - 3px);
+}
+
+article > header .meta .share .buttons[x-placement^="right"]:after {
+  left: 0;
+  top: calc(50% - 7px);
+}
+
+article > header .meta .share .buttons[x-placement^="left"] {
+  margin-right: 9px;
+}
+
+article > header .meta .share .buttons[x-placement^="left"]:before {
+  right: -5px;
+  top: calc(50% - 3px);
+}
+
+article > header .meta .share .buttons[x-placement^="left"]:after {
+  right: 0;
+  top: calc(50% - 7px);
 }
 
 @media (min-width: 768px) {
   article > header {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-wrap: nowrap;
-        flex-wrap: nowrap;
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: normal;
-        -ms-flex-direction: row;
-            flex-direction: row;
-    -webkit-box-pack: justify;
-        -ms-flex-pack: justify;
-            justify-content: space-between;
-    -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center;
     margin-bottom: 2rem;
     padding-bottom: 2rem;
   }
 
   article > header h1 {
-    font-size: 1.6em;
+    font-size: 1.7em;
     line-height: 1.4;
   }
 
-  article > header .share {
-    margin-top: 0;
-    margin-left: 2rem;
+  article > header .meta {
+    margin-top: 1.5rem;
+    font-size: 1em;
   }
 
-  article > header .share a {
-    width: 2em;
-    height: 2em;
-  }
-
-  article > header .share a:not(:first-of-type) {
-    margin-left: 0.5rem;
+  article > header .meta .btn {
+    padding: 0.5rem;
   }
 }
 

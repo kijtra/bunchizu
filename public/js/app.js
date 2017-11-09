@@ -963,7 +963,7 @@ module.exports = Cancel;
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(10);
-module.exports = __webpack_require__(43);
+module.exports = __webpack_require__(44);
 
 
 /***/ }),
@@ -973,13 +973,14 @@ module.exports = __webpack_require__(43);
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_Map__ = __webpack_require__(39);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_ToggleArticle__ = __webpack_require__(48);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_ToggleArticle__ = __webpack_require__(40);
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
  * building robust, powerful web applications using Vue and Laravel.
  */
 
+var domready = __webpack_require__(49);
 __webpack_require__(11);
 
 window.Vue = __webpack_require__(36);
@@ -999,18 +1000,45 @@ window.Vue = __webpack_require__(36);
 
 
 
-var article = new __WEBPACK_IMPORTED_MODULE_1__lib_ToggleArticle__["a" /* default */]();
-article.listen('.toggle-article');
-article.onShow(function () {
-  console.log('onShow');
-});
-
 window.initMap = function () {
-  window.AbstractInfoBox = __webpack_require__(40);
-  window.Baloon = __webpack_require__(41);
-  window.Marker = __webpack_require__(42);
-  var mc = new __WEBPACK_IMPORTED_MODULE_0__lib_Map__["a" /* default */](document.getElementById('js-map'));
+    window.AbstractInfoBox = __webpack_require__(41);
+    window.Baloon = __webpack_require__(42);
+    window.Marker = __webpack_require__(43);
+    var mc = new __WEBPACK_IMPORTED_MODULE_0__lib_Map__["a" /* default */](document.getElementById('js-map'));
 };
+
+domready(function () {
+    var article = new __WEBPACK_IMPORTED_MODULE_1__lib_ToggleArticle__["a" /* default */]();
+    article.listen('.toggle-article');
+    article.onShow(function () {
+        console.log('onShow');
+    });
+
+    (function () {
+        var ref = document.querySelector('header .share button');
+        var target = document.querySelector('header .share .buttons');
+        if (!ref || !target) {
+            return;
+        }
+
+        var popper;
+
+        ref.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            if (popper) {
+                ref.classList.remove('show');
+                popper.destroy();
+                popper = null;
+            } else {
+                popper = new Popper(ref, target, {
+                    placement: 'right'
+                });
+                ref.classList.add('show');
+            }
+        });
+    })();
+});
 
 /***/ }),
 /* 11 */
@@ -46925,6 +46953,208 @@ var _class = function () {
 
 /***/ }),
 /* 40 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var _class = function () {
+    function _class() {
+        _classCallCheck(this, _class);
+
+        this.classNames = {
+            showing: 'article-showing',
+            showed: 'article-show',
+            hiding: 'article-hiding',
+            hided: ''
+        };
+
+        this.callOnShow = [];
+        this.callOnShowed = [];
+        this.callOnHide = [];
+        this.callOnHided = [];
+
+        this.body = document.getElementsByTagName('body')[0];
+
+        this.isOpen = this.body.classList.contains(this.classNames.showed);
+        this.isAnimating = false;
+
+        this.mapWrapper = document.getElementById('js-map-wrapper');
+        this.mapContainer = document.getElementById('js-map-container');
+
+        this.enabled = true;
+        if (!this.mapWrapper) {
+            this.enabled = false;
+            return;
+        }
+
+        var me = this;
+        ['transitionend', 'webkitTransitionEnd', 'mozTransitionEnd'].forEach(function (transition) {
+            me.mapContainer.addEventListener(transition, function (e) {
+                me.transitionEnd(e);
+            }, false);
+        });
+    }
+
+    _createClass(_class, [{
+        key: 'listen',
+        value: function listen(className) {
+            if (!this.enabled) {
+                return;
+            }
+
+            var me = this;
+            document.querySelectorAll(className).forEach(function (element) {
+                element.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    me.toggle();
+                }, false);
+            });
+        }
+    }, {
+        key: 'toggle',
+        value: function toggle() {
+            if (!this.enabled || this.isAnimating) {
+                return;
+            }
+
+            if (!this.isOpen) {
+                this.show();
+            } else {
+                this.hide();
+            }
+        }
+    }, {
+        key: 'show',
+        value: function show() {
+            if (!this.enabled || this.isOpen || this.isAnimating) {
+                return;
+            }
+
+            this.isAnimating = true;
+
+            var me = this;
+            var style = this.getWrapperStyle();
+            this.mapContainer.setAttribute('style', style);
+
+            this.isOpen = true;
+            this.body.classList.add(this.classNames.showing);
+
+            if (this.callOnShow.length) {
+                this.callOnShow.forEach(function (callback) {
+                    callback(me);
+                });
+            }
+        }
+    }, {
+        key: 'hide',
+        value: function hide() {
+            if (!this.enabled || !this.isOpen || this.isAnimating) {
+                return;
+            }
+
+            this.isAnimating = true;
+            this.isOpen = false;
+
+            var me = this;
+            var style = this.getWrapperStyle();
+            style += 'position:absolute;';
+            this.mapContainer.setAttribute('style', style);
+            setTimeout(function () {
+                me.body.classList.add(me.classNames.hiding);
+            }, 5);
+
+            if (this.callOnHide.length) {
+                this.callOnHide.forEach(function (callback) {
+                    callback(me);
+                });
+            }
+        }
+    }, {
+        key: 'getWrapperStyle',
+        value: function getWrapperStyle() {
+            var doc = this.mapWrapper && this.mapWrapper.ownerDocument;
+            if (!doc) {
+                return;
+            }
+            var docElem = doc.documentElement;
+            var rect = this.mapWrapper.getBoundingClientRect();
+            var style = '';
+            style += 'width:' + this.mapWrapper.offsetWidth + 'px;';
+            style += 'height:' + this.mapWrapper.offsetHeight + 'px;';
+            style += 'top:' + this.mapWrapper.offsetTop + 'px;';
+            style += 'left:' + (rect.left + window.pageXOffset - docElem.clientLeft) + 'px;';
+            return style;
+        }
+    }, {
+        key: 'transitionEnd',
+        value: function transitionEnd(e) {
+            var me = this;
+            if (this.isOpen) {
+                this.body.classList.remove(this.classNames.showing, this.classNames.hiding);
+                this.body.classList.add(this.classNames.showed);
+
+                if (this.callOnShowed.length) {
+                    this.callOnShowed.forEach(function (callback) {
+                        callback(me);
+                    });
+                }
+            } else {
+                this.body.classList.remove(this.classNames.showing, this.classNames.showed, this.classNames.hiding);
+
+                if (this.callOnHided.length) {
+                    this.callOnHided.forEach(function (callback) {
+                        callback(me);
+                    });
+                }
+            }
+
+            this.mapContainer.setAttribute('style', '');
+            this.isAnimating = false;
+        }
+    }, {
+        key: 'onShow',
+        value: function onShow(callback) {
+            if ('function' !== typeof callback) {
+                return;
+            }
+            this.callOnShow.push(callback);
+        }
+    }, {
+        key: 'onShowed',
+        value: function onShowed(callback) {
+            if ('function' !== typeof callback) {
+                return;
+            }
+            this.callOnShowed.push(callback);
+        }
+    }, {
+        key: 'onHide',
+        value: function onHide(callback) {
+            if ('function' !== typeof callback) {
+                return;
+            }
+            this.callOnHide.push(callback);
+        }
+    }, {
+        key: 'onHided',
+        value: function onHided(callback) {
+            if ('function' !== typeof callback) {
+                return;
+            }
+            this.callOnHided.push(callback);
+        }
+    }]);
+
+    return _class;
+}();
+
+/* harmony default export */ __webpack_exports__["a"] = (_class);
+
+/***/ }),
+/* 41 */
 /***/ (function(module, exports) {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -47404,7 +47634,7 @@ module.exports = function (_google$maps$OverlayV) {
 }(google.maps.OverlayView);
 
 /***/ }),
-/* 41 */
+/* 42 */
 /***/ (function(module, exports) {
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -47438,7 +47668,7 @@ module.exports = function (_AbstractInfoBox) {
 }(AbstractInfoBox);
 
 /***/ }),
-/* 42 */
+/* 43 */
 /***/ (function(module, exports) {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -47477,216 +47707,50 @@ module.exports = function (_google$maps$Marker) {
 }(google.maps.Marker);
 
 /***/ }),
-/* 43 */
+/* 44 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 44 */,
 /* 45 */,
 /* 46 */,
 /* 47 */,
-/* 48 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/* 48 */,
+/* 49 */
+/***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+/*!
+  * domready (c) Dustin Diaz 2014 - License MIT
+  */
+!function (name, definition) {
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+  if (true) module.exports = definition()
+  else if (typeof define == 'function' && typeof define.amd == 'object') define(definition)
+  else this[name] = definition()
 
-var _class = function () {
-    function _class() {
-        _classCallCheck(this, _class);
+}('domready', function () {
 
-        this.classNames = {
-            showing: 'article-showing',
-            showed: 'article-show',
-            hiding: 'article-hiding',
-            hided: ''
-        };
+  var fns = [], listener
+    , doc = document
+    , hack = doc.documentElement.doScroll
+    , domContentLoaded = 'DOMContentLoaded'
+    , loaded = (hack ? /^loaded|^c/ : /^loaded|^i|^c/).test(doc.readyState)
 
-        this.callOnShow = [];
-        this.callOnShowed = [];
-        this.callOnHide = [];
-        this.callOnHided = [];
 
-        this.body = document.getElementsByTagName('body')[0];
+  if (!loaded)
+  doc.addEventListener(domContentLoaded, listener = function () {
+    doc.removeEventListener(domContentLoaded, listener)
+    loaded = 1
+    while (listener = fns.shift()) listener()
+  })
 
-        this.isOpen = this.body.classList.contains(this.classNames.showed);
-        this.isAnimating = false;
+  return function (fn) {
+    loaded ? setTimeout(fn, 0) : fns.push(fn)
+  }
 
-        this.mapWrapper = document.getElementById('js-map-wrapper');
-        this.mapContainer = document.getElementById('js-map-container');
+});
 
-        this.enabled = true;
-        if (!this.mapWrapper) {
-            this.enabled = false;
-            return;
-        }
-
-        var me = this;
-        ['transitionend', 'webkitTransitionEnd', 'mozTransitionEnd'].forEach(function (transition) {
-            me.mapContainer.addEventListener(transition, function (e) {
-                me.transitionEnd(e);
-            }, false);
-        });
-    }
-
-    _createClass(_class, [{
-        key: 'listen',
-        value: function listen(className) {
-            if (!this.enabled) {
-                return;
-            }
-
-            var me = this;
-            document.querySelectorAll(className).forEach(function (element) {
-                element.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    me.toggle();
-                }, false);
-            });
-        }
-    }, {
-        key: 'toggle',
-        value: function toggle() {
-            if (!this.enabled || this.isAnimating) {
-                return;
-            }
-
-            if (!this.isOpen) {
-                this.show();
-            } else {
-                this.hide();
-            }
-        }
-    }, {
-        key: 'show',
-        value: function show() {
-            if (!this.enabled || this.isOpen || this.isAnimating) {
-                return;
-            }
-
-            this.isAnimating = true;
-
-            var me = this;
-            var style = this.getWrapperStyle();
-            this.mapContainer.setAttribute('style', style);
-
-            this.isOpen = true;
-            this.body.classList.add(this.classNames.showing);
-
-            if (this.callOnShow.length) {
-                this.callOnShow.forEach(function (callback) {
-                    callback(me);
-                });
-            }
-        }
-    }, {
-        key: 'hide',
-        value: function hide() {
-            if (!this.enabled || !this.isOpen || this.isAnimating) {
-                return;
-            }
-
-            this.isAnimating = true;
-            this.isOpen = false;
-
-            var me = this;
-            var style = this.getWrapperStyle();
-            style += 'position:absolute;';
-            this.mapContainer.setAttribute('style', style);
-            setTimeout(function () {
-                me.body.classList.add(me.classNames.hiding);
-            }, 5);
-
-            if (this.callOnHide.length) {
-                this.callOnHide.forEach(function (callback) {
-                    callback(me);
-                });
-            }
-        }
-    }, {
-        key: 'getWrapperStyle',
-        value: function getWrapperStyle() {
-            var doc = this.mapWrapper && this.mapWrapper.ownerDocument;
-            if (!doc) {
-                return;
-            }
-            var docElem = doc.documentElement;
-            var rect = this.mapWrapper.getBoundingClientRect();
-            var style = '';
-            style += 'width:' + this.mapWrapper.offsetWidth + 'px;';
-            style += 'height:' + this.mapWrapper.offsetHeight + 'px;';
-            style += 'top:' + this.mapWrapper.offsetTop + 'px;';
-            style += 'left:' + (rect.left + window.pageXOffset - docElem.clientLeft) + 'px;';
-            return style;
-        }
-    }, {
-        key: 'transitionEnd',
-        value: function transitionEnd(e) {
-            var me = this;
-            if (this.isOpen) {
-                this.body.classList.remove(this.classNames.showing, this.classNames.hiding);
-                this.body.classList.add(this.classNames.showed);
-
-                if (this.callOnShowed.length) {
-                    this.callOnShowed.forEach(function (callback) {
-                        callback(me);
-                    });
-                }
-            } else {
-                this.body.classList.remove(this.classNames.showing, this.classNames.showed, this.classNames.hiding);
-
-                if (this.callOnHided.length) {
-                    this.callOnHided.forEach(function (callback) {
-                        callback(me);
-                    });
-                }
-            }
-
-            this.mapContainer.setAttribute('style', '');
-            this.isAnimating = false;
-        }
-    }, {
-        key: 'onShow',
-        value: function onShow(callback) {
-            if ('function' !== typeof callback) {
-                return;
-            }
-            this.callOnShow.push(callback);
-        }
-    }, {
-        key: 'onShowed',
-        value: function onShowed(callback) {
-            if ('function' !== typeof callback) {
-                return;
-            }
-            this.callOnShowed.push(callback);
-        }
-    }, {
-        key: 'onHide',
-        value: function onHide(callback) {
-            if ('function' !== typeof callback) {
-                return;
-            }
-            this.callOnHide.push(callback);
-        }
-    }, {
-        key: 'onHided',
-        value: function onHided(callback) {
-            if ('function' !== typeof callback) {
-                return;
-            }
-            this.callOnHided.push(callback);
-        }
-    }]);
-
-    return _class;
-}();
-
-/* harmony default export */ __webpack_exports__["a"] = (_class);
 
 /***/ })
 /******/ ]);

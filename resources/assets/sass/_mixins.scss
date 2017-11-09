@@ -3,3 +3,96 @@
     border-radius:$shadowed-box-radius;
     box-shadow:$shadowed-box-shadow-x $shadowed-box-shadow-y $shadowed-box-shadow-length $shadowed-box-shadow-color;
 }
+
+@mixin popper($background: #FFC107, $arrow: 9px) {
+    $diagonal:round(sqrt(pow(strip-unit($arrow), 2) + pow(strip-unit($arrow), 2))) + 0px;
+    $nega:round($diagonal / 2) - 2px;
+    display:none;
+    position: absolute;
+    background: $background;
+    color: black;
+    width: 150px;
+    border-radius: $border-radius;
+    box-shadow: 0 0 2px rgba(0,0,0,0.5);
+    padding: map-get($spacers, 2);
+    text-align: center;
+
+    &:before, &:after {
+        content:'';
+        position: absolute;
+        z-index:-1;
+        background: $background;
+    }
+
+    &:before {
+        width: $arrow;
+        height: $arrow;
+        box-shadow: 0 0 2px rgba(0,0,0,0.5);
+        transform:rotate(45deg);
+    }
+
+    &:after {
+        width: $diagonal + 4;
+        height: $diagonal + 4;
+    }
+
+    &[x-placement] {
+        display:inline-block;
+    }
+
+    &[x-placement^="top"] {
+        margin-bottom: $arrow;
+
+        &:before {
+            bottom: -#{$nega};
+            left: calc(50% - #{round($nega / 2)});
+        }
+
+        &:after {
+            bottom: 0;
+            left: calc(50% - #{round($diagonal / 2)});
+        }
+    }
+
+    &[x-placement^="bottom"] {
+        margin-top: $arrow;
+
+        &:before {
+            top: -#{$nega};
+            left: calc(50% - #{round($nega / 2)});
+        }
+
+        &:after {
+            top: 0;
+            left: calc(50% - #{round($diagonal / 2)});
+        }
+    }
+
+    &[x-placement^="right"] {
+        margin-left: $arrow;
+
+        &:before {
+            left: -#{$nega};
+            top: calc(50% - #{round($nega / 2)});
+        }
+
+        &:after {
+            left: 0;
+            top: calc(50% - #{round($diagonal / 2)});
+        }
+    }
+
+    &[x-placement^="left"] {
+        margin-right: $arrow;
+
+        &:before {
+            right: -#{$nega};
+            top: calc(50% - #{round($nega / 2)});
+        }
+
+        &:after {
+            right: 0;
+            top: calc(50% - #{round($diagonal / 2)});
+        }
+    }
+}

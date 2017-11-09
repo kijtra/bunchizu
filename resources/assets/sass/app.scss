@@ -1,12 +1,16 @@
 // Fonts
 @import url("https://fonts.googleapis.com/css?family=Material+Icons");
+
 // Bootstrap
 @import "~bootstrap/scss/functions";
 @import "~bootstrap/scss/variables";
 @import "~bootstrap/scss/mixins";
+
 // Variables
 @import "variables";
+@import "functions";
 @import "mixins";
+
 // Bootstrap
 @import "~bootstrap/scss/root";
 @import "~bootstrap/scss/print";
@@ -40,7 +44,16 @@
 @import "~bootstrap/scss/popover";
 @import "~bootstrap/scss/carousel";
 @import "~bootstrap/scss/utilities";
+
+// mathsass
+@import "~mathsass/dist/math";
+
 @import "components/map";
+
+.material-icons {
+    font-size:inherit;
+}
+
 html,
 body {
     height: 100%; // overflow:hidden;
@@ -121,6 +134,7 @@ article {
     }
 
     >header {
+        
         margin-bottom:map-get($spacers, 4);
         padding-bottom:map-get($spacers, 3);
         border-bottom:1px solid $border-color;
@@ -128,64 +142,50 @@ article {
         h1 {
             margin:0;
             padding:0;
-            font-size:1.3em;
+            font-size:1.2em;
             line-height:1.4;
         }
 
-        .share {
+        .meta {
             display:flex;
-            flex-wrap: nowrap;
+            flex-direction:row;
             align-items:center;
-            justify-content:center;
-            margin-top:map-get($spacers, 4);
+            margin-top:map-get($spacers, 3);
+            font-size:.7em;
             line-height:1;
 
-            small {
-                display:inline-block;
-                margin-right:map-get($spacers, 1);
-                white-space:nowrap;
-            }
-
-            a {
-                width:1.5em;
-                height:1.5em;
+            .btn {
                 display:inline-flex;
                 align-items:center;
-                justify-content:center;
-                border-radius:50%;
-                background:#000;
+                padding:map-get($spacers, 1);
+                font-size:inherit;
+                line-height:inherit;
+            }
 
-                &:not(:first-of-type) {
-                    margin-left:map-get($spacers, 3);
+            .share {
+                margin-left:auto;
+
+                .buttons {
+                    @include popper();
                 }
             }
         }
 
         @include media-breakpoint-up(md, $grid-breakpoints) {
-            display:flex;
-            flex-wrap: nowrap;
-            flex-direction:row;
-            justify-content:space-between;
-            align-items:center;
             margin-bottom:#{$spacer * 2};
             padding-bottom:#{$spacer * 2};
 
             h1 {
-                font-size:1.6em;
+                font-size:1.7em;
                 line-height:1.4;
             }
 
-            .share {
-                margin-top:0;
-                margin-left:#{$spacer * 2};
-    
-                a {
-                    width:2em;
-                    height:2em;
+            .meta {
+                margin-top:map-get($spacers, 4);
+                font-size:1em;
 
-                    &:not(:first-of-type) {
-                        margin-left:map-get($spacers, 2);
-                    }
+                .btn {
+                    padding:map-get($spacers, 2);
                 }
             }
         }
