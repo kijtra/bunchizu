@@ -10,3 +10,29 @@ $shadowed-box-shadow-length:2px;
 $shadowed-box-shadow-color:rgba(0, 0, 0, .15);
 $toggle-map-anime-speed:.2s;
 $map-zoombutton-anime-speed:.4s;
+
+
+$marker-sizes:(
+    xs: 40px,
+    sm: 40px,
+    md: 34px,
+    lg: 34px,
+);
+$marker-arrows:(
+    xs: 10px,
+    sm: 10px,
+    md: 8px,
+    lg: 8px,
+);
+$marker-texts:(
+    xs: .9rem,
+    sm: .9rem,
+    md: .8rem,
+    lg: .8rem,
+);
+
+$marker-color:#F75850;
+$marker-radius:50%;
+$marker-arrow-thin:.75;
+$marker-border-width:1px;
+$marker-border-color:#B73830;

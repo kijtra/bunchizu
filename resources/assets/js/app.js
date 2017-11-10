@@ -23,18 +23,20 @@ window.Vue = require('vue');
 
 import Map from './lib/Map';
 import ToggleArticle from './lib/ToggleArticle';
+window.articleToggler = new ToggleArticle;
 
 window.initMap = () => {
     window.AbstractInfoBox = require('./lib/AbstractInfoBox');
     window.Baloon = require('./lib/Baloon');
     window.Marker = require('./lib/Marker');
+    window.RichMarker = require('js-rich-marker/lib/richmarker').RichMarker;
     var mc = new Map(document.getElementById('js-map'));
 }
 
 domready(function () {
-    var article = new ToggleArticle();
-    article.listen('.toggle-article');
-    article.onShow(function () {
+    // var article = new ToggleArticle();
+    articleToggler.listen('.toggle-article');
+    articleToggler.onShow(function () {
         console.log('onShow');
     });
 

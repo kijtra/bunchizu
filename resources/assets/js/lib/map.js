@@ -84,6 +84,44 @@ export default class {
             self.map.setCenter(self.currentCenter);
         });
 
+        articleToggler.onShow(function () {
+            var center;
+            if (self.currentMarker) {
+                center = self.currentMarker.getPosition();
+            } else {
+                center = self.map.getCenter();
+            }
+            self.articleInterval_ = setInterval(function () {
+                google.maps.event.trigger(self.map, 'resize');
+                self.map.setCenter(center);
+            }, 50);
+        });
+
+        articleToggler.onShowed(function () {
+            if (self.articleInterval_) {
+                clearInterval(self.articleInterval_);
+            }
+        });
+
+        articleToggler.onHide(function () {
+            var center;
+            if (self.article) {
+                center = this.article.beforeCenter;
+            } else {
+                center = self.map.getCenter();
+            }
+            self.articleInterval_ = setInterval(function () {
+                google.maps.event.trigger(self.map, 'resize');
+                self.map.setCenter(center);
+            }, 50);
+        });
+
+        articleToggler.onHided(function () {
+            if (self.articleInterval_) {
+                clearInterval(self.articleInterval_);
+            }
+        });
+
         // google.maps.event.addDomListener(self.toggleElement, 'click', function (e) {
         //     if (!self.currentMarker) {
         //         e.preventDefault();
@@ -102,7 +140,8 @@ export default class {
         // });
 
         var marker = self.addMarker(this.option.defaultPosition, {
-            draggable: true
+            draggable: true,
+            content: '001',
         });
 
         // var infowindow = new google.maps.InfoWindow({
@@ -116,6 +155,31 @@ export default class {
         var infobox = new Baloon();
         infobox.setContent(content);
         infobox.open(this.map, marker);
+
+        marker.addListener('click', function () {
+            self.currentMarker = marker;
+            console.log(marker.getHeight());
+            // self.showArticle();
+            // articleToggler.show();
+        });
+
+        // setTimeout(function () {
+        //     var marker = new RichMarker({
+        //         position: self.map.getCenter(),
+        //         map: self.map,
+        //         // draggable: true,
+        //         shadow:false,
+        //         content: ''
+        //     });
+        //     marker.addListener('ready', function () {
+        //         this.setContent('<div class="map-marker ready"><div><div><img src="https://farm4.static.flickr.com/3212/3012579547_097e27ced9_m.jpg"/>You should drag it!</div></div></div>');
+        //     });
+        //     marker.addListener('click', function () {
+        //         self.currentMarker = this;
+        //         articleToggler.toggle();
+        //     });
+        // }, 2000);
+        
         // infowindow.open(this.map, marker);
     }
 
@@ -182,10 +246,6 @@ export default class {
                 to: to
             });
         }
-
-        // if (this.article) {
-        //     this.setCenterByArticle(this.article, to);
-        // }
     }
 
     onZoomOut(from, to) {
@@ -195,10 +255,6 @@ export default class {
                 to: to
             });
         }
-
-        // if (this.article) {
-        //     this.setCenterByArticle(this.article, to);
-        // }
     }
 
     addMarker(position, conf) {
@@ -208,16 +264,35 @@ export default class {
         if ('object' === typeof conf) {
             option = conf;
         }
-        option.position = position;
+        option.position = new google.maps.LatLng(position);
         option.map = this.map;
+        option.shadow = false;
 
-        var marker = new Marker(option);
+        var wrapper = document.createElement('div');
+        wrapper.classList.add('map-marker');
 
-        marker.addListener('click', function () {
-            self.currentMarker = this;
-            self.toggleElement.checked = true;
-            self.triggerEvent(self.toggleElement, 'change');
+        var before = '<div><div>';
+        var after = '</div></div>';
+        var content = option.content || '';
+
+        wrapper.innerHTML = before + content + after;
+        option.content = wrapper;
+
+        var marker = new RichMarker(option);
+
+        marker.addListener('ready', function () {
+            this.getContent().classList.add('ready');
         });
+
+        // 未対応
+        // marker.addListener('dragstart', function () {
+        //     this.getContent().classList.add('dragging');
+        // });
+
+        // 未対応
+        // marker.addListener('dragstart', function () {
+        //     this.getContent().classList.remove('dragging');
+        // });
 
         return marker;
     }

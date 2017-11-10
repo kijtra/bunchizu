@@ -48,7 +48,9 @@
 // mathsass
 @import "~mathsass/dist/math";
 
+@import "components/popper";
 @import "components/map";
+@import "components/map-marker";
 
 .material-icons {
     font-size:inherit;
@@ -183,8 +185,6 @@ article {
                 margin-left:auto;
 
                 .buttons {
-                    @include popper();
-
                     a {
                         display:block;
                         text-align:left;

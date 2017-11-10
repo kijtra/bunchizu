@@ -15,6 +15,7 @@
     "cross-env": "^5.0.1",
     "domready": "^1.0.8",
     "jquery": "^3.1.1",
+    "js-rich-marker": "^1.1.2",
     "laravel-mix": "^1.0",
     "lodash": "^4.17.4",
     "mathsass": "^0.10.1",

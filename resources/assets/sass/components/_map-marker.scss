@@ -1,0 +1,147 @@
+$marker-shadow:0 1px 4px rgba(0,0,0,.6);
+
+.map-marker {
+    display:flex;
+    flex-direction: column;
+    align-items:center;
+    position:relative;
+    z-index:1;
+
+    &:before {
+        content:'';
+        display:block;
+        position:absolute;
+        top:0;
+        left:0;
+        z-index:-1;
+        background-color:$marker-color;
+        border-radius:$marker-radius;
+        border:$marker-border-width solid $marker-border-color;
+        box-shadow:$marker-shadow;
+    }
+
+    &:after {
+        content:'';
+        display:block;
+        background-color:$marker-color;
+        position:relative;
+        z-index:1;
+        top:-1px;
+        transform:translateY(-50%) scaleX($marker-arrow-thin) rotate(45deg);
+        border-right:$marker-border-width solid $marker-border-color;
+        border-bottom:$marker-border-width solid $marker-border-color;
+        box-shadow:$marker-shadow;
+    }
+
+    >div {
+        position:relative;
+        z-index:2;
+        // border-radius:$marker-radius;
+        text-align:center;
+        text-shadow:
+            1px 1px 0 #fff,
+            -1px -1px 0 #fff,
+            1px -1px 0 #fff,
+            -1px 1px 0 #fff
+        ;
+        line-height:1;
+
+        &:before {
+            display:block;
+            content:'';
+            position:absolute;
+            top:$marker-border-width;
+            left:$marker-border-width;
+            z-index:-1;
+            background-color:$marker-color;
+            border-radius:$marker-radius;
+            border:#{$marker-border-width + 1} solid transparent;
+        }
+
+        &:after {
+            display:block;
+            content:'';
+            width:50%;
+            height:50%;
+            position:absolute;
+            top:50%;
+            left:50%;
+            z-index:-1;
+            transform:translate(-50%, -50%);
+            background-color:lighten($marker-color, 20%);
+            border-radius:50%;
+        }
+
+        >div {
+            display:flex;
+            flex-direction: column;
+            justify-content:center;
+            align-items:center;
+            position:relative;
+            border-radius:$marker-radius;
+            border:#{$marker-border-width + 2} solid transparent;
+            overflow:hidden;
+
+            >img {
+                position:absolute;
+                top:50%;
+                left:50%;
+                max-width:100%;
+                max-height:100%;
+                transform:translate(-50%, -50%);
+            }
+        }
+    }
+
+    @each $breakpoint, $size in $marker-sizes {
+        $arrow:map-get($marker-arrows, $breakpoint);
+        $diagonal:round(sqrt(pow(strip-unit($arrow), 2) + pow(strip-unit($arrow), 2))) + 0px;
+
+        @include media-breakpoint-up($breakpoint) {
+            width:$size;
+            height:#{$size + round($diagonal / 2)};
+            transform-origin:#{round($size / 2)} #{$size + round($diagonal / 2)};
+
+            &:before, >div, >div>div {
+                width:$size;
+                height:$size;
+            }
+
+            >div:before {
+                width:#{$size - ($marker-border-width * 2)};
+                height:#{$size - ($marker-border-width * 2)};
+            }
+
+            >div>div {
+                font-size:map-get($marker-texts, $breakpoint);
+            }
+
+            &:after {
+                width:$arrow;
+                height:$arrow;
+                margin-bottom:-#{round($diagonal / 2)};
+            }
+        }
+    }
+
+    &.ready {
+        animation: mapMarkerReady 3s 1 ease-in-out;
+    }
+
+    &.dragging {
+        &:before, &:after {
+            box-shadow:0 10px 4px rgba(0,0,0,.6);
+        }
+    }
+}
+
+
+@keyframes mapMarkerReady {
+    0% { top:-15px;transform: scale(.9, .9); }
+    4% { top:0;transform: scale(.9, .9); }
+    6% { transform: scale(1.1, .4); }
+    9% { transform: scale(.9, 1.1); }
+    13% { transform: scale(1.1, .9); }
+    18% { transform: scale(1, 1); }
+    100% { transform: scale(1, 1); }
+}
