@@ -48,222 +48,63 @@
 // mathsass
 @import "~mathsass/dist/math";
 
+// Swiper
+@import "~swiper/dist/css/swiper.css";
+
+// Components
 @import "components/social-icons";
 @import "components/popper";
 @import "components/map";
 @import "components/map-marker";
 
-.material-icons {
-    font-size:inherit;
-}
+// layouts
+@import "layouts/base";
+@import "layouts/page";
+@import "layouts/header";
 
-html,
-body {
-    height: 100%; // overflow:hidden;
-}
 
-body {
-    overflow-y: scroll;
-    word-break : break-all;
-}
 
-body>input {
-    display: none;
-}
 
-#map {
-    .infobox {
-        max-width: 70vw;
-    }
-    .infobox-inner {
-        border: 1px solid red;
-        background-color: #fff;
-    }
-}
 
-#app {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-
-    >header {
-        border-bottom: 1px solid $border-color;
-        @each $breakpoint, $header-height in $header-heights {
-            @include media-breakpoint-up($breakpoint, $grid-breakpoints) {
-                // height: $header-height;
-                flex: 0 0 $header-height;
-            }
-        }
-    }
-}
 
 main {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-}
+    >#map {
+        flex-grow:1;
+        background:#ddd;
+    }
 
-article {
-    @include make-container();
-    @include make-container-max-widths();
-    flex-grow: 1;
-    padding-top:#{$spacer * 2};
-    overflow: hidden;
+    >.map-list {
+        width:100%;
+        position:absolute;
+        bottom:map-get($spacers, 3);
 
-    >.map {
-        height: 30vh;
-        .inner {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: #eee;
-            transition:
-                width $toggle-map-anime-speed ease-in-out,
-                height $toggle-map-anime-speed ease-in-out,
-                top $toggle-map-anime-speed ease-in-out,
-                left $toggle-map-anime-speed ease-in-out,
-                border-radius $toggle-map-anime-speed ease-in-out;
-            will-change: width, height, top, left, border-radius;
+        .swiper-container {
+            margin-left:-#{$spacer};
+            margin-right:-#{$spacer};
+            opacity:0;
+            transition:opacity .2s linear;
 
-            >div {
-                height: 100%;
+            &.ready {
+                opacity:1;
             }
+        }
+
+        .swiper-wrapper {
+            // margin-left:10px;
+        }
+
+        .swiper-slide {
+            width:calc(100% - 80px) !important;
+            // margin-left:10px !important;
+            // margin-right:10px !important;
+
+            // &:last-child {
+            //     width:100% !important;
+            // }
         }
     }
 
-    >header {
-        
-        margin-bottom:map-get($spacers, 4);
-        padding-bottom:map-get($spacers, 4);
-        border-bottom:1px solid $border-color;
-
-        h1 {
-            margin:0;
-            padding:0;
-            font-size:1.2em;
-            line-height:1.4;
-        }
-
-        p {
-            margin:map-get($spacers, 3) 0 0;
-            // font-size:1.1em;
-        }
-
-        .meta {
-            display:flex;
-            flex-direction:row;
-            align-items:center;
-            margin-top:map-get($spacers, 3);
-            font-size:.8em;
-            line-height:1;
-
-            .btn {
-                display:inline-flex;
-                align-items:center;
-                padding:map-get($spacers, 1);
-                font-size:inherit;
-                line-height:inherit;
-            }
-
-            time {
-                display:inline-flex;
-                align-items:center;
-                color:$gray-600;
-
-                i {
-                    margin-right:.1em;
-                    font-size:1.3em;
-                    line-height:inherit;
-                }
-            }
-
-            .share {
-                margin-left:auto;
-
-                .buttons {
-                    a {
-                        display:block;
-                        text-align:left;
-                        font-size:1em;
-
-                        & + a {
-                            margin-top:map-get($spacers, 2);
-                        }
-                    }
-                }
-            }
-        }
-
-        @include media-breakpoint-up(md, $grid-breakpoints) {
-            margin-bottom:#{$spacer * 2};
-            padding-bottom:#{$spacer * 2};
-
-            h1 {
-                font-size:1.7em;
-                line-height:1.4;
-            }
-
-            .meta {
-                margin-top:map-get($spacers, 4);
-                font-size:1em;
-
-                .btn {
-                    padding:map-get($spacers, 2);
-                }
-            }
-        }
-    }
-
-    @include media-breakpoint-up(md, $grid-breakpoints) {
-        padding-top:#{$spacer * 4};
-    }
-}// article
-
-body.article-showing #app {
-    height: auto;
-
-    article {
-        overflow: visible;
-        border-radius: $border-radius;
-    }
-}
-
-body.article-show #app {
-    height: auto;
-
-    article {
-        overflow: visible;
-
-        >.map {
-            .inner {
-                position: relative;
-                transition: none;
-                border-radius: $border-radius;
-            }
-        }
-    }
-}
-
-body.article-hiding #app {
-    height: 100%;
-
-    article {
-        overflow: hidden;
-
-        >.map {
-            .inner {
-                position: absolute !important;
-                width: 100% !important;
-                height: 100% !important;
-                top: 0 !important;
-                left: 0 !important;
-                transition: width $toggle-map-anime-speed ease-in-out, height $toggle-map-anime-speed ease-in-out, top $toggle-map-anime-speed ease-in-out, left $toggle-map-anime-speed ease-in-out, border-radius $toggle-map-anime-speed ease-in-out;
-            }
-        }
+    >article {
+        display:none;
     }
 }

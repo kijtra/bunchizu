@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="{{ app()->getLocale() }}">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="aaa">
+    <title>Sample</title>
+    <link href="../css/app.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <div id="app" class="page">
+        <header>
+            header
+            <label for="toggle" class="btn btn-sm btn-secodary">toggle</label>
+            <button id="tgl" class="toggle-article">tgl</button>
+        </header>
+
+        <main id="js-main">
+
+            <div id="map"></div>
+
+            <section class="map-list">
+                <div class="container">
+                    <div class="items-container swiper-container">
+                        <div class="items swiper-wrapper">
+                            <div class="item swiper-slide">
+                                <div class="card">
+                                        <div class="card-body">
+                                                <h4 class="card-title">Card title</h4>
+                                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                                <a href="#" class="btn btn-primary">Go somewhere</a>
+                                        </div>
+                                </div>
+                            </div>
+                            <div class="item swiper-slide">
+                                <div class="card">
+                                        <div class="card-body">
+                                                <h4 class="card-title">Card title</h4>
+                                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                        </div>
+                                </div>
+                            </div>
+                            <div class="item swiper-slide">
+                                <div class="card">
+                                        <div class="card-body">
+                                                <h4 class="card-title">Card title</h4>
+                                                <p class="card-text">Some quick example text to build</p>
+                                                <a href="#" class="btn btn-primary">Go somewhere</a>
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <article id="article">
+                <header>
+                    <h1>注意権利を括弧しれてください主体性にそのままするすることは</h1>
+                    <p>主体性にそのままするすることは</p>
+                    <div class="meta">
+                        <time datetime="1999-12-31"><i class="material-icons">&#xE923;</i>1999年12月31日 更新</time>
+                        <div class="share">
+                            <button class="btn btn-sm btn-secondary"><i class="material-icons">&#xE80D;</i>シェア</button>
+                            <div class="buttons popper">
+                                <a href="#" class="twitter btn btn-sm"><i class="social-twitter-round"></i>Twitter</a>
+                                <a href="#" class="facebook btn btn-sm"><i class="social-facebook"></i>Facebook</a>
+                                <a href="#" class="google btn btn-sm"><i class="social-googleplus"></i>Google+</a>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+
+                <div class="body">
+                    body
+                    <div class="map-marker">
+                        <div><div>
+                            000
+                        </div></div>
+                    </div>
+                    <div style="width:50%;height:1000px;background:#f9f9f9;"></div>
+                    <button id="tgl" class="toggle-article">tgl</button>
+                </div>
+            </article>
+
+        </main>
+    </div>
+
+    <script src="../js/app.js"></script>
+    <!--
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCe3QWJTF7YzCaOtwqCoXTIZwN8c84lItc&libraries=geometry&callback=initMap"></script>
+-->
+    <script>
+        var swiper = new Swiper('.swiper-container', {
+            loop: true,
+            autoHeight: true,
+            centeredSlides: true,
+            slidesPerView: 'auto',
+
+            // Navigation arrows
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+
+            spaceBetween: 20,
+            // slidesPerView: 3,
+            // slidesOffsetBefore:20,
+
+            breakpoints: {
+                768: {
+                    // spaceBetween: 20,
+                    // slidesPerView: 1
+                },
+
+                992: {
+                    // spaceBetween: 30,
+                    // slidesPerView: 2,
+                }
+            },
+
+            on: {
+                init: function (e) {
+                    var i, l;
+                    for (i = 0, l = this.$el.length; i < l; i++) {
+                        this.$el[i].classList.add('ready');
+                    }
+                },
+                // click: function (e) {
+                //     // console.log([this.clickedIndex, this.activeIndex]);
+                //     if (this.clickedIndex !== this.activeIndex) {
+                //         this.slideTo(this.clickedIndex);
+                //     }
+                // },
+                tap: function (e) {
+                    // console.log([this.clickedIndex, this.activeIndex]);
+                    if (this.clickedIndex !== this.activeIndex) {
+                        this.slideTo(this.clickedIndex);
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

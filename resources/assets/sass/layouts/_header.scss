@@ -1,0 +1,10 @@
+
+#app>header {
+    border-bottom: 1px solid $border-color;
+    @each $breakpoint, $header-height in $header-heights {
+        @include media-breakpoint-up($breakpoint, $grid-breakpoints) {
+            // height: $header-height;
+            flex: 0 0 $header-height;
+        }
+    }
+}

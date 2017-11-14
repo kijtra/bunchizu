@@ -27,4 +27,12 @@
             }
         }
     }
+
+    .infobox {
+        max-width: 70vw;
+    }
+    .infobox-inner {
+        border: 1px solid red;
+        background-color: #fff;
+    }
 }
