@@ -105,7 +105,7 @@
 -->
     <script>
         var swiper = new Swiper('.swiper-container', {
-            
+            loop:true,
 
             // Navigation arrows
             navigation: {
@@ -120,7 +120,6 @@
 
             breakpoints: {
                 768: {
-                    loop: true,
                     autoHeight: true,
                     slidesPerView: 1,
                     centeredSlides: true,
@@ -139,17 +138,28 @@
                     for (i = 0, l = this.$el.length; i < l; i++) {
                         this.$el[i].classList.add('ready');
                     }
+                    this.resizeTimer = null;
                 },
-                // click: function (e) {
-                //     // console.log([this.clickedIndex, this.activeIndex]);
-                //     if (this.clickedIndex !== this.activeIndex) {
-                //         this.slideTo(this.clickedIndex);
+                // resize: function (e) {
+                //     var self = this;
+                //     if (this.resizeTimer) {
+                //         clearTimeout(this.resizeTimer);
                 //     }
+                //     this.resizeTimer = setTimeout(function () {
+                //         console.log('resize');
+                //         self.update();
+                //         self.resizeTimer = null;
+                //     }, 300);
                 // },
                 tap: function (e) {
-                    console.log(this);
-                    if (this.clickedIndex !== this.activeIndex) {
-                        this.slideTo(this.clickedIndex);
+                    var self = this;
+                    for (i in this.params.breakpoints) {
+                        if (document.body.clientWidth < i) {
+                            if (this.clickedIndex !== this.activeIndex) {
+                                this.slideTo(this.clickedIndex);
+                            }
+                        }
+                        break;
                     }
                 }
             }
