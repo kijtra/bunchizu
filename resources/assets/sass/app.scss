@@ -79,29 +79,42 @@ main {
         bottom:map-get($spacers, 3);
 
         .swiper-container {
-            margin-left:-#{$spacer};
-            margin-right:-#{$spacer};
+            padding:0 #{map-get($spacers, 3) + ($spacer * 2)};
             opacity:0;
             transition:opacity .2s linear;
 
             &.ready {
                 opacity:1;
             }
+
+            >button {
+                width:#{$spacer * 2};
+                height:#{$spacer * 2};
+                background-color:$white;
+                background-size:30%;
+                border-radius:50%;
+            }
         }
 
         .swiper-wrapper {
             // margin-left:10px;
+            
         }
 
-        .swiper-slide {
-            width:calc(100% - 80px) !important;
-            // margin-left:10px !important;
-            // margin-right:10px !important;
-
-            // &:last-child {
-            //     width:100% !important;
-            // }
+        @include media-breakpoint-down(sm) {
+            .swiper-container {
+                padding:0;
+            }
+            .swiper-slide {
+                width:calc(100% - 80px) !important;
+            }
         }
+
+        // @include media-breakpoint-up(md) {
+        //     .swiper-slide {
+        //         width:auto;
+        //     }
+        // }
     }
 
     >article {

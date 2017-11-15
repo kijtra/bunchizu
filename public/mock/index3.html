@@ -24,8 +24,9 @@
             <div id="map"></div>
 
             <section class="map-list">
-                <div class="container">
                     <div class="items-container swiper-container">
+                        <button class="btn btn-sm swiper-button-prev"></button>
+                        <button class="btn btn-sm swiper-button-next"></button>
                         <div class="items swiper-wrapper">
                             <div class="item swiper-slide">
                                 <div class="card">
@@ -53,9 +54,17 @@
                                         </div>
                                 </div>
                             </div>
+                            <div class="item swiper-slide">
+                                <div class="card">
+                                        <div class="card-body">
+                                                <h4 class="card-title">Card title</h4>
+                                                <p class="card-text">Some quick example text to build</p>
+                                                <a href="#" class="btn btn-primary">Go somewhere</a>
+                                        </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
             </section>
 
             <article id="article">
@@ -96,10 +105,7 @@
 -->
     <script>
         var swiper = new Swiper('.swiper-container', {
-            loop: true,
-            autoHeight: true,
-            centeredSlides: true,
-            slidesPerView: 'auto',
+            
 
             // Navigation arrows
             navigation: {
@@ -108,13 +114,17 @@
             },
 
             spaceBetween: 20,
-            // slidesPerView: 3,
+            slidesPerView: 3,
             // slidesOffsetBefore:20,
+            // slidesOffsetAfter:20,
 
             breakpoints: {
                 768: {
-                    // spaceBetween: 20,
-                    // slidesPerView: 1
+                    loop: true,
+                    autoHeight: true,
+                    slidesPerView: 1,
+                    centeredSlides: true,
+                    slidesPerView: 'auto'
                 },
 
                 992: {
@@ -137,7 +147,7 @@
                 //     }
                 // },
                 tap: function (e) {
-                    // console.log([this.clickedIndex, this.activeIndex]);
+                    console.log(this);
                     if (this.clickedIndex !== this.activeIndex) {
                         this.slideTo(this.clickedIndex);
                     }

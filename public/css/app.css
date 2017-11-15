@@ -10932,8 +10932,7 @@ main > .map-list {
 }
 
 main > .map-list .swiper-container {
-  margin-left: -1rem;
-  margin-right: -1rem;
+  padding: 0 3rem;
   opacity: 0;
   -webkit-transition: opacity .2s linear;
   transition: opacity .2s linear;
@@ -10943,8 +10942,22 @@ main > .map-list .swiper-container.ready {
   opacity: 1;
 }
 
-main > .map-list .swiper-slide {
-  width: calc(100% - 80px) !important;
+main > .map-list .swiper-container > button {
+  width: 2rem;
+  height: 2rem;
+  background-color: #fff;
+  background-size: 30%;
+  border-radius: 50%;
+}
+
+@media (max-width: 767px) {
+  main > .map-list .swiper-container {
+    padding: 0;
+  }
+
+  main > .map-list .swiper-slide {
+    width: calc(100% - 80px) !important;
+  }
 }
 
 main > article {
