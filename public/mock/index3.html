@@ -63,6 +63,15 @@
                                         </div>
                                 </div>
                             </div>
+                            <div class="item swiper-slide">
+                                <div class="card">
+                                        <div class="card-body">
+                                                <h4 class="card-title">Card title</h4>
+                                                <p class="card-text">Some quick example text to build</p>
+                                                <a href="#" class="btn btn-primary">Go somewhere</a>
+                                        </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
             </section>
@@ -115,20 +124,23 @@
 
             spaceBetween: 20,
             slidesPerView: 3,
-            // slidesOffsetBefore:20,
-            // slidesOffsetAfter:20,
+
+            centeredSlides: true,
 
             breakpoints: {
-                768: {
+                576: {
                     autoHeight: true,
-                    slidesPerView: 1,
-                    centeredSlides: true,
                     slidesPerView: 'auto'
                 },
 
+                768: {
+                    spaceBetween: 50,
+                    slidesPerView: 2
+                },
+
                 992: {
-                    // spaceBetween: 30,
-                    // slidesPerView: 2,
+                    spaceBetween: 20,
+                    slidesPerView: 2
                 }
             },
 
