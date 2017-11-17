@@ -963,7 +963,7 @@ module.exports = Cancel;
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(10);
-module.exports = __webpack_require__(48);
+module.exports = __webpack_require__(49);
 
 
 /***/ }),
@@ -972,20 +972,16 @@ module.exports = __webpack_require__(48);
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_Map__ = __webpack_require__(42);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_ToggleArticle__ = __webpack_require__(43);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_Swiper__ = __webpack_require__(42);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_Map__ = __webpack_require__(43);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lib_ToggleArticle__ = __webpack_require__(44);
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-var domready = __webpack_require__(11);
 __webpack_require__(12);
-
-window.Vue = __webpack_require__(37);
-
-window.Swiper = __webpack_require__(40).default;
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -1001,17 +997,27 @@ window.Swiper = __webpack_require__(40).default;
 
 
 
-window.articleToggler = new __WEBPACK_IMPORTED_MODULE_1__lib_ToggleArticle__["a" /* default */]();
+
+
+
+window.articleToggler = new __WEBPACK_IMPORTED_MODULE_2__lib_ToggleArticle__["a" /* default */]();
 
 window.initMap = function () {
-    window.AbstractInfoBox = __webpack_require__(44);
-    window.Baloon = __webpack_require__(45);
-    window.Marker = __webpack_require__(46);
-    window.RichMarker = __webpack_require__(47).RichMarker;
-    var mc = new __WEBPACK_IMPORTED_MODULE_0__lib_Map__["a" /* default */](document.getElementById('js-map'));
+    window.AbstractInfoBox = __webpack_require__(45);
+    window.Baloon = __webpack_require__(46);
+    window.Marker = __webpack_require__(47);
+    window.RichMarker = __webpack_require__(48).RichMarker;
+    var mc = new __WEBPACK_IMPORTED_MODULE_1__lib_Map__["a" /* default */](document.getElementById('js-map'));
 };
 
-domready(function () {
+__webpack_require__(11)(function () {
+    Elements.sets({
+        map: '#js-map',
+        spots: '.spot-list'
+    });
+
+    Object(__WEBPACK_IMPORTED_MODULE_0__lib_Swiper__["a" /* default */])();
+
     // var article = new ToggleArticle();
     articleToggler.listen('.toggle-article');
     articleToggler.onShow(function () {
@@ -1137,6 +1143,11 @@ if (token) {
 //     broadcaster: 'pusher',
 //     key: 'your-pusher-key'
 // });
+
+window.Vue = __webpack_require__(37);
+window.Swiper = __webpack_require__(40).default;
+
+window.Elements = __webpack_require__(55);
 
 /***/ }),
 /* 13 */
@@ -28526,7 +28537,7 @@ return jQuery;
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* WEBPACK VAR INJECTION */(function(global) {/**!
  * @fileOverview Kickass library to create and place poppers near their reference elements.
- * @version 1.12.5
+ * @version 1.12.6
  * @license
  * Copyright (c) 2016 Federico Zivolo and contributors
  *
@@ -28548,22 +28559,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var nativeHints = ['native code', '[object MutationObserverConstructor]'];
-
-/**
- * Determine if a function is implemented natively (as opposed to a polyfill).
- * @method
- * @memberof Popper.Utils
- * @argument {Function | undefined} fn the function to check
- * @returns {Boolean}
- */
-var isNative = (function (fn) {
-  return nativeHints.some(function (hint) {
-    return (fn || '').toString().indexOf(hint) > -1;
-  });
-});
-
-var isBrowser = typeof window !== 'undefined';
+var isBrowser = typeof window !== 'undefined' && typeof window.document !== 'undefined';
 var longerTimeoutBrowsers = ['Edge', 'Trident', 'Firefox'];
 var timeoutDuration = 0;
 for (var i = 0; i < longerTimeoutBrowsers.length; i += 1) {
@@ -28574,26 +28570,16 @@ for (var i = 0; i < longerTimeoutBrowsers.length; i += 1) {
 }
 
 function microtaskDebounce(fn) {
-  var scheduled = false;
-  var i = 0;
-  var elem = document.createElement('span');
-
-  // MutationObserver provides a mechanism for scheduling microtasks, which
-  // are scheduled *before* the next task. This gives us a way to debounce
-  // a function but ensure it's called *before* the next paint.
-  var observer = new MutationObserver(function () {
-    fn();
-    scheduled = false;
-  });
-
-  observer.observe(elem, { attributes: true });
-
+  var called = false;
   return function () {
-    if (!scheduled) {
-      scheduled = true;
-      elem.setAttribute('x-index', i);
-      i = i + 1; // don't use compund (+=) because it doesn't get optimized in V8
+    if (called) {
+      return;
     }
+    called = true;
+    Promise.resolve().then(function () {
+      called = false;
+      fn();
+    });
   };
 }
 
@@ -28610,11 +28596,7 @@ function taskDebounce(fn) {
   };
 }
 
-// It's common for MutationObserver polyfills to be seen in the wild, however
-// these rely on Mutation Events which only occur when an element is connected
-// to the DOM. The algorithm used in this module does not use a connected element,
-// and so we must ensure that a *native* MutationObserver is available.
-var supportsNativeMutationObserver = isBrowser && isNative(window.MutationObserver);
+var supportsMicroTasks = isBrowser && window.Promise;
 
 /**
 * Create a debounced version of a method, that's asynchronously deferred
@@ -28625,7 +28607,7 @@ var supportsNativeMutationObserver = isBrowser && isNative(window.MutationObserv
 * @argument {Function} fn
 * @returns {Function}
 */
-var debounce = supportsNativeMutationObserver ? microtaskDebounce : taskDebounce;
+var debounce = supportsMicroTasks ? microtaskDebounce : taskDebounce;
 
 /**
  * Check if the given variable is a function
@@ -28678,8 +28660,16 @@ function getParentNode(element) {
  */
 function getScrollParent(element) {
   // Return body, `getScroll` will take care to get the correct `scrollTop` from it
-  if (!element || ['HTML', 'BODY', '#document'].indexOf(element.nodeName) !== -1) {
+  if (!element) {
     return window.document.body;
+  }
+
+  switch (element.nodeName) {
+    case 'HTML':
+    case 'BODY':
+      return element.ownerDocument.body;
+    case '#document':
+      return element.body;
   }
 
   // Firefox want us to check `-x` and `-y` variations as well
@@ -28709,6 +28699,10 @@ function getOffsetParent(element) {
   var nodeName = offsetParent && offsetParent.nodeName;
 
   if (!nodeName || nodeName === 'BODY' || nodeName === 'HTML') {
+    if (element) {
+      return element.ownerDocument.documentElement;
+    }
+
     return window.document.documentElement;
   }
 
@@ -28804,8 +28798,8 @@ function getScroll(element) {
   var nodeName = element.nodeName;
 
   if (nodeName === 'BODY' || nodeName === 'HTML') {
-    var html = window.document.documentElement;
-    var scrollingElement = window.document.scrollingElement || html;
+    var html = element.ownerDocument.documentElement;
+    var scrollingElement = element.ownerDocument.scrollingElement || html;
     return scrollingElement[upperSide];
   }
 
@@ -29054,7 +29048,7 @@ function getOffsetRectRelativeToArbitraryNode(children, parent) {
 }
 
 function getViewportOffsetRectRelativeToArtbitraryNode(element) {
-  var html = window.document.documentElement;
+  var html = element.ownerDocument.documentElement;
   var relativeOffset = getOffsetRectRelativeToArbitraryNode(element, html);
   var width = Math.max(html.clientWidth, window.innerWidth || 0);
   var height = Math.max(html.clientHeight, window.innerHeight || 0);
@@ -29115,10 +29109,10 @@ function getBoundaries(popper, reference, padding, boundariesElement) {
     if (boundariesElement === 'scrollParent') {
       boundariesNode = getScrollParent(getParentNode(popper));
       if (boundariesNode.nodeName === 'BODY') {
-        boundariesNode = window.document.documentElement;
+        boundariesNode = popper.ownerDocument.documentElement;
       }
     } else if (boundariesElement === 'window') {
-      boundariesNode = window.document.documentElement;
+      boundariesNode = popper.ownerDocument.documentElement;
     } else {
       boundariesNode = boundariesElement;
     }
@@ -29359,10 +29353,11 @@ function runModifiers(modifiers, data, ends) {
   var modifiersToRun = ends === undefined ? modifiers : modifiers.slice(0, findIndex(modifiers, 'name', ends));
 
   modifiersToRun.forEach(function (modifier) {
-    if (modifier.function) {
+    if (modifier['function']) {
+      // eslint-disable-line dot-notation
       console.warn('`modifier.function` is deprecated, use `modifier.fn`!');
     }
-    var fn = modifier.function || modifier.fn;
+    var fn = modifier['function'] || modifier.fn; // eslint-disable-line dot-notation
     if (modifier.enabled && isFunction(fn)) {
       // Add properties to offsets to make them a complete clientRect object
       // we do this before each modifier to make sure the previous one doesn't
@@ -29489,9 +29484,19 @@ function destroy() {
   return this;
 }
 
+/**
+ * Get the window associated with the element
+ * @argument {Element} element
+ * @returns {Window}
+ */
+function getWindow(element) {
+  var ownerDocument = element.ownerDocument;
+  return ownerDocument ? ownerDocument.defaultView : window;
+}
+
 function attachToScrollParents(scrollParent, event, callback, scrollParents) {
   var isBody = scrollParent.nodeName === 'BODY';
-  var target = isBody ? window : scrollParent;
+  var target = isBody ? scrollParent.ownerDocument.defaultView : scrollParent;
   target.addEventListener(event, callback, { passive: true });
 
   if (!isBody) {
@@ -29509,7 +29514,7 @@ function attachToScrollParents(scrollParent, event, callback, scrollParents) {
 function setupEventListeners(reference, options, state, updateBound) {
   // Resize event listener on window
   state.updateBound = updateBound;
-  window.addEventListener('resize', state.updateBound, { passive: true });
+  getWindow(reference).addEventListener('resize', state.updateBound, { passive: true });
 
   // Scroll event listener on scroll parents
   var scrollElement = getScrollParent(reference);
@@ -29540,7 +29545,7 @@ function enableEventListeners() {
  */
 function removeEventListeners(reference, state) {
   // Remove resize event listener on window
-  window.removeEventListener('resize', state.updateBound);
+  getWindow(reference).removeEventListener('resize', state.updateBound);
 
   // Remove scroll event listener on scroll parents
   state.scrollParents.forEach(function (target) {
@@ -30842,8 +30847,8 @@ var Popper = function () {
     };
 
     // get reference and popper elements (allow jQuery wrappers)
-    this.reference = reference.jquery ? reference[0] : reference;
-    this.popper = popper.jquery ? popper[0] : popper;
+    this.reference = reference && reference.jquery ? reference[0] : reference;
+    this.popper = popper && popper.jquery ? popper[0] : popper;
 
     // Deep merge modifiers options
     this.options.modifiers = {};
@@ -54266,6 +54271,66 @@ function scroll(...args) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony default export */ __webpack_exports__["a"] = (function () {
+    return new Swiper('.swiper-container', {
+        loop: true,
+
+        // Navigation arrows
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev'
+        },
+
+        spaceBetween: 20,
+        slidesPerView: 3,
+
+        centeredSlides: true,
+
+        breakpoints: {
+            576: {
+                autoHeight: true,
+                slidesPerView: 'auto'
+            },
+
+            768: {
+                spaceBetween: 50,
+                slidesPerView: 2
+            },
+
+            992: {
+                spaceBetween: 20,
+                slidesPerView: 2
+            }
+        },
+
+        on: {
+            init: function init(e) {
+                var i, l;
+                for (i = 0, l = this.$el.length; i < l; i++) {
+                    this.$el[i].classList.add('ready');
+                }
+                this.resizeTimer = null;
+            },
+            tap: function tap(e) {
+                var self = this;
+                for (i in this.params.breakpoints) {
+                    if (document.body.clientWidth < i) {
+                        if (this.clickedIndex !== this.activeIndex) {
+                            this.slideTo(this.clickedIndex);
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+    });
+});
+
+/***/ }),
+/* 43 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -54310,8 +54375,8 @@ var _class = function () {
 
         this.map = new google.maps.Map(this.mapElement, {
             zoom: this.option.defaultZoom,
-            // minZoom: this.option.zoomMin,
-            // maxZoom: this.option.zoomMax,
+            minZoom: this.option.zoomMin,
+            maxZoom: this.option.zoomMax,
             center: this.currentCenter,
             mapTypeControl: false,
             fullscreenControl: false,
@@ -54436,6 +54501,17 @@ var _class = function () {
 
             marker.addListener('click', function () {
                 self.currentMarker = marker;
+
+                var spots = Elements.get('spots');
+                if (spots) {
+                    var flag = spots.getAttribute('aria-hidden') || 'false';
+                    if ('false' === flag) {
+                        spots.setAttribute('aria-hidden', 'true');
+                    } else {
+                        spots.setAttribute('aria-hidden', 'false');
+                    }
+                }
+
                 console.log(marker.getHeight());
                 // self.showArticle();
                 // articleToggler.show();
@@ -54505,10 +54581,17 @@ var _class = function () {
             }
 
             zoomIn.addEventListener('click', function () {
-                self.zoomIn();
+                var zoom = self.map.getZoom();
+                if (zoom <= self.option.zoomMax) {
+                    self.map.setZoom(zoom + 1);
+                }
             });
+
             zoomOut.addEventListener('click', function () {
-                self.zoomOut();
+                var zoom = self.map.getZoom();
+                if (zoom >= self.option.zoomMin) {
+                    self.map.setZoom(zoom - 1);
+                }
             });
 
             container.appendChild(zoomIn);
@@ -54816,7 +54899,7 @@ var _class = function () {
 /* harmony default export */ __webpack_exports__["a"] = (_class);
 
 /***/ }),
-/* 43 */
+/* 44 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -55018,7 +55101,7 @@ var _class = function () {
 /* harmony default export */ __webpack_exports__["a"] = (_class);
 
 /***/ }),
-/* 44 */
+/* 45 */
 /***/ (function(module, exports) {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -55498,7 +55581,7 @@ module.exports = function (_google$maps$OverlayV) {
 }(google.maps.OverlayView);
 
 /***/ }),
-/* 45 */
+/* 46 */
 /***/ (function(module, exports) {
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -55532,7 +55615,7 @@ module.exports = function (_AbstractInfoBox) {
 }(AbstractInfoBox);
 
 /***/ }),
-/* 46 */
+/* 47 */
 /***/ (function(module, exports) {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -55571,7 +55654,7 @@ module.exports = function (_google$maps$Marker) {
 }(google.maps.Marker);
 
 /***/ }),
-/* 47 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -56479,10 +56562,102 @@ var RichMarkerPosition = exports.RichMarkerPosition = {
 };
 
 /***/ }),
-/* 48 */
+/* 49 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 50 */,
+/* 51 */,
+/* 52 */,
+/* 53 */,
+/* 54 */,
+/* 55 */
+/***/ (function(module, exports) {
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Me = function () {
+    function Me() {
+        _classCallCheck(this, Me);
+
+        this.cached = {};
+    }
+
+    _createClass(Me, [{
+        key: 'getElement_',
+        value: function getElement_(val) {
+            var element = void 0;
+            if ('string' === typeof val) {
+                if ('#' === val[0]) {
+                    element = document.getElementById(val.substr(1));
+                } else if ('.' === val[0]) {
+                    element = document.querySelector(val);
+                } else {
+                    element = document.getElementsByTagName(val)[0];
+                }
+            }
+
+            if (element) {
+                return element;
+            }
+        }
+    }, {
+        key: 'sets',
+        value: function sets(elements) {
+            if ('object' !== (typeof elements === 'undefined' ? 'undefined' : _typeof(elements))) {
+                return;
+            }
+
+            var key = void 0,
+                val = void 0;
+            for (key in elements) {
+                if (this.cached[key]) {
+                    continue;
+                }
+
+                if (val = this.getElement_(elements[key])) {
+                    this.cached[key] = val;
+                }
+            }
+        }
+    }, {
+        key: 'set',
+        value: function set(name, element) {
+            var val = void 0;
+            if (val = this.getElement_(element)) {
+                this.cached[name] = val;
+            }
+        }
+    }, {
+        key: 'get',
+        value: function get(name) {
+            if (this.cached[name]) {
+                return this.cached[name];
+            }
+
+            var val = this.getElement_(name);
+            if (val) {
+                this.cached[name] = val;
+                return val;
+            }
+        }
+    }, {
+        key: 'all',
+        value: function all() {
+            return this.cached;
+        }
+    }]);
+
+    return Me;
+}();
+
+module.exports = new Me();
 
 /***/ })
 /******/ ]);

@@ -51,3 +51,8 @@ if (token) {
 //     broadcaster: 'pusher',
 //     key: 'your-pusher-key'
 // });
+
+window.Vue = require('vue');
+window.Swiper = require('swiper').default;
+
+window.Elements = require('./lib/Elements');

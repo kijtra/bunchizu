@@ -10,7 +10,7 @@
     <link href="../css/app.css" rel="stylesheet">
 </head>
 
-<body>
+<body class="map">
 
     <div id="app" class="page">
         <header>
@@ -21,9 +21,9 @@
 
         <main id="js-main">
 
-            <div id="map"></div>
+            <div class="map"><div id="js-map"></div></div>
 
-            <section class="map-list">
+            <section class="spot-list" aria-hidden="true">
                     <div class="items-container swiper-container">
                         <button class="btn btn-sm swiper-button-prev"></button>
                         <button class="btn btn-sm swiper-button-next"></button>
@@ -109,73 +109,73 @@
     </div>
 
     <script src="../js/app.js"></script>
-    <!--
+    
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCe3QWJTF7YzCaOtwqCoXTIZwN8c84lItc&libraries=geometry&callback=initMap"></script>
--->
+
     <script>
-        var swiper = new Swiper('.swiper-container', {
-            loop:true,
+        // var swiper = new Swiper('.swiper-container', {
+        //     loop:true,
 
-            // Navigation arrows
-            navigation: {
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
-            },
+        //     // Navigation arrows
+        //     navigation: {
+        //         nextEl: '.swiper-button-next',
+        //         prevEl: '.swiper-button-prev',
+        //     },
 
-            spaceBetween: 20,
-            slidesPerView: 3,
+        //     spaceBetween: 20,
+        //     slidesPerView: 3,
 
-            centeredSlides: true,
+        //     centeredSlides: true,
 
-            breakpoints: {
-                576: {
-                    autoHeight: true,
-                    slidesPerView: 'auto'
-                },
+        //     breakpoints: {
+        //         576: {
+        //             autoHeight: true,
+        //             slidesPerView: 'auto'
+        //         },
 
-                768: {
-                    spaceBetween: 50,
-                    slidesPerView: 2
-                },
+        //         768: {
+        //             spaceBetween: 50,
+        //             slidesPerView: 2
+        //         },
 
-                992: {
-                    spaceBetween: 20,
-                    slidesPerView: 2
-                }
-            },
+        //         992: {
+        //             spaceBetween: 20,
+        //             slidesPerView: 2
+        //         }
+        //     },
 
-            on: {
-                init: function (e) {
-                    var i, l;
-                    for (i = 0, l = this.$el.length; i < l; i++) {
-                        this.$el[i].classList.add('ready');
-                    }
-                    this.resizeTimer = null;
-                },
-                // resize: function (e) {
-                //     var self = this;
-                //     if (this.resizeTimer) {
-                //         clearTimeout(this.resizeTimer);
-                //     }
-                //     this.resizeTimer = setTimeout(function () {
-                //         console.log('resize');
-                //         self.update();
-                //         self.resizeTimer = null;
-                //     }, 300);
-                // },
-                tap: function (e) {
-                    var self = this;
-                    for (i in this.params.breakpoints) {
-                        if (document.body.clientWidth < i) {
-                            if (this.clickedIndex !== this.activeIndex) {
-                                this.slideTo(this.clickedIndex);
-                            }
-                        }
-                        break;
-                    }
-                }
-            }
-        });
+        //     on: {
+        //         init: function (e) {
+        //             var i, l;
+        //             for (i = 0, l = this.$el.length; i < l; i++) {
+        //                 this.$el[i].classList.add('ready');
+        //             }
+        //             this.resizeTimer = null;
+        //         },
+        //         // resize: function (e) {
+        //         //     var self = this;
+        //         //     if (this.resizeTimer) {
+        //         //         clearTimeout(this.resizeTimer);
+        //         //     }
+        //         //     this.resizeTimer = setTimeout(function () {
+        //         //         console.log('resize');
+        //         //         self.update();
+        //         //         self.resizeTimer = null;
+        //         //     }, 300);
+        //         // },
+        //         tap: function (e) {
+        //             var self = this;
+        //             for (i in this.params.breakpoints) {
+        //                 if (document.body.clientWidth < i) {
+        //                     if (this.clickedIndex !== this.activeIndex) {
+        //                         this.slideTo(this.clickedIndex);
+        //                     }
+        //                 }
+        //                 break;
+        //             }
+        //         }
+        //     }
+        // });
     </script>
 </body>
 </html>

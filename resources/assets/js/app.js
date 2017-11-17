@@ -4,12 +4,9 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-var domready = require('domready');
 require('./bootstrap');
 
-window.Vue = require('vue');
 
-window.Swiper = require('swiper').default;
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -23,9 +20,15 @@ window.Swiper = require('swiper').default;
 //     el: '#app'
 // });
 
+
+
+import SwiperInit from './lib/Swiper';
+
 import Map from './lib/Map';
 import ToggleArticle from './lib/ToggleArticle';
 window.articleToggler = new ToggleArticle;
+
+
 
 window.initMap = () => {
     window.AbstractInfoBox = require('./lib/AbstractInfoBox');
@@ -35,7 +38,14 @@ window.initMap = () => {
     var mc = new Map(document.getElementById('js-map'));
 }
 
-domready(function () {
+require('domready')(function () {
+    Elements.sets({
+        map: '#js-map',
+        spots: '.spot-list',
+    });
+    
+    SwiperInit();
+
     // var article = new ToggleArticle();
     articleToggler.listen('.toggle-article');
     articleToggler.onShow(function () {

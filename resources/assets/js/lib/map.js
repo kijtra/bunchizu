@@ -34,8 +34,8 @@ export default class {
 
         this.map = new google.maps.Map(this.mapElement, {
             zoom: this.option.defaultZoom,
-            // minZoom: this.option.zoomMin,
-            // maxZoom: this.option.zoomMax,
+            minZoom: this.option.zoomMin,
+            maxZoom: this.option.zoomMax,
             center: this.currentCenter,
             mapTypeControl: false,
             fullscreenControl: false,
@@ -158,6 +158,17 @@ export default class {
 
         marker.addListener('click', function () {
             self.currentMarker = marker;
+
+            var spots = Elements.get('spots');
+            if (spots) {
+                var flag = spots.getAttribute('aria-hidden') || 'false';
+                if ('false' === flag) {
+                    spots.setAttribute('aria-hidden', 'true');
+                } else {
+                    spots.setAttribute('aria-hidden', 'false');
+                }
+            }
+
             console.log(marker.getHeight());
             // self.showArticle();
             // articleToggler.show();
@@ -225,10 +236,17 @@ export default class {
         }
 
         zoomIn.addEventListener('click', function () {
-            self.zoomIn();
+            var zoom = self.map.getZoom();
+            if (zoom <= self.option.zoomMax) {
+                self.map.setZoom(zoom + 1);
+            }
         });
+
         zoomOut.addEventListener('click', function () {
-            self.zoomOut();
+            var zoom = self.map.getZoom();
+            if (zoom >= self.option.zoomMin) {
+                self.map.setZoom(zoom - 1);
+            }
         });
 
         container.appendChild(zoomIn);
