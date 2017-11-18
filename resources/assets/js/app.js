@@ -21,59 +21,63 @@ require('./bootstrap');
 // });
 
 
+require('domready')(function () {
+    Uni.Map.initCards();
+});
 
-import SwiperInit from './lib/Swiper';
+// import SwiperInit from './lib/Swiper';
 
-import Map from './lib/Map';
-import ToggleArticle from './lib/ToggleArticle';
-window.articleToggler = new ToggleArticle;
+// import Map from './lib/Map';
+// import ToggleArticle from './lib/ToggleArticle';
+// window.articleToggler = new ToggleArticle;
 
 
 
 window.initMap = () => {
-    window.AbstractInfoBox = require('./lib/AbstractInfoBox');
-    window.Baloon = require('./lib/Baloon');
-    window.Marker = require('./lib/Marker');
-    window.RichMarker = require('js-rich-marker/lib/richmarker').RichMarker;
-    var mc = new Map(document.getElementById('js-map'));
+    Uni.Map.initMap();
+    // window.AbstractInfoBox = require('./lib/AbstractInfoBox');
+    // window.Baloon = require('./lib/Baloon');
+    // window.Marker = require('./lib/Marker');
+    // window.RichMarker = require('js-rich-marker/lib/richmarker').RichMarker;
+    // var mc = new Map(document.getElementById('js-map'));
 }
 
-require('domready')(function () {
-    Elements.sets({
-        map: '#js-map',
-        spots: '.spot-list',
-    });
+// require('domready')(function () {
+//     Elements.sets({
+//         map: '#js-map',
+//         spots: '.spot-list',
+//     });
     
-    SwiperInit();
+//     SwiperInit();
 
-    // var article = new ToggleArticle();
-    articleToggler.listen('.toggle-article');
-    articleToggler.onShow(function () {
-        console.log('onShow');
-    });
+//     // var article = new ToggleArticle();
+//     articleToggler.listen('.toggle-article');
+//     articleToggler.onShow(function () {
+//         console.log('onShow');
+//     });
 
-    (function () {
-        var ref = document.querySelector('header .share button');
-        var target = document.querySelector('header .share .buttons');
-        if (!ref || !target) {
-            return;
-        }
+//     (function () {
+//         var ref = document.querySelector('header .share button');
+//         var target = document.querySelector('header .share .buttons');
+//         if (!ref || !target) {
+//             return;
+//         }
 
-        var popper;
+//         var popper;
 
-        ref.addEventListener('click', function (e) {
-            e.preventDefault();
+//         ref.addEventListener('click', function (e) {
+//             e.preventDefault();
 
-            if (popper) {
-                ref.classList.remove('show');
-                popper.destroy();
-                popper = null;
-            } else {
-                popper = new Popper(ref, target, {
-                    placement: 'right'
-                });
-                ref.classList.add('show');
-            }
-        });
-    })();
-});
+//             if (popper) {
+//                 ref.classList.remove('show');
+//                 popper.destroy();
+//                 popper = null;
+//             } else {
+//                 popper = new Popper(ref, target, {
+//                     placement: 'right'
+//                 });
+//                 ref.classList.add('show');
+//             }
+//         });
+//     })();
+// });

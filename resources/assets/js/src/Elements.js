@@ -1,6 +1,21 @@
-class Me {
+export default class Elements {
     constructor () {
-        this.cached = {};
+        this.cached = {
+            map: this.byId('js-map'),
+            mapCards: this.byId('js-map-cards')
+        };
+    }
+
+    byId (arg) {
+        return document.getElementById(arg);
+    }
+
+    byClass (arg) {
+        return document.querySelector(arg);
+    }
+
+    query (arg) {
+        return document.querySelectorAll(arg);
     }
 
     getElement_ (val) {
@@ -61,5 +76,3 @@ class Me {
         return this.cached;
     }
 }
-
-module.exports = new Me;

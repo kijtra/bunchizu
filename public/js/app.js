@@ -71,7 +71,7 @@
 
 
 var bind = __webpack_require__(3);
-var isBuffer = __webpack_require__(20);
+var isBuffer = __webpack_require__(19);
 
 /*global toString:true*/
 
@@ -408,7 +408,7 @@ module.exports = g;
 /* WEBPACK VAR INJECTION */(function(process) {
 
 var utils = __webpack_require__(0);
-var normalizeHeaderName = __webpack_require__(22);
+var normalizeHeaderName = __webpack_require__(21);
 
 var DEFAULT_CONTENT_TYPE = {
   'Content-Type': 'application/x-www-form-urlencoded'
@@ -716,12 +716,12 @@ process.umask = function() { return 0; };
 
 
 var utils = __webpack_require__(0);
-var settle = __webpack_require__(23);
-var buildURL = __webpack_require__(25);
-var parseHeaders = __webpack_require__(26);
-var isURLSameOrigin = __webpack_require__(27);
+var settle = __webpack_require__(22);
+var buildURL = __webpack_require__(24);
+var parseHeaders = __webpack_require__(25);
+var isURLSameOrigin = __webpack_require__(26);
 var createError = __webpack_require__(6);
-var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(28);
+var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(27);
 
 module.exports = function xhrAdapter(config) {
   return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -818,7 +818,7 @@ module.exports = function xhrAdapter(config) {
     // This is only done if running in a standard browser environment.
     // Specifically not if we're in a web worker, or react-native.
     if (utils.isStandardBrowserEnv()) {
-      var cookies = __webpack_require__(29);
+      var cookies = __webpack_require__(28);
 
       // Add xsrf header
       var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ?
@@ -902,7 +902,7 @@ module.exports = function xhrAdapter(config) {
 "use strict";
 
 
-var enhanceError = __webpack_require__(24);
+var enhanceError = __webpack_require__(23);
 
 /**
  * Create an Error with the specified message, config, error code, request and response.
@@ -963,25 +963,20 @@ module.exports = Cancel;
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(10);
-module.exports = __webpack_require__(49);
+module.exports = __webpack_require__(45);
 
 
 /***/ }),
 /* 10 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_Swiper__ = __webpack_require__(42);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_Map__ = __webpack_require__(43);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lib_ToggleArticle__ = __webpack_require__(44);
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-__webpack_require__(12);
+__webpack_require__(11);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -996,102 +991,75 @@ __webpack_require__(12);
 // });
 
 
+__webpack_require__(44)(function () {
+    Uni.Map.initCards();
+});
 
+// import SwiperInit from './lib/Swiper';
 
+// import Map from './lib/Map';
+// import ToggleArticle from './lib/ToggleArticle';
+// window.articleToggler = new ToggleArticle;
 
-
-window.articleToggler = new __WEBPACK_IMPORTED_MODULE_2__lib_ToggleArticle__["a" /* default */]();
 
 window.initMap = function () {
-    window.AbstractInfoBox = __webpack_require__(45);
-    window.Baloon = __webpack_require__(46);
-    window.Marker = __webpack_require__(47);
-    window.RichMarker = __webpack_require__(48).RichMarker;
-    var mc = new __WEBPACK_IMPORTED_MODULE_1__lib_Map__["a" /* default */](document.getElementById('js-map'));
+    Uni.Map.initMap();
+    // window.AbstractInfoBox = require('./lib/AbstractInfoBox');
+    // window.Baloon = require('./lib/Baloon');
+    // window.Marker = require('./lib/Marker');
+    // window.RichMarker = require('js-rich-marker/lib/richmarker').RichMarker;
+    // var mc = new Map(document.getElementById('js-map'));
 };
 
-__webpack_require__(11)(function () {
-    Elements.sets({
-        map: '#js-map',
-        spots: '.spot-list'
-    });
+// require('domready')(function () {
+//     Elements.sets({
+//         map: '#js-map',
+//         spots: '.spot-list',
+//     });
 
-    Object(__WEBPACK_IMPORTED_MODULE_0__lib_Swiper__["a" /* default */])();
+//     SwiperInit();
 
-    // var article = new ToggleArticle();
-    articleToggler.listen('.toggle-article');
-    articleToggler.onShow(function () {
-        console.log('onShow');
-    });
+//     // var article = new ToggleArticle();
+//     articleToggler.listen('.toggle-article');
+//     articleToggler.onShow(function () {
+//         console.log('onShow');
+//     });
 
-    (function () {
-        var ref = document.querySelector('header .share button');
-        var target = document.querySelector('header .share .buttons');
-        if (!ref || !target) {
-            return;
-        }
+//     (function () {
+//         var ref = document.querySelector('header .share button');
+//         var target = document.querySelector('header .share .buttons');
+//         if (!ref || !target) {
+//             return;
+//         }
 
-        var popper;
+//         var popper;
 
-        ref.addEventListener('click', function (e) {
-            e.preventDefault();
+//         ref.addEventListener('click', function (e) {
+//             e.preventDefault();
 
-            if (popper) {
-                ref.classList.remove('show');
-                popper.destroy();
-                popper = null;
-            } else {
-                popper = new Popper(ref, target, {
-                    placement: 'right'
-                });
-                ref.classList.add('show');
-            }
-        });
-    })();
-});
+//             if (popper) {
+//                 ref.classList.remove('show');
+//                 popper.destroy();
+//                 popper = null;
+//             } else {
+//                 popper = new Popper(ref, target, {
+//                     placement: 'right'
+//                 });
+//                 ref.classList.add('show');
+//             }
+//         });
+//     })();
+// });
 
 /***/ }),
 /* 11 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-/*!
-  * domready (c) Dustin Diaz 2014 - License MIT
-  */
-!function (name, definition) {
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__src_Unify__ = __webpack_require__(41);
 
-  if (true) module.exports = definition()
-  else if (typeof define == 'function' && typeof define.amd == 'object') define(definition)
-  else this[name] = definition()
-
-}('domready', function () {
-
-  var fns = [], listener
-    , doc = document
-    , hack = doc.documentElement.doScroll
-    , domContentLoaded = 'DOMContentLoaded'
-    , loaded = (hack ? /^loaded|^c/ : /^loaded|^i|^c/).test(doc.readyState)
-
-
-  if (!loaded)
-  doc.addEventListener(domContentLoaded, listener = function () {
-    doc.removeEventListener(domContentLoaded, listener)
-    loaded = 1
-    while (listener = fns.shift()) listener()
-  })
-
-  return function (fn) {
-    loaded ? setTimeout(fn, 0) : fns.push(fn)
-  }
-
-});
-
-
-/***/ }),
-/* 12 */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-window._ = __webpack_require__(13);
+window._ = __webpack_require__(12);
 
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
@@ -1100,9 +1068,9 @@ window._ = __webpack_require__(13);
  */
 
 try {
-  window.$ = window.jQuery = __webpack_require__(15);
-  window.Popper = __webpack_require__(16).default;
-  __webpack_require__(17);
+  window.$ = window.jQuery = __webpack_require__(14);
+  window.Popper = __webpack_require__(15).default;
+  __webpack_require__(16);
 } catch (e) {}
 
 /**
@@ -1111,7 +1079,7 @@ try {
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
 
-window.axios = __webpack_require__(18);
+window.axios = __webpack_require__(17);
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
@@ -1144,13 +1112,16 @@ if (token) {
 //     key: 'your-pusher-key'
 // });
 
-window.Vue = __webpack_require__(37);
-window.Swiper = __webpack_require__(40).default;
+window.Vue = __webpack_require__(36);
+window.Swiper = __webpack_require__(39).default;
 
-window.Elements = __webpack_require__(55);
+
+window.Uni = new __WEBPACK_IMPORTED_MODULE_0__src_Unify__["a" /* default */]();
+
+// window.Elements = require('./lib/Elements');
 
 /***/ }),
-/* 13 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -18239,10 +18210,10 @@ window.Elements = __webpack_require__(55);
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(14)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(13)(module)))
 
 /***/ }),
-/* 14 */
+/* 13 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -18270,7 +18241,7 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 15 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -28530,14 +28501,14 @@ return jQuery;
 
 
 /***/ }),
-/* 16 */
+/* 15 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* WEBPACK VAR INJECTION */(function(global) {/**!
  * @fileOverview Kickass library to create and place poppers near their reference elements.
- * @version 1.12.6
+ * @version 1.12.5
  * @license
  * Copyright (c) 2016 Federico Zivolo and contributors
  *
@@ -28559,7 +28530,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var isBrowser = typeof window !== 'undefined' && typeof window.document !== 'undefined';
+var nativeHints = ['native code', '[object MutationObserverConstructor]'];
+
+/**
+ * Determine if a function is implemented natively (as opposed to a polyfill).
+ * @method
+ * @memberof Popper.Utils
+ * @argument {Function | undefined} fn the function to check
+ * @returns {Boolean}
+ */
+var isNative = (function (fn) {
+  return nativeHints.some(function (hint) {
+    return (fn || '').toString().indexOf(hint) > -1;
+  });
+});
+
+var isBrowser = typeof window !== 'undefined';
 var longerTimeoutBrowsers = ['Edge', 'Trident', 'Firefox'];
 var timeoutDuration = 0;
 for (var i = 0; i < longerTimeoutBrowsers.length; i += 1) {
@@ -28570,16 +28556,26 @@ for (var i = 0; i < longerTimeoutBrowsers.length; i += 1) {
 }
 
 function microtaskDebounce(fn) {
-  var called = false;
+  var scheduled = false;
+  var i = 0;
+  var elem = document.createElement('span');
+
+  // MutationObserver provides a mechanism for scheduling microtasks, which
+  // are scheduled *before* the next task. This gives us a way to debounce
+  // a function but ensure it's called *before* the next paint.
+  var observer = new MutationObserver(function () {
+    fn();
+    scheduled = false;
+  });
+
+  observer.observe(elem, { attributes: true });
+
   return function () {
-    if (called) {
-      return;
+    if (!scheduled) {
+      scheduled = true;
+      elem.setAttribute('x-index', i);
+      i = i + 1; // don't use compund (+=) because it doesn't get optimized in V8
     }
-    called = true;
-    Promise.resolve().then(function () {
-      called = false;
-      fn();
-    });
   };
 }
 
@@ -28596,7 +28592,11 @@ function taskDebounce(fn) {
   };
 }
 
-var supportsMicroTasks = isBrowser && window.Promise;
+// It's common for MutationObserver polyfills to be seen in the wild, however
+// these rely on Mutation Events which only occur when an element is connected
+// to the DOM. The algorithm used in this module does not use a connected element,
+// and so we must ensure that a *native* MutationObserver is available.
+var supportsNativeMutationObserver = isBrowser && isNative(window.MutationObserver);
 
 /**
 * Create a debounced version of a method, that's asynchronously deferred
@@ -28607,7 +28607,7 @@ var supportsMicroTasks = isBrowser && window.Promise;
 * @argument {Function} fn
 * @returns {Function}
 */
-var debounce = supportsMicroTasks ? microtaskDebounce : taskDebounce;
+var debounce = supportsNativeMutationObserver ? microtaskDebounce : taskDebounce;
 
 /**
  * Check if the given variable is a function
@@ -28660,16 +28660,8 @@ function getParentNode(element) {
  */
 function getScrollParent(element) {
   // Return body, `getScroll` will take care to get the correct `scrollTop` from it
-  if (!element) {
+  if (!element || ['HTML', 'BODY', '#document'].indexOf(element.nodeName) !== -1) {
     return window.document.body;
-  }
-
-  switch (element.nodeName) {
-    case 'HTML':
-    case 'BODY':
-      return element.ownerDocument.body;
-    case '#document':
-      return element.body;
   }
 
   // Firefox want us to check `-x` and `-y` variations as well
@@ -28699,10 +28691,6 @@ function getOffsetParent(element) {
   var nodeName = offsetParent && offsetParent.nodeName;
 
   if (!nodeName || nodeName === 'BODY' || nodeName === 'HTML') {
-    if (element) {
-      return element.ownerDocument.documentElement;
-    }
-
     return window.document.documentElement;
   }
 
@@ -28798,8 +28786,8 @@ function getScroll(element) {
   var nodeName = element.nodeName;
 
   if (nodeName === 'BODY' || nodeName === 'HTML') {
-    var html = element.ownerDocument.documentElement;
-    var scrollingElement = element.ownerDocument.scrollingElement || html;
+    var html = window.document.documentElement;
+    var scrollingElement = window.document.scrollingElement || html;
     return scrollingElement[upperSide];
   }
 
@@ -29048,7 +29036,7 @@ function getOffsetRectRelativeToArbitraryNode(children, parent) {
 }
 
 function getViewportOffsetRectRelativeToArtbitraryNode(element) {
-  var html = element.ownerDocument.documentElement;
+  var html = window.document.documentElement;
   var relativeOffset = getOffsetRectRelativeToArbitraryNode(element, html);
   var width = Math.max(html.clientWidth, window.innerWidth || 0);
   var height = Math.max(html.clientHeight, window.innerHeight || 0);
@@ -29109,10 +29097,10 @@ function getBoundaries(popper, reference, padding, boundariesElement) {
     if (boundariesElement === 'scrollParent') {
       boundariesNode = getScrollParent(getParentNode(popper));
       if (boundariesNode.nodeName === 'BODY') {
-        boundariesNode = popper.ownerDocument.documentElement;
+        boundariesNode = window.document.documentElement;
       }
     } else if (boundariesElement === 'window') {
-      boundariesNode = popper.ownerDocument.documentElement;
+      boundariesNode = window.document.documentElement;
     } else {
       boundariesNode = boundariesElement;
     }
@@ -29353,11 +29341,10 @@ function runModifiers(modifiers, data, ends) {
   var modifiersToRun = ends === undefined ? modifiers : modifiers.slice(0, findIndex(modifiers, 'name', ends));
 
   modifiersToRun.forEach(function (modifier) {
-    if (modifier['function']) {
-      // eslint-disable-line dot-notation
+    if (modifier.function) {
       console.warn('`modifier.function` is deprecated, use `modifier.fn`!');
     }
-    var fn = modifier['function'] || modifier.fn; // eslint-disable-line dot-notation
+    var fn = modifier.function || modifier.fn;
     if (modifier.enabled && isFunction(fn)) {
       // Add properties to offsets to make them a complete clientRect object
       // we do this before each modifier to make sure the previous one doesn't
@@ -29484,19 +29471,9 @@ function destroy() {
   return this;
 }
 
-/**
- * Get the window associated with the element
- * @argument {Element} element
- * @returns {Window}
- */
-function getWindow(element) {
-  var ownerDocument = element.ownerDocument;
-  return ownerDocument ? ownerDocument.defaultView : window;
-}
-
 function attachToScrollParents(scrollParent, event, callback, scrollParents) {
   var isBody = scrollParent.nodeName === 'BODY';
-  var target = isBody ? scrollParent.ownerDocument.defaultView : scrollParent;
+  var target = isBody ? window : scrollParent;
   target.addEventListener(event, callback, { passive: true });
 
   if (!isBody) {
@@ -29514,7 +29491,7 @@ function attachToScrollParents(scrollParent, event, callback, scrollParents) {
 function setupEventListeners(reference, options, state, updateBound) {
   // Resize event listener on window
   state.updateBound = updateBound;
-  getWindow(reference).addEventListener('resize', state.updateBound, { passive: true });
+  window.addEventListener('resize', state.updateBound, { passive: true });
 
   // Scroll event listener on scroll parents
   var scrollElement = getScrollParent(reference);
@@ -29545,7 +29522,7 @@ function enableEventListeners() {
  */
 function removeEventListeners(reference, state) {
   // Remove resize event listener on window
-  getWindow(reference).removeEventListener('resize', state.updateBound);
+  window.removeEventListener('resize', state.updateBound);
 
   // Remove scroll event listener on scroll parents
   state.scrollParents.forEach(function (target) {
@@ -30847,8 +30824,8 @@ var Popper = function () {
     };
 
     // get reference and popper elements (allow jQuery wrappers)
-    this.reference = reference && reference.jquery ? reference[0] : reference;
-    this.popper = popper && popper.jquery ? popper[0] : popper;
+    this.reference = reference.jquery ? reference[0] : reference;
+    this.popper = popper.jquery ? popper[0] : popper;
 
     // Deep merge modifiers options
     this.options.modifiers = {};
@@ -30973,7 +30950,7 @@ Popper.Defaults = Defaults;
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(1)))
 
 /***/ }),
-/* 17 */
+/* 16 */
 /***/ (function(module, exports) {
 
 /*!
@@ -34829,13 +34806,13 @@ return exports;
 
 
 /***/ }),
-/* 18 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(19);
+module.exports = __webpack_require__(18);
 
 /***/ }),
-/* 19 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -34843,7 +34820,7 @@ module.exports = __webpack_require__(19);
 
 var utils = __webpack_require__(0);
 var bind = __webpack_require__(3);
-var Axios = __webpack_require__(21);
+var Axios = __webpack_require__(20);
 var defaults = __webpack_require__(2);
 
 /**
@@ -34878,14 +34855,14 @@ axios.create = function create(instanceConfig) {
 
 // Expose Cancel & CancelToken
 axios.Cancel = __webpack_require__(8);
-axios.CancelToken = __webpack_require__(35);
+axios.CancelToken = __webpack_require__(34);
 axios.isCancel = __webpack_require__(7);
 
 // Expose all/spread
 axios.all = function all(promises) {
   return Promise.all(promises);
 };
-axios.spread = __webpack_require__(36);
+axios.spread = __webpack_require__(35);
 
 module.exports = axios;
 
@@ -34894,7 +34871,7 @@ module.exports.default = axios;
 
 
 /***/ }),
-/* 20 */
+/* 19 */
 /***/ (function(module, exports) {
 
 /*!
@@ -34921,7 +34898,7 @@ function isSlowBuffer (obj) {
 
 
 /***/ }),
-/* 21 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -34929,10 +34906,10 @@ function isSlowBuffer (obj) {
 
 var defaults = __webpack_require__(2);
 var utils = __webpack_require__(0);
-var InterceptorManager = __webpack_require__(30);
-var dispatchRequest = __webpack_require__(31);
-var isAbsoluteURL = __webpack_require__(33);
-var combineURLs = __webpack_require__(34);
+var InterceptorManager = __webpack_require__(29);
+var dispatchRequest = __webpack_require__(30);
+var isAbsoluteURL = __webpack_require__(32);
+var combineURLs = __webpack_require__(33);
 
 /**
  * Create a new instance of Axios
@@ -35014,7 +34991,7 @@ module.exports = Axios;
 
 
 /***/ }),
-/* 22 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35033,7 +35010,7 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
 
 
 /***/ }),
-/* 23 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35066,7 +35043,7 @@ module.exports = function settle(resolve, reject, response) {
 
 
 /***/ }),
-/* 24 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35094,7 +35071,7 @@ module.exports = function enhanceError(error, config, code, request, response) {
 
 
 /***/ }),
-/* 25 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35169,7 +35146,7 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 
 
 /***/ }),
-/* 26 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35213,7 +35190,7 @@ module.exports = function parseHeaders(headers) {
 
 
 /***/ }),
-/* 27 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35288,7 +35265,7 @@ module.exports = (
 
 
 /***/ }),
-/* 28 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35331,7 +35308,7 @@ module.exports = btoa;
 
 
 /***/ }),
-/* 29 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35391,7 +35368,7 @@ module.exports = (
 
 
 /***/ }),
-/* 30 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35450,14 +35427,14 @@ module.exports = InterceptorManager;
 
 
 /***/ }),
-/* 31 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var utils = __webpack_require__(0);
-var transformData = __webpack_require__(32);
+var transformData = __webpack_require__(31);
 var isCancel = __webpack_require__(7);
 var defaults = __webpack_require__(2);
 
@@ -35536,7 +35513,7 @@ module.exports = function dispatchRequest(config) {
 
 
 /***/ }),
-/* 32 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35563,7 +35540,7 @@ module.exports = function transformData(data, headers, fns) {
 
 
 /***/ }),
-/* 33 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35584,7 +35561,7 @@ module.exports = function isAbsoluteURL(url) {
 
 
 /***/ }),
-/* 34 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35605,7 +35582,7 @@ module.exports = function combineURLs(baseURL, relativeURL) {
 
 
 /***/ }),
-/* 35 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35669,7 +35646,7 @@ module.exports = CancelToken;
 
 
 /***/ }),
-/* 36 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35703,7 +35680,7 @@ module.exports = function spread(callback) {
 
 
 /***/ }),
-/* 37 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -46269,10 +46246,10 @@ Vue$3.compile = compileToFunctions;
 
 module.exports = Vue$3;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(38).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(37).setImmediate))
 
 /***/ }),
-/* 38 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var apply = Function.prototype.apply;
@@ -46325,13 +46302,13 @@ exports._unrefActive = exports.active = function(item) {
 };
 
 // setimmediate attaches itself to the global object
-__webpack_require__(39);
+__webpack_require__(38);
 exports.setImmediate = setImmediate;
 exports.clearImmediate = clearImmediate;
 
 
 /***/ }),
-/* 39 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
@@ -46524,12 +46501,12 @@ exports.clearImmediate = clearImmediate;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(4)))
 
 /***/ }),
-/* 40 */
+/* 39 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_dom7_dist_dom7_modular__ = __webpack_require__(41);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_dom7_dist_dom7_modular__ = __webpack_require__(40);
 /**
  * Swiper 4.0.6
  * Most modern mobile touch slider and framework with hardware accelerated transitions
@@ -52845,7 +52822,7 @@ Swiper$1.components = [
 
 
 /***/ }),
-/* 41 */
+/* 40 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -54267,67 +54244,52 @@ function scroll(...args) {
 
 
 /***/ }),
-/* 42 */
+/* 41 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony default export */ __webpack_exports__["a"] = (function () {
-    return new Swiper('.swiper-container', {
-        loop: true,
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Elements__ = __webpack_require__(42);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Map__ = __webpack_require__(43);
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-        // Navigation arrows
-        navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev'
-        },
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-        spaceBetween: 20,
-        slidesPerView: 3,
 
-        centeredSlides: true,
 
-        breakpoints: {
-            576: {
-                autoHeight: true,
-                slidesPerView: 'auto'
-            },
 
-            768: {
-                spaceBetween: 50,
-                slidesPerView: 2
-            },
+var Unify = function () {
+    function Unify() {
+        _classCallCheck(this, Unify);
 
-            992: {
-                spaceBetween: 20,
-                slidesPerView: 2
+        this.el_ = null;
+        this.Map_ = null;
+    }
+
+    _createClass(Unify, [{
+        key: 'el',
+        get: function get() {
+            if (!this.el_) {
+                this.el_ = new __WEBPACK_IMPORTED_MODULE_0__Elements__["a" /* default */]();
             }
-        },
-
-        on: {
-            init: function init(e) {
-                var i, l;
-                for (i = 0, l = this.$el.length; i < l; i++) {
-                    this.$el[i].classList.add('ready');
-                }
-                this.resizeTimer = null;
-            },
-            tap: function tap(e) {
-                var self = this;
-                for (i in this.params.breakpoints) {
-                    if (document.body.clientWidth < i) {
-                        if (this.clickedIndex !== this.activeIndex) {
-                            this.slideTo(this.clickedIndex);
-                        }
-                    }
-                    break;
-                }
-            }
+            return this.el_;
         }
-    });
-});
+    }, {
+        key: 'Map',
+        get: function get() {
+            if (!this.Map_) {
+                this.Map_ = new __WEBPACK_IMPORTED_MODULE_1__Map__["a" /* default */]();
+            }
+            return this.Map_;
+        }
+    }]);
+
+    return Unify;
+}();
+
+/* harmony default export */ __webpack_exports__["a"] = (Unify);
 
 /***/ }),
-/* 43 */
+/* 42 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -54337,12 +54299,120 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-// https://github.com/googlemaps/v3-utility-library/blob/master/infobox/src/infobox.js
-var _class = function () {
-    function _class(element) {
-        _classCallCheck(this, _class);
+var Elements = function () {
+    function Elements() {
+        _classCallCheck(this, Elements);
 
-        this.option = {
+        this.cached = {
+            map: this.byId('js-map'),
+            mapCards: this.byId('js-map-cards')
+        };
+    }
+
+    _createClass(Elements, [{
+        key: 'byId',
+        value: function byId(arg) {
+            return document.getElementById(arg);
+        }
+    }, {
+        key: 'byClass',
+        value: function byClass(arg) {
+            return document.querySelector(arg);
+        }
+    }, {
+        key: 'query',
+        value: function query(arg) {
+            return document.querySelectorAll(arg);
+        }
+    }, {
+        key: 'getElement_',
+        value: function getElement_(val) {
+            var element = void 0;
+            if ('string' === typeof val) {
+                if ('#' === val[0]) {
+                    element = document.getElementById(val.substr(1));
+                } else if ('.' === val[0]) {
+                    element = document.querySelector(val);
+                } else {
+                    element = document.getElementsByTagName(val)[0];
+                }
+            }
+
+            if (element) {
+                return element;
+            }
+        }
+    }, {
+        key: 'sets',
+        value: function sets(elements) {
+            if ('object' !== (typeof elements === 'undefined' ? 'undefined' : _typeof(elements))) {
+                return;
+            }
+
+            var key = void 0,
+                val = void 0;
+            for (key in elements) {
+                if (this.cached[key]) {
+                    continue;
+                }
+
+                if (val = this.getElement_(elements[key])) {
+                    this.cached[key] = val;
+                }
+            }
+        }
+    }, {
+        key: 'set',
+        value: function set(name, element) {
+            var val = void 0;
+            if (val = this.getElement_(element)) {
+                this.cached[name] = val;
+            }
+        }
+    }, {
+        key: 'get',
+        value: function get(name) {
+            if (this.cached[name]) {
+                return this.cached[name];
+            }
+
+            var val = this.getElement_(name);
+            if (val) {
+                this.cached[name] = val;
+                return val;
+            }
+        }
+    }, {
+        key: 'all',
+        value: function all() {
+            return this.cached;
+        }
+    }]);
+
+    return Elements;
+}();
+
+/* harmony default export */ __webpack_exports__["a"] = (Elements);
+
+/***/ }),
+/* 43 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Map_Cards__ = __webpack_require__(51);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Map_Marker__ = __webpack_require__(52);
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+
+
+
+var Map = function () {
+    function Map() {
+        _classCallCheck(this, Map);
+
+        this.opts = {
             debug: true,
             defaultPosition: {
                 lat: 35.7055267,
@@ -54360,42 +54430,84 @@ var _class = function () {
             }
         };
 
-        this.headerElement = document.getElementById('header');
-        this.articleElement = document.getElementById('article');
-        this.toggleElement = document.getElementById('show-article');
+        this.el = Uni.el.get('map');
+        this.map = null;
 
-        this.mapElement = element;
-
-        this.beforeZoom = this.option.defaultZoom;
-        this.currentZoom = this.option.defaultZoom;
-        this.currentCenter = this.option.defaultPosition;
-
-        this.bounds = null;
-        this.article = null;
-
-        this.map = new google.maps.Map(this.mapElement, {
-            zoom: this.option.defaultZoom,
-            minZoom: this.option.zoomMin,
-            maxZoom: this.option.zoomMax,
-            center: this.currentCenter,
-            mapTypeControl: false,
-            fullscreenControl: false,
-            streetViewControl: false,
-            rotateControl: false,
-            zoomControl: false
-        });
-
-        this.init();
+        this.beforeZoom = this.opts.defaultZoom;
+        this.currentZoom = this.opts.defaultZoom;
+        this.currentCenter = this.opts.defaultPosition;
     }
 
-    _createClass(_class, [{
-        key: 'init',
-        value: function init() {
+    _createClass(Map, [{
+        key: 'initMap',
+        value: function initMap() {
+            this.map = new google.maps.Map(this.el, {
+                zoom: this.opts.defaultZoom,
+                minZoom: this.opts.zoomMin,
+                maxZoom: this.opts.zoomMax,
+                center: this.currentCenter,
+                mapTypeControl: false,
+                fullscreenControl: false,
+                streetViewControl: false,
+                rotateControl: false,
+                zoomControl: false
+            });
+
+            this.initZoomControl_();
+
+            var mk = new __WEBPACK_IMPORTED_MODULE_1__Map_Marker__["a" /* default */]({ map: this.map, position: this.currentCenter });
+        }
+    }, {
+        key: 'initCards',
+        value: function initCards() {
+            var cards = new __WEBPACK_IMPORTED_MODULE_0__Map_Cards__["a" /* default */]();
+            cards.init();
+            cards.toggle();
+        }
+    }, {
+        key: 'initZoomControl_',
+        value: function initZoomControl_() {
             var self = this;
+            var pos = google.maps.ControlPosition.RIGHT_TOP;
+            var zoom = this.map.getZoom();
 
-            self.addCustomZoomControl();
+            var container = document.createElement('div');
+            container.setAttribute('class', 'zoom-buttons btn-group-vertical');
 
-            self.map.addListener('zoom_changed', function (e) {
+            var zoomIn = document.createElement('button');
+            zoomIn.setAttribute('class', 'btn btn-light btn-sm zoom-in');
+            zoomIn.innerHTML = '<i class="material-icons">&#xE145;</i>';
+            if (zoom >= this.opts.zoomMax) {
+                zoomIn.setAttribute('disabled', true);
+            }
+
+            var zoomOut = document.createElement('button');
+            zoomOut.setAttribute('class', 'btn btn-light btn-sm zoom-out');
+            zoomOut.innerHTML = '<i class="material-icons">&#xE15B;</i>';
+            if (zoom <= this.opts.zoomMin) {
+                zoomOut.setAttribute('disabled', true);
+            }
+
+            zoomIn.addEventListener('click', function () {
+                var zoom = self.map.getZoom();
+                if (zoom <= self.opts.zoomMax) {
+                    self.map.setZoom(zoom + 1);
+                }
+            });
+
+            zoomOut.addEventListener('click', function () {
+                var zoom = self.map.getZoom();
+                if (zoom >= self.opts.zoomMin) {
+                    self.map.setZoom(zoom - 1);
+                }
+            });
+
+            container.appendChild(zoomIn);
+            container.appendChild(zoomOut);
+
+            this.map.controls[pos].push(container);
+
+            this.map.addListener('zoom_changed', function (e) {
                 self.beforeZoom = self.currentZoom;
                 self.currentZoom = this.getZoom();
 
@@ -54405,1256 +54517,318 @@ var _class = function () {
                     self.onZoomOut(self.beforeZoom, self.currentZoom);
                 }
 
-                if (self.zoomOutButton) {
-                    if (self.currentZoom > self.option.zoomMin) {
-                        self.zoomOutButton.removeAttribute('disabled');
-                    } else {
-                        self.zoomOutButton.setAttribute('disabled', true);
-                    }
-                }
-
-                if (self.zoomInButton) {
-                    if (self.currentZoom < self.option.zoomMax) {
-                        self.zoomInButton.removeAttribute('disabled');
-                    } else {
-                        self.zoomInButton.setAttribute('disabled', true);
-                    }
-                }
-            });
-
-            google.maps.event.addDomListener(window, 'resize', function (e) {
-                google.maps.event.trigger(self.map, 'resize');
-                self.map.setCenter(self.currentCenter);
-            });
-
-            articleToggler.onShow(function () {
-                var center;
-                if (self.currentMarker) {
-                    center = self.currentMarker.getPosition();
+                if (self.currentZoom > self.opts.zoomMin) {
+                    zoomOut.removeAttribute('disabled');
                 } else {
-                    center = self.map.getCenter();
+                    zoomOut.setAttribute('disabled', true);
                 }
-                self.articleInterval_ = setInterval(function () {
-                    google.maps.event.trigger(self.map, 'resize');
-                    self.map.setCenter(center);
-                }, 50);
-            });
 
-            articleToggler.onShowed(function () {
-                if (self.articleInterval_) {
-                    clearInterval(self.articleInterval_);
-                }
-            });
-
-            articleToggler.onHide(function () {
-                var center;
-                if (self.article) {
-                    center = this.article.beforeCenter;
+                if (self.currentZoom < self.opts.zoomMax) {
+                    zoomIn.removeAttribute('disabled');
                 } else {
-                    center = self.map.getCenter();
-                }
-                self.articleInterval_ = setInterval(function () {
-                    google.maps.event.trigger(self.map, 'resize');
-                    self.map.setCenter(center);
-                }, 50);
-            });
-
-            articleToggler.onHided(function () {
-                if (self.articleInterval_) {
-                    clearInterval(self.articleInterval_);
+                    zoomIn.setAttribute('disabled', true);
                 }
             });
-
-            // google.maps.event.addDomListener(self.toggleElement, 'click', function (e) {
-            //     if (!self.currentMarker) {
-            //         e.preventDefault();
-            //         return false;
-            //     }
-            // });
-
-            // google.maps.event.addDomListener(self.toggleElement, 'change', function (e) {
-            //     if (self.currentMarker) {
-            //         if (self.toggleElement.checked) {
-            //             self.showArticle();
-            //         } else {
-            //             self.hideArticle();
-            //         }
-            //     }
-            // });
-
-            var marker = self.addMarker(this.option.defaultPosition, {
-                draggable: true,
-                content: '001'
-            });
-
-            // var infowindow = new google.maps.InfoWindow({
-            //     content: '<div>content</div>'
-            // });
-            var content = '<div class="info-window">content</div>';
-            // var infowindow = new InfoBox({
-            //     content: content
-            // });
-
-            var infobox = new Baloon();
-            infobox.setContent(content);
-            infobox.open(this.map, marker);
-
-            marker.addListener('click', function () {
-                self.currentMarker = marker;
-
-                var spots = Elements.get('spots');
-                if (spots) {
-                    var flag = spots.getAttribute('aria-hidden') || 'false';
-                    if ('false' === flag) {
-                        spots.setAttribute('aria-hidden', 'true');
-                    } else {
-                        spots.setAttribute('aria-hidden', 'false');
-                    }
-                }
-
-                console.log(marker.getHeight());
-                // self.showArticle();
-                // articleToggler.show();
-            });
-
-            // setTimeout(function () {
-            //     var marker = new RichMarker({
-            //         position: self.map.getCenter(),
-            //         map: self.map,
-            //         // draggable: true,
-            //         shadow:false,
-            //         content: ''
-            //     });
-            //     marker.addListener('ready', function () {
-            //         this.setContent('<div class="map-marker ready"><div><div><img src="https://farm4.static.flickr.com/3212/3012579547_097e27ced9_m.jpg"/>You should drag it!</div></div></div>');
-            //     });
-            //     marker.addListener('click', function () {
-            //         self.currentMarker = this;
-            //         articleToggler.toggle();
-            //     });
-            // }, 2000);
-
-            // infowindow.open(this.map, marker);
-        }
-    }, {
-        key: 'triggerEvent',
-        value: function triggerEvent(element, event) {
-            console.log(element, event);
-            if (window.Event) {
-                var evt = new Event(event, {
-                    bubbles: false,
-                    cancelable: false
-                });
-                element.dispatchEvent(evt);
-            } else if (document.createEvent) {
-                // IE以外
-                var evt = document.createEvent('HTMLEvents');
-                evt.initEvent(event, true, true); // event type, bubbling, cancelable
-                return element.dispatchEvent(evt);
-            } else {
-                // IE
-                var evt = document.createEventObject();
-                return element.fireEvent("on" + event, evt);
-            }
-        }
-    }, {
-        key: 'addCustomZoomControl',
-        value: function addCustomZoomControl() {
-            var self = this;
-            var zoom = this.map.getZoom();
-
-            var container = document.createElement('div');
-            container.setAttribute('class', 'zoom-buttons btn-group-vertical');
-
-            var zoomIn = document.createElement('button');
-            zoomIn.setAttribute('class', 'btn btn-light btn-sm zoom-in');
-            zoomIn.innerHTML = '<i class="material-icons">&#xE145;</i>';
-            if (zoom >= this.option.zoomMax) {
-                zoomIn.setAttribute('disabled', true);
-            }
-
-            var zoomOut = document.createElement('button');
-            zoomOut.setAttribute('class', 'btn btn-light btn-sm zoom-out');
-            zoomOut.innerHTML = '<i class="material-icons">&#xE15B;</i>';
-            if (zoom <= this.option.zoomMin) {
-                zoomOut.setAttribute('disabled', true);
-            }
-
-            zoomIn.addEventListener('click', function () {
-                var zoom = self.map.getZoom();
-                if (zoom <= self.option.zoomMax) {
-                    self.map.setZoom(zoom + 1);
-                }
-            });
-
-            zoomOut.addEventListener('click', function () {
-                var zoom = self.map.getZoom();
-                if (zoom >= self.option.zoomMin) {
-                    self.map.setZoom(zoom - 1);
-                }
-            });
-
-            container.appendChild(zoomIn);
-            container.appendChild(zoomOut);
-
-            this.map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(container);
-            this.zoomInButton = zoomIn;
-            this.zoomOutButton = zoomOut;
         }
     }, {
         key: 'onZoomIn',
         value: function onZoomIn(from, to) {
-            if (this.option.debug) {
-                console.log('zoomIn', {
-                    from: from,
-                    to: to
-                });
-            }
+            // if (this.opts.debug) {
+            //     console.log('zoomIn', {
+            //         from: from,
+            //         to: to
+            //     });
+            // }
         }
     }, {
         key: 'onZoomOut',
         value: function onZoomOut(from, to) {
-            if (this.option.debug) {
-                console.log('zoomOut', {
-                    from: from,
-                    to: to
-                });
-            }
+            // if (this.opts.debug) {
+            //     console.log('zoomOut', {
+            //         from: from,
+            //         to: to
+            //     });
+            // }
         }
-    }, {
-        key: 'addMarker',
-        value: function addMarker(position, conf) {
-            var self = this;
-
-            var option = {};
-            if ('object' === (typeof conf === 'undefined' ? 'undefined' : _typeof(conf))) {
-                option = conf;
-            }
-            option.position = new google.maps.LatLng(position);
-            option.map = this.map;
-            option.shadow = false;
-
-            var wrapper = document.createElement('div');
-            wrapper.classList.add('map-marker');
-
-            var before = '<div><div>';
-            var after = '</div></div>';
-            var content = option.content || '';
-
-            wrapper.innerHTML = before + content + after;
-            option.content = wrapper;
-
-            var marker = new RichMarker(option);
-
-            marker.addListener('ready', function () {
-                this.getContent().classList.add('ready');
-            });
-
-            // 未対応
-            // marker.addListener('dragstart', function () {
-            //     this.getContent().classList.add('dragging');
-            // });
-
-            // 未対応
-            // marker.addListener('dragstart', function () {
-            //     this.getContent().classList.remove('dragging');
-            // });
-
-            return marker;
-        }
-    }, {
-        key: 'setCenter',
-        value: function setCenter(latlon, bounds) {
-            var position;
-
-            if (!bounds) {
-                position = latlon;
-            } else {
-                var spherical = google.maps.geometry.spherical;
-                var mapCenter = this.map.getCenter();
-                var boundsCenter = bounds.getCenter();
-                var target = latlon || mapCenter;
-
-                var length = spherical.computeLength([target, boundsCenter]);
-                var heading = spherical.computeHeading(boundsCenter, target);
-
-                position = spherical.computeOffset(mapCenter, length, heading);
-            }
-
-            this.map.panTo(position);
-
-            this.currentCenter = position;
-        }
-    }, {
-        key: 'getPadBounds',
-        value: function getPadBounds(requests, zoom) {
-            var width = this.mapElement.clientWidth;
-            var height = this.mapElement.clientHeight;
-            var max = this.option.widthMax;
-            var currentBounds = this.map.getBounds();
-            var proj = this.map.getProjection();
-            var scale = Math.pow(2, zoom || this.map.getZoom());
-            var sw = proj.fromLatLngToPoint(currentBounds.getSouthWest());
-            var ne = proj.fromLatLngToPoint(currentBounds.getNorthEast());
-
-            var key,
-                val,
-                sizes = {
-                top: 0,
-                right: 0,
-                bottom: 0,
-                left: 0
-            };
-            for (key in requests) {
-                val = '' + (requests[key] || 0);
-                if (/^\d+$/.test(val)) {
-                    sizes[key] = parseInt(val);
-                } else if (/^\d+px$/.test(val)) {
-                    sizes[key] = parseInt(val.slice(0, -2));
-                } else if (/^\d+\%$/.test(val)) {
-                    val = parseInt(val.slice(0, -1));
-                    if ('left' === key || 'right' === key) {
-                        sizes[key] = Math.min(val, 100) / 100 * width;
-                    } else {
-                        sizes[key] = Math.min(val, 100) / 100 * height;
-                    }
-                }
-            }
-
-            if (this.option.debug) {
-                console.info('bounds size', requests, sizes);
-            }
-
-            if (width > max) {
-                var pad = (width - max) / 2;
-
-                if (sizes.left < pad) {
-                    sizes.left = sizes.left + pad;
-                }
-
-                if (width - sizes.right > width - pad) {
-                    sizes.right = sizes.right + pad;
-                }
-            }
-
-            var tr = new google.maps.Point(ne.x - (sizes.right ? sizes.right / scale : 0), ne.y + (sizes.top ? sizes.top / scale : 0));
-            var bl = new google.maps.Point(sw.x + (sizes.left ? sizes.left / scale : 0), sw.y - (sizes.bottom ? sizes.bottom / scale : 0));
-
-            var bounds = new google.maps.LatLngBounds(proj.fromPointToLatLng(bl), proj.fromPointToLatLng(tr));
-
-            return bounds;
-        }
-    }, {
-        key: 'showArticle',
-        value: function showArticle() {
-            if (!this.currentMarker) {
-                if (this.option.debug) {
-                    console.error('Target marker is not defined');
-                }
-                return;
-            }
-
-            this.map.setOptions({
-                gestureHandling: 'none'
-            });
-
-            var marker = this.currentMarker;
-            var markerPosition = marker.getPosition();
-
-            this.article = {
-                marker: marker,
-                markerPosition: markerPosition,
-                beforeZoom: this.map.getZoom(),
-                beforeCenter: this.map.getCenter()
-            };
-
-            this.map.setZoom(13);
-
-            var size = {
-                top: this.headerElement.clientHeight,
-                bottom: '70%'
-            };
-            if (document.body.clientWidth > this.option.breakPoint.mobile) {
-                size = {
-                    top: this.headerElement.clientHeight,
-                    right: '70%'
-                };
-            }
-            var bounds = this.getPadBounds(size);
-            this.setCenter(marker.getPosition(), bounds);
-        }
-    }, {
-        key: 'hideArticle',
-        value: function hideArticle() {
-            if (!this.article) {
-                if (this.option.debug) {
-                    console.error('Article is not defined');
-                }
-                return;
-            }
-
-            this.map.setZoom(this.article.beforeZoom);
-            this.map.panTo(this.article.beforeCenter);
-            this.article = null;
-
-            this.map.setOptions({
-                gestureHandling: 'greedy'
-            });
-        }
-
-        // onArticleShowed () {
-        //     var self = this;
-        //     google.maps.event.trigger(self.map, 'resize');
-        //     self.map.panTo(self.article.marker.getPosition());
-        // }
-
-        // onArticleHided () {
-        //     var self = this;
-        //     self.map.setOptions({
-        //         gestureHandling: 'greedy'
-        //     });
-        //     self.map.setZoom(self.article.beforeZoom);
-        //     self.map.panTo(self.article.beforeCenter);
-        //     self.article = null;
-        // }
-
-        // getTransitionEvent () {
-        //     var t, el = document.createElement("div");
-        //     var transitions = {
-        //         "transition"      : "transitionend",
-        //         "OTransition"     : "oTransitionEnd",
-        //         "MozTransition"   : "transitionend",
-        //         "WebkitTransition": "webkitTransitionEnd"
-        //     }
-
-        //     for (t in transitions){
-        //         if (el.style[t] !== undefined){
-        //             return transitions[t];
-        //         }
-        //     }
-        // }
-
-        // setCenterByArticle (article, zoom) {
-        //     var origin = article.markerPosition;
-        //     var range = article.beforeZoom - zoom;
-        //     var length = 0 - (article.pointLength * Math.pow(2, range));
-        //     var heading = article.pointHeading;
-        //     var position = google.maps.geometry.spherical.computeOffset(origin, length, heading);
-        //     this.map.setCenter(position);
-        // }
-
-        // rad (x) {
-        //     return x * Math.PI / 180;
-        // }
-
-        // getDistance (p1, p2) {
-        //     var R = 6378137; // Earth’s mean radius in meter
-        //     var dLat = this.rad(p2.lat() - p1.lat());
-        //     var dLong = this.rad(p2.lng() - p1.lng());
-        //     var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-        //       Math.cos(this.rad(p1.lat())) * Math.cos(this.rad(p2.lat())) *
-        //       Math.sin(dLong / 2) * Math.sin(dLong / 2);
-        //     var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        //     var d = R * c;
-        //     return d; // returns the distance in meter
-        // }
-
-        // getContainerBounds () {
-        //     var width = this.mapElement.clientWidth;
-        //     var height = this.mapElement.clientHeight;
-        //     var max = this.option.widthMax;
-        //     var bounds;
-
-        //     if (width > max) {
-        //         var currentBounds = this.map.getBounds();
-        //         var proj = this.map.getProjection();
-        //         var scale = Math.pow(2, this.map.getZoom());
-        //         var ne = currentBounds.getNorthEast();//北東
-        //         var sw = currentBounds.getSouthWest();//南西
-        //         var left = (width - max) / 2;
-        //         var right = left + max;
-
-        //         var x = proj.fromLatLngToPoint(sw).x;
-        //         var y = proj.fromLatLngToPoint(ne).y;
-
-        //         var tr = new google.maps.Point(right / scale + x, y);
-        //         var bl = new google.maps.Point(left / scale + x, height / scale + y);
-
-        //         bounds = new google.maps.LatLngBounds(
-        //             proj.fromPointToLatLng(bl),
-        //             proj.fromPointToLatLng(tr)
-        //         );
-        //     } else {
-        //         bounds = this.map.getBounds();
-        //     }
-
-        //     return bounds;
-        // }
-
     }]);
 
-    return _class;
+    return Map;
 }();
 
-/* harmony default export */ __webpack_exports__["a"] = (_class);
+/* harmony default export */ __webpack_exports__["a"] = (Map);
 
 /***/ }),
 /* 44 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+/*!
+  * domready (c) Dustin Diaz 2014 - License MIT
+  */
+!function (name, definition) {
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+  if (true) module.exports = definition()
+  else if (typeof define == 'function' && typeof define.amd == 'object') define(definition)
+  else this[name] = definition()
 
-var _class = function () {
-    function _class() {
-        _classCallCheck(this, _class);
+}('domready', function () {
 
-        this.classNames = {
-            showing: 'article-showing',
-            showed: 'article-show',
-            hiding: 'article-hiding',
-            hided: ''
-        };
+  var fns = [], listener
+    , doc = document
+    , hack = doc.documentElement.doScroll
+    , domContentLoaded = 'DOMContentLoaded'
+    , loaded = (hack ? /^loaded|^c/ : /^loaded|^i|^c/).test(doc.readyState)
 
-        this.callOnShow = [];
-        this.callOnShowed = [];
-        this.callOnHide = [];
-        this.callOnHided = [];
 
-        this.body = document.getElementsByTagName('body')[0];
+  if (!loaded)
+  doc.addEventListener(domContentLoaded, listener = function () {
+    doc.removeEventListener(domContentLoaded, listener)
+    loaded = 1
+    while (listener = fns.shift()) listener()
+  })
 
-        this.isOpen = this.body.classList.contains(this.classNames.showed);
-        this.isAnimating = false;
+  return function (fn) {
+    loaded ? setTimeout(fn, 0) : fns.push(fn)
+  }
 
-        this.mapWrapper = document.getElementById('js-map-wrapper');
-        this.mapContainer = document.getElementById('js-map-container');
+});
 
-        this.enabled = true;
-        if (!this.mapWrapper) {
-            this.enabled = false;
-            return;
-        }
-
-        var me = this;
-        ['transitionend', 'webkitTransitionEnd', 'mozTransitionEnd'].forEach(function (transition) {
-            me.mapContainer.addEventListener(transition, function (e) {
-                me.transitionEnd(e);
-            }, false);
-        });
-    }
-
-    _createClass(_class, [{
-        key: 'listen',
-        value: function listen(className) {
-            if (!this.enabled) {
-                return;
-            }
-
-            var me = this;
-            document.querySelectorAll(className).forEach(function (element) {
-                element.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    me.toggle();
-                }, false);
-            });
-        }
-    }, {
-        key: 'toggle',
-        value: function toggle() {
-            if (!this.enabled || this.isAnimating) {
-                return;
-            }
-
-            if (!this.isOpen) {
-                this.show();
-            } else {
-                this.hide();
-            }
-        }
-    }, {
-        key: 'show',
-        value: function show() {
-            if (!this.enabled || this.isOpen || this.isAnimating) {
-                return;
-            }
-
-            this.isAnimating = true;
-
-            var me = this;
-            var style = this.getWrapperStyle();
-            this.mapContainer.setAttribute('style', style);
-
-            this.isOpen = true;
-            this.body.classList.add(this.classNames.showing);
-
-            if (this.callOnShow.length) {
-                this.callOnShow.forEach(function (callback) {
-                    callback(me);
-                });
-            }
-        }
-    }, {
-        key: 'hide',
-        value: function hide() {
-            if (!this.enabled || !this.isOpen || this.isAnimating) {
-                return;
-            }
-
-            this.isAnimating = true;
-            this.isOpen = false;
-
-            var me = this;
-            var style = this.getWrapperStyle();
-            style += 'position:absolute;';
-            this.mapContainer.setAttribute('style', style);
-            setTimeout(function () {
-                me.body.classList.add(me.classNames.hiding);
-            }, 5);
-
-            if (this.callOnHide.length) {
-                this.callOnHide.forEach(function (callback) {
-                    callback(me);
-                });
-            }
-        }
-    }, {
-        key: 'getWrapperStyle',
-        value: function getWrapperStyle() {
-            var doc = this.mapWrapper && this.mapWrapper.ownerDocument;
-            if (!doc) {
-                return;
-            }
-            var docElem = doc.documentElement;
-            var rect = this.mapWrapper.getBoundingClientRect();
-            var style = '';
-            style += 'width:' + this.mapWrapper.offsetWidth + 'px;';
-            style += 'height:' + this.mapWrapper.offsetHeight + 'px;';
-            style += 'top:' + this.mapWrapper.offsetTop + 'px;';
-            style += 'left:' + (rect.left + window.pageXOffset - docElem.clientLeft) + 'px;';
-            return style;
-        }
-    }, {
-        key: 'transitionEnd',
-        value: function transitionEnd(e) {
-            var me = this;
-            if (this.isOpen) {
-                this.body.classList.remove(this.classNames.showing, this.classNames.hiding);
-                this.body.classList.add(this.classNames.showed);
-
-                if (this.callOnShowed.length) {
-                    this.callOnShowed.forEach(function (callback) {
-                        callback(me);
-                    });
-                }
-            } else {
-                this.body.classList.remove(this.classNames.showing, this.classNames.showed, this.classNames.hiding);
-
-                if (this.callOnHided.length) {
-                    this.callOnHided.forEach(function (callback) {
-                        callback(me);
-                    });
-                }
-            }
-
-            this.mapContainer.setAttribute('style', '');
-            this.isAnimating = false;
-        }
-    }, {
-        key: 'onShow',
-        value: function onShow(callback) {
-            if ('function' !== typeof callback) {
-                return;
-            }
-            this.callOnShow.push(callback);
-        }
-    }, {
-        key: 'onShowed',
-        value: function onShowed(callback) {
-            if ('function' !== typeof callback) {
-                return;
-            }
-            this.callOnShowed.push(callback);
-        }
-    }, {
-        key: 'onHide',
-        value: function onHide(callback) {
-            if ('function' !== typeof callback) {
-                return;
-            }
-            this.callOnHide.push(callback);
-        }
-    }, {
-        key: 'onHided',
-        value: function onHided(callback) {
-            if ('function' !== typeof callback) {
-                return;
-            }
-            this.callOnHided.push(callback);
-        }
-    }]);
-
-    return _class;
-}();
-
-/* harmony default export */ __webpack_exports__["a"] = (_class);
 
 /***/ }),
 /* 45 */
 /***/ (function(module, exports) {
 
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 46 */,
+/* 47 */,
+/* 48 */,
+/* 49 */,
+/* 50 */,
+/* 51 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_swiper__ = __webpack_require__(39);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+// const Swiper = require('swiper').default;
 
-/**
- * https://github.com/googlemaps/v3-utility-library/tree/master/infobox
- */
-module.exports = function (_google$maps$OverlayV) {
-    _inherits(_class, _google$maps$OverlayV);
+var Cards = function () {
+    function Cards() {
+        _classCallCheck(this, Cards);
 
-    function _class(conf) {
-        _classCallCheck(this, _class);
+        this.options = {
+            loop: true,
 
-        var _this = _possibleConstructorReturn(this, (_class.__proto__ || Object.getPrototypeOf(_class)).call(this));
+            // Navigation arrows
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev'
+            },
 
-        conf = conf || {};
+            spaceBetween: 20,
+            slidesPerView: 3,
 
-        google.maps.OverlayView.apply(_this, arguments);
+            centeredSlides: true,
 
-        // Standard options (in common with google.maps.InfoWindow):
-        _this.maxWidth_ = conf.maxWidth || 0;
-        _this.maxHeight_ = conf.maxHeight || 0;
-        _this.pixelOffset_ = conf.pixelOffset || new google.maps.Size(0, 0);
-        _this.zIndex_ = conf.zIndex || null;
+            breakpoints: {
+                576: {
+                    autoHeight: true,
+                    slidesPerView: 'auto'
+                },
 
-        _this.content_ = conf.content || "";
-        _this.position_ = conf.position || new google.maps.LatLng(0, 0);
-        _this.marker_ = null;
+                768: {
+                    spaceBetween: 50,
+                    slidesPerView: 2
+                },
 
-        // Additional options (unique to InfoBox):
-        _this.boxClass_ = conf.boxClass || "";
-        _this.innerClass_ = conf.innerClass || "";
-
-        _this.infoBoxClearance_ = conf.infoBoxClearance || new google.maps.Size(1, 1);
-
-        if (typeof conf.visible === 'undefined') {
-            if (typeof conf.isHidden === 'undefined') {
-                conf.visible = true;
-            } else {
-                conf.visible = !conf.isHidden;
+                992: {
+                    spaceBetween: 20,
+                    slidesPerView: 2
+                }
             }
-        }
+        };
 
-        _this.isHidden_ = !conf.visible;
-
-        _this.alignBottom_ = conf.alignBottom || false;
-        _this.pane_ = conf.pane || 'floatPane';
-
-        _this.box_ = null;
-        _this.boxInner_ = null;
-        _this.closeListeners_ = null;
-        _this.moveListener_ = null;
-        _this.mapListener_ = null;
-        _this.fixedWidthSet_ = null;
-
-        _this.contentBefore_ = '';
-        _this.contentAfter_ = '';
-        return _this;
+        this.el = Uni.el.get('mapCards');
+        this.swiper = null;
     }
 
-    _createClass(_class, [{
-        key: "createInfoBox_",
-        value: function createInfoBox_(content) {
-            if (this.box_) {
-                return;
-            }
+    _createClass(Cards, [{
+        key: 'init',
+        value: function init() {
+            this.el.setAttribute('aria-hidden', 'true');
+            var container = this.el.querySelector('.swiper-container');
 
-            this.createBoxElement_();
-            this.setBoxContent_(this.content_);
-
-            // Add the InfoBox DIV to the DOM
-            this.getPanes()[this.pane_].appendChild(this.box_);
-
-            var projection = this.getProjection();
-            var width = this.box_.style.width;
-            var height = this.box_.style.height;
-            var sizes;
-
-            if (width) {
-                this.fixedWidthSet_ = true;
-                width = parseFloat(width.replace(/[^\d]+/g, ''));
-            } else {
-                if (this.maxWidth_ !== 0 && this.box_.offsetWidth > this.maxWidth_) {
-                    width = this.maxWidth_;
-                    this.fixedWidthSet_ = true;
-                } else {
-                    // The following code is needed to overcome problems with MSIE
-                    sizes = this.getElementWidths_(this.box_);
-                    width = this.box_.offsetWidth - sizes.left - sizes.right;
-                    this.fixedWidthSet_ = false;
-                }
-            }
-            console.log(height);
-            if (height) {
-                height = parseFloat(height.replace(/[^\d]+/g, ''));
-            } else {
-                if (this.maxHeight_ !== 0 && this.box_.offsetHeight > this.maxHeight_) {
-                    height = this.maxHeight_;
-                } else {
-                    // The following code is needed to overcome problems with MSIE
-                    if (!sizes) {
-                        sizes = this.getElementWidths_(this.box_);
-                    }
-                    height = this.box_.offsetHeight - sizes.top - sizes.bottom;
-                }
-            }
-
-            this.box_.style.width = width + 'px';
-            // this.box_.style.height = height + 'px';
-
-            // this.panBox_();
-            this.box_.style.marginLeft = 0 - width / 2 + 'px';
-
-            if (this.marker_) {
-                var offsetY = this.marker_.height + height;
-                this.box_.style.marginTop = '-' + offsetY + 'px';
-            }
-
-            google.maps.event.trigger(this, 'domready');
-        }
-    }, {
-        key: "createBoxElement_",
-        value: function createBoxElement_() {
-            var box = document.createElement('div');
-            box.setAttribute('class', this.boxClass_);
-            box.style.cssText = '';
-            box.style.WebkitTransform = 'translateZ(0)';
-            box.style.transform = 'translateZ(0)';
-            box.style.position = 'absolute';
-            box.style.visibility = 'hidden';
-            if (this.zIndex_ !== null) {
-                box.style.zIndex = this.zIndex_;
-            }
-
-            this.box_ = box;
-
-            return box;
-        }
-    }, {
-        key: "setBoxContent_",
-        value: function setBoxContent_(content) {
-            var self = this;
-            var i, l;
-
-            this.removeCloseHandler_();
-
-            // Odd code required to make things work with MSIE.
-            if (!this.fixedWidthSet_) {
-                this.box_.style.width = '';
-            }
-
-            if (typeof content.nodeType === 'undefined') {
-                var html = this.contentBefore_;
-                html += '<div class="' + this.innerClass_ + '">';
-                html += content;
-                html += '</div>';
-                html += this.contentAfter_;
-                this.box_.innerHTML = html;
-            } else {
-                var inner = document.createElement('div');
-                inner.setAttribute('class', this.innerClass_);
-                inner.appendChild(content);
-                this.box_.innerHTML = this.contentBefore_;
-                this.box_.appendChild(inner);
-                this.box_.innerHTML = this.box_.innerHTML + this.contentAfter_;
-            }
-
-            var closes = this.box_.querySelectorAll('.close');
-            if (closes.length) {
-                this.closeListeners_ = [];
-                var closeHandle = function closeHandle(e) {
-                    e.cancelBubble = true;
-                    if (e.stopPropagation) {
-                        e.stopPropagation();
-                    }
-                    google.maps.event.trigger(self, 'closeclick');
-                    self.close();
-                };
-                for (i = 0, l = closes.length; i < l; i++) {
-                    this.closeListeners_.push(google.maps.event.addDomListener(closes[i], 'click', closeHandle));
-                }
-            }
-        }
-    }, {
-        key: "removeCloseHandler_",
-        value: function removeCloseHandler_() {
-            if (this.closeListener_) {
-                google.maps.event.removeListener(this.closeListener_);
-                this.closeListener_ = null;
-            }
-
-            if (this.closeListeners_) {
-                for (i = 0, l = this.closeListeners_.length; i < l; i++) {
-                    google.maps.event.removeListener(this.closeListeners_[i]);
-                }
-                this.closeListeners_ = null;
-            }
-        }
-    }, {
-        key: "panBox_",
-        value: function panBox_() {
-            var map = this.getMap();
-
-            // Only pan if attached to map, not panorama
-            if (!map instanceof google.maps.Map) {
-                return;
-            }
-
-            if (!map.getBounds().contains(this.position_)) {
-                // Marker not in visible area of map, so set center
-                // of map to the marker position first.
-                map.setCenter(this.position_);
-            }
-
-            var xOffset = 0,
-                yOffset = 0;
-            var bounds = map.getBounds();
-
-            var mapDiv = map.getDiv();
-            var mapWidth = mapDiv.offsetWidth;
-            var mapHeight = mapDiv.offsetHeight;
-            var iwOffsetX = this.pixelOffset_.width;
-            var iwOffsetY = this.pixelOffset_.height;
-            var iwWidth = this.box_.offsetWidth;
-            var iwHeight = this.box_.offsetHeight;
-            var padX = this.infoBoxClearance_.width;
-            var padY = this.infoBoxClearance_.height;
-            var pixPosition = this.getProjection().fromLatLngToContainerPixel(this.position_);
-
-            if (pixPosition.x < -iwOffsetX + padX) {
-                xOffset = pixPosition.x + iwOffsetX - padX;
-            } else if (pixPosition.x + iwWidth + iwOffsetX + padX > mapWidth) {
-                xOffset = pixPosition.x + iwWidth + iwOffsetX + padX - mapWidth;
-            }
-
-            if (this.alignBottom_) {
-                if (pixPosition.y < -iwOffsetY + padY + iwHeight) {
-                    yOffset = pixPosition.y + iwOffsetY - padY - iwHeight;
-                } else if (pixPosition.y + iwOffsetY + padY > mapHeight) {
-                    yOffset = pixPosition.y + iwOffsetY + padY - mapHeight;
-                }
-            } else {
-                if (pixPosition.y < -iwOffsetY + padY) {
-                    yOffset = pixPosition.y + iwOffsetY - padY;
-                } else if (pixPosition.y + iwHeight + iwOffsetY + padY > mapHeight) {
-                    yOffset = pixPosition.y + iwHeight + iwOffsetY + padY - mapHeight;
-                }
-            }
-
-            if (!(xOffset === 0 && yOffset === 0)) {
-                // Move the map to the shifted center.
-                var c = map.getCenter();
-                map.panBy(xOffset, yOffset);
-            }
-        }
-    }, {
-        key: "getElementWidths_",
-        value: function getElementWidths_(element) {
-            var widths = {
-                top: 0,
-                bottom: 0,
-                left: 0,
-                right: 0
+            var options = this.options;
+            options.on = {
+                init: this.onInit_,
+                tap: this.onTap_
             };
 
-            var style;
-            if (document.defaultView && document.defaultView.getComputedStyle) {
-                style = element.ownerDocument.defaultView.getComputedStyle(element, '');
-            } else if (document.documentElement.currentStyle) {
-                // MSIE
-                style = element.currentStyle;
-            }
-
-            if (style) {
-                widths.top = parseInt(style.borderTopWidth, 10) || 0;
-                widths.bottom = parseInt(style.borderBottomWidth, 10) || 0;
-                widths.left = parseInt(style.borderLeftWidth, 10) || 0;
-                widths.right = parseInt(style.borderRightWidth, 10) || 0;
-            }
-
-            return widths;
+            this.swiper = new __WEBPACK_IMPORTED_MODULE_0_swiper__["default"](container, options);
         }
     }, {
-        key: "onRemove",
-        value: function onRemove() {
-            if (this.box_) {
-                this.box_.parentNode.removeChild(this.box_);
-                this.box_ = null;
+        key: 'onInit_',
+        value: function onInit_() {
+            var i = void 0,
+                l = void 0;
+            for (i = 0, l = this.$el.length; i < l; i++) {
+                this.$el[i].classList.add('ready');
             }
+            this.resizeTimer = null;
         }
     }, {
-        key: "draw",
-        value: function draw() {
-            this.createInfoBox_();
-            var box = this.box_;
-
-            var pixPosition = this.getProjection().fromLatLngToDivPixel(this.position_);
-
-            box.style.left = pixPosition.x + this.pixelOffset_.width + 'px';
-
-            if (this.alignBottom_) {
-                box.style.bottom = -(pixPosition.y + this.pixelOffset_.height) + 'px';
-            } else {
-                box.style.top = pixPosition.y + this.pixelOffset_.height + 'px';
-            }
-
-            if (this.isHidden_) {
-                box.style.visibility = 'hidden';
-            } else {
-                box.style.visibility = 'visible';
-            }
-        }
-    }, {
-        key: "setOptions",
-        value: function setOptions(conf) {
-            if (typeof conf.content !== 'undefined') {
-                this.setContent(conf.content);
-            }
-            if (typeof conf.disableAutoPan !== 'undefined') {
-                this.disableAutoPan_ = conf.disableAutoPan;
-            }
-            if (typeof conf.maxWidth !== 'undefined') {
-                this.maxWidth_ = conf.maxWidth;
-            }
-            if (typeof conf.pixelOffset !== 'undefined') {
-                this.pixelOffset_ = conf.pixelOffset;
-            }
-            if (typeof conf.alignBottom !== 'undefined') {
-                this.alignBottom_ = conf.alignBottom;
-            }
-            if (typeof conf.position !== 'undefined') {
-                this.setPosition(conf.position);
-            }
-            if (typeof conf.zIndex !== 'undefined') {
-                this.setZIndex(conf.zIndex);
-            }
-            if (typeof conf.infoBoxClearance !== 'undefined') {
-                this.infoBoxClearance_ = conf.infoBoxClearance;
-            }
-            if (typeof conf.isHidden !== 'undefined') {
-                this.isHidden_ = conf.isHidden;
-            }
-            if (typeof conf.visible !== 'undefined') {
-                this.isHidden_ = !conf.visible;
-            }
-
-            if (this.box_) {
-                this.draw();
-            }
-        }
-    }, {
-        key: "setContent",
-        value: function setContent(content) {
-            this.content_ = content;
-
-            if (this.box_) {
-                if (!this.fixedWidthSet_) {
-                    this.box_.style.width = this.box_.offsetWidth + 'px';
+        key: 'onTap_',
+        value: function onTap_() {
+            var self = this,
+                i = void 0;
+            for (i in this.params.breakpoints) {
+                if (document.body.clientWidth < i) {
+                    if (this.clickedIndex !== this.activeIndex) {
+                        this.slideTo(this.clickedIndex);
+                    }
                 }
-                this.setBoxContent_(content);
-            }
-
-            google.maps.event.trigger(this, 'content_changed');
-        }
-    }, {
-        key: "setPosition",
-        value: function setPosition(latlng) {
-            this.position_ = latlng;
-
-            if (this.box_) {
-
-                this.draw();
-            }
-
-            google.maps.event.trigger(this, 'position_changed');
-        }
-    }, {
-        key: "setVisible",
-        value: function setVisible(isVisible) {
-            this.isHidden_ = !isVisible;
-            if (this.box_) {
-                this.box_.style.visibility = this.isHidden_ ? 'hidden' : 'visible';
+                break;
             }
         }
     }, {
-        key: "getContent",
-        value: function getContent() {
-            return this.content_;
-        }
-    }, {
-        key: "getPosition",
-        value: function getPosition() {
-            return this.position_;
-        }
-    }, {
-        key: "getZIndex",
-        value: function getZIndex() {
-            return this.zIndex_;
-        }
-    }, {
-        key: "getVisible",
-        value: function getVisible() {
-            var isVisible;
-
-            if (typeof this.getMap() === 'undefined' || this.getMap() === null) {
-                isVisible = false;
+        key: 'toggle',
+        value: function toggle() {
+            var state = this.el.getAttribute('aria-hidden');
+            if ('true' === state) {
+                this.el.setAttribute('aria-hidden', 'false');
             } else {
-                isVisible = !this.isHidden_;
+                this.el.setAttribute('aria-hidden', 'true');
             }
-            return isVisible;
-        }
-    }, {
-        key: "show",
-        value: function show() {
-            this.isHidden_ = false;
-            if (this.box_) {
-                this.box_.style.visibility = 'visible';
-            }
-        }
-    }, {
-        key: "hide",
-        value: function hide() {
-            this.isHidden_ = true;
-            if (this.box_) {
-                this.box_.style.visibility = 'hidden';
-            }
-        }
-    }, {
-        key: "open",
-        value: function open(map, marker) {
-            var self = this;
-
-            if (marker) {
-                this.position_ = marker.getPosition();
-                this.marker_ = marker;
-                this.moveListener_ = google.maps.event.addListener(marker, 'position_changed', function () {
-                    self.setPosition(this.getPosition());
-                });
-
-                this.mapListener_ = google.maps.event.addListener(marker, 'map_changed', function () {
-                    self.setMap(this.map);
-                });
-            }
-
-            this.setMap(map);
-
-            if (this.box_) {
-                this.panBox_();
-            }
-        }
-    }, {
-        key: "close",
-        value: function close() {
-            this.removeCloseHandler_();
-
-            if (this.moveListener_) {
-                google.maps.event.removeListener(this.moveListener_);
-                this.moveListener_ = null;
-            }
-
-            if (this.mapListener_) {
-                google.maps.event.removeListener(this.mapListener_);
-                this.mapListener_ = null;
-            }
-
-            this.setMap(null);
         }
     }]);
 
-    return _class;
-}(google.maps.OverlayView);
+    return Cards;
+}();
+
+/* harmony default export */ __webpack_exports__["a"] = (Cards);
 
 /***/ }),
-/* 46 */
-/***/ (function(module, exports) {
+/* 52 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-/**
- * https://github.com/googlemaps/v3-utility-library/tree/master/infobox
- */
-module.exports = function (_AbstractInfoBox) {
-    _inherits(Baloon, _AbstractInfoBox);
-
-    function Baloon(conf) {
-        _classCallCheck(this, Baloon);
-
-        var _this = _possibleConstructorReturn(this, (Baloon.__proto__ || Object.getPrototypeOf(Baloon)).call(this));
-
-        opt_opts = conf || {};
-
-        _this.boxClass_ = opt_opts.boxClass || "infobox";
-        _this.innerClass_ = opt_opts.innerClass || "infobox-inner";
-
-        _this.contentBefore_ = '<button class="close"><i class="material-icons">&#xE5CD;</i></button>';
-        _this.contentAfter_ = '';
-        return _this;
-    }
-
-    return Baloon;
-}(AbstractInfoBox);
-
-/***/ }),
-/* 47 */
-/***/ (function(module, exports) {
+"use strict";
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+// import RichMarker from 'js-rich-marker/lib/richmarker';
+var RichMarker = null;
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-module.exports = function (_google$maps$Marker) {
-    _inherits(Marker, _google$maps$Marker);
-
-    function Marker(conf) {
+var Marker = function () {
+    function Marker(opts) {
         _classCallCheck(this, Marker);
 
-        var _this = _possibleConstructorReturn(this, (Marker.__proto__ || Object.getPrototypeOf(Marker)).call(this));
+        var self = this;
 
-        _this.icon = 'https://maps.gstatic.com/mapfiles/api-3/images/spotlight-poi.png';
-        _this.width = 22;
-        _this.height = 40;
-        conf = conf || new google.maps.MarkerOptions();
-        conf.icon = _this.icon;
-        google.maps.Marker.apply(_this, [conf]);
-        return _this;
+        if (!RichMarker) {
+            RichMarker = __webpack_require__(53).RichMarker;
+        }
+
+        this.container = null;
+        this.content = null;
+        this.width = null;
+        this.height = null;
+
+        this.opts = this.buildOptions_(opts);
+        this.el = this.createContainer_(this.opts.content);
+        this.opts.content = this.el;
+
+        this.richMarker = new RichMarker(this.opts);
+
+        this.richMarker.addListener('ready', function () {
+            self.width = self.el.clientWidth;
+            self.height = self.el.clientHeight;
+            self.el.classList.add('ready');
+        });
     }
 
     _createClass(Marker, [{
-        key: 'getHeight',
-        value: function getHeight() {
-            return this.height;
+        key: 'buildOptions_',
+        value: function buildOptions_(opts) {
+            if ('object' !== (typeof opts === 'undefined' ? 'undefined' : _typeof(opts))) {
+                opts = {};
+            }
+
+            opts.shadow = false;
+
+            if (opts.position && !(opts.position instanceof google.maps.LatLng)) {
+                opts.position = new google.maps.LatLng(opts.position);
+            }
+
+            return opts;
+        }
+    }, {
+        key: 'createContainer_',
+        value: function createContainer_(content) {
+            this.container = document.createElement('div');
+            var inner1 = document.createElement('div');
+            this.content = document.createElement('div');
+
+            inner1.appendChild(this.content);
+            this.container.appendChild(inner1);
+
+            this.container.classList.add('map-marker');
+            this.content.innerHTML = content || '';
+
+            return this.container;
+        }
+    }, {
+        key: 'setContent',
+        value: function setContent(content) {
+            this.content.innerHTML = content || '';
+            this.width = this.el.clientWidth;
+            this.height = this.el.clientHeight;
+            this.richMarker.content_changed();
+        }
+    }, {
+        key: 'setDraggable',
+        value: function setDraggable(bool) {
+            this.richMarker.setDraggable(bool);
+        }
+    }, {
+        key: 'setPosition',
+        value: function setPosition(position) {
+            if (position && !(position instanceof google.maps.LatLng)) {
+                position = new google.maps.LatLng(position);
+            }
+            this.richMarker.setPosition(position);
+        }
+    }, {
+        key: 'setVisible',
+        value: function setVisible(bool) {
+            this.richMarker.setVisible(bool);
+        }
+    }, {
+        key: 'setZIndex',
+        value: function setZIndex(num) {
+            this.richMarker.setZIndex();
+        }
+    }, {
+        key: 'addListener',
+        value: function addListener(name, callback) {
+            this.richMarker.addListener(name, callback);
         }
     }]);
 
     return Marker;
-}(google.maps.Marker);
+}();
+
+/* harmony default export */ __webpack_exports__["a"] = (Marker);
 
 /***/ }),
-/* 48 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -56560,104 +55734,6 @@ var RichMarkerPosition = exports.RichMarkerPosition = {
   'BOTTOM': 8,
   'BOTTOM_RIGHT': 9
 };
-
-/***/ }),
-/* 49 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 50 */,
-/* 51 */,
-/* 52 */,
-/* 53 */,
-/* 54 */,
-/* 55 */
-/***/ (function(module, exports) {
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Me = function () {
-    function Me() {
-        _classCallCheck(this, Me);
-
-        this.cached = {};
-    }
-
-    _createClass(Me, [{
-        key: 'getElement_',
-        value: function getElement_(val) {
-            var element = void 0;
-            if ('string' === typeof val) {
-                if ('#' === val[0]) {
-                    element = document.getElementById(val.substr(1));
-                } else if ('.' === val[0]) {
-                    element = document.querySelector(val);
-                } else {
-                    element = document.getElementsByTagName(val)[0];
-                }
-            }
-
-            if (element) {
-                return element;
-            }
-        }
-    }, {
-        key: 'sets',
-        value: function sets(elements) {
-            if ('object' !== (typeof elements === 'undefined' ? 'undefined' : _typeof(elements))) {
-                return;
-            }
-
-            var key = void 0,
-                val = void 0;
-            for (key in elements) {
-                if (this.cached[key]) {
-                    continue;
-                }
-
-                if (val = this.getElement_(elements[key])) {
-                    this.cached[key] = val;
-                }
-            }
-        }
-    }, {
-        key: 'set',
-        value: function set(name, element) {
-            var val = void 0;
-            if (val = this.getElement_(element)) {
-                this.cached[name] = val;
-            }
-        }
-    }, {
-        key: 'get',
-        value: function get(name) {
-            if (this.cached[name]) {
-                return this.cached[name];
-            }
-
-            var val = this.getElement_(name);
-            if (val) {
-                this.cached[name] = val;
-                return val;
-            }
-        }
-    }, {
-        key: 'all',
-        value: function all() {
-            return this.cached;
-        }
-    }]);
-
-    return Me;
-}();
-
-module.exports = new Me();
 
 /***/ })
 /******/ ]);

@@ -55,4 +55,7 @@ if (token) {
 window.Vue = require('vue');
 window.Swiper = require('swiper').default;
 
-window.Elements = require('./lib/Elements');
+import Unify from './src/Unify';
+window.Uni = new Unify;
+
+// window.Elements = require('./lib/Elements');
