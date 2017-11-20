@@ -23,15 +23,8 @@ require('./bootstrap');
 
 require('domready')(function () {
     Uni.Map.initCards();
+    // console.log(Uni.schema.getData('spots'));
 });
-
-// import SwiperInit from './lib/Swiper';
-
-// import Map from './lib/Map';
-// import ToggleArticle from './lib/ToggleArticle';
-// window.articleToggler = new ToggleArticle;
-
-
 
 window.initMap = () => {
     Uni.Map.initMap();

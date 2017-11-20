@@ -115,70 +115,29 @@
     
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCe3QWJTF7YzCaOtwqCoXTIZwN8c84lItc&libraries=geometry&callback=initMap"></script>
 
-    <script>
-        // var swiper = new Swiper('.swiper-container', {
-        //     loop:true,
-
-        //     // Navigation arrows
-        //     navigation: {
-        //         nextEl: '.swiper-button-next',
-        //         prevEl: '.swiper-button-prev',
-        //     },
-
-        //     spaceBetween: 20,
-        //     slidesPerView: 3,
-
-        //     centeredSlides: true,
-
-        //     breakpoints: {
-        //         576: {
-        //             autoHeight: true,
-        //             slidesPerView: 'auto'
-        //         },
-
-        //         768: {
-        //             spaceBetween: 50,
-        //             slidesPerView: 2
-        //         },
-
-        //         992: {
-        //             spaceBetween: 20,
-        //             slidesPerView: 2
-        //         }
-        //     },
-
-        //     on: {
-        //         init: function (e) {
-        //             var i, l;
-        //             for (i = 0, l = this.$el.length; i < l; i++) {
-        //                 this.$el[i].classList.add('ready');
-        //             }
-        //             this.resizeTimer = null;
-        //         },
-        //         // resize: function (e) {
-        //         //     var self = this;
-        //         //     if (this.resizeTimer) {
-        //         //         clearTimeout(this.resizeTimer);
-        //         //     }
-        //         //     this.resizeTimer = setTimeout(function () {
-        //         //         console.log('resize');
-        //         //         self.update();
-        //         //         self.resizeTimer = null;
-        //         //     }, 300);
-        //         // },
-        //         tap: function (e) {
-        //             var self = this;
-        //             for (i in this.params.breakpoints) {
-        //                 if (document.body.clientWidth < i) {
-        //                     if (this.clickedIndex !== this.activeIndex) {
-        //                         this.slideTo(this.clickedIndex);
-        //                     }
-        //                 }
-        //                 break;
-        //             }
-        //         }
-        //     }
-        // });
-    </script>
+<script type="application/ld+json" data-name="spots">
+{
+  "@context": "http://schema.org",
+  "@graph": [
+    {
+      "@type": "Place",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Denver",
+        "addressRegion": "CO",
+        "postalCode": "80209",
+        "streetAddress": "7 S. Broadway"
+      },
+      "name": "The Hi-Dive"
+    },
+    {
+      "@type": "Offer",
+      "price": "13.00",
+      "priceCurrency": "USD",
+      "url": "http://www.ticketfly.com/purchase/309433"
+    }
+  ]
+}
+</script>
 </body>
 </html>
