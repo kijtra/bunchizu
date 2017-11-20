@@ -12,23 +12,17 @@ $toggle-map-anime-speed:.2s;
 $map-zoombutton-anime-speed:.4s;
 
 
-$marker-sizes:(
-    xs: 40px,
-    sm: 40px,
-    md: 34px,
-    lg: 34px,
-);
-$marker-arrows:(
-    xs: 10px,
-    sm: 10px,
-    md: 8px,
-    lg: 8px,
-);
-$marker-texts:(
-    xs: .9rem,
-    sm: .9rem,
-    md: .8rem,
-    lg: .8rem,
+$marker-sizes: (
+    normal: (
+        size: 20px,
+        arrow: 8px,
+        text: .8rem
+    ),
+    focused: (
+        size: 40px,
+        arrow: 10px,
+        text: .9rem
+    ),
 );
 
 $marker-color:#F75850;

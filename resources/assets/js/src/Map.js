@@ -1,5 +1,5 @@
 import Cards from './Map/Cards';
-import Marker from './Map/Marker';
+// import Marker from './Map/Marker';
 
 export default class Map {
     constructor () {
@@ -27,6 +27,11 @@ export default class Map {
         this.beforeZoom = this.opts.defaultZoom;
         this.currentZoom = this.opts.defaultZoom;
         this.currentCenter = this.opts.defaultPosition;
+
+        this.RichMarker = null;
+        this.addMarkerCount = 0;
+        this.addMarkerTimer = null;
+        this.markers = [];
     }
 
     initMap () {
@@ -44,7 +49,14 @@ export default class Map {
 
         this.initZoomControl_();
 
-        var mk = new Marker({map: this.map, position: this.currentCenter});
+        var marker;
+        for (var i = 0; i < 10;i++) {
+            var p = {
+                lat: this.currentCenter.lat,
+                lng: this.currentCenter.lng + (0.002 * i)
+            };
+            marker = this.addMarker(p);
+        }
     }
 
     initCards () {
@@ -134,5 +146,62 @@ export default class Map {
         //         to: to
         //     });
         // }
+    }
+
+    addMarker (position, content) {
+        let self = this;
+
+        if (!this.richMarker) {
+            this.RichMarker = require('js-rich-marker/lib/richmarker').RichMarker;
+        }
+
+        if (position && !(position instanceof google.maps.LatLng)) {
+            position = new google.maps.LatLng(position);
+        }
+
+        let container = document.createElement('div');
+        container.classList.add('map-marker', 'normal');
+        container.innerHTML = '<div><div>' + (content || '') +'</div></div>';
+
+        let opts = {
+            // map: this.map,
+            position: position,
+            content: container,
+            shadow: false
+        };
+
+        let marker = new this.RichMarker(opts);
+
+        marker.addListener('ready', function () {
+            this.getContent().classList.add('ready');
+        });
+
+        marker.addListener('click', function () {
+            var content = this.getContent();
+            if (content.classList.contains('normal')) {
+                content.classList.remove('normal');
+                content.classList.add('focused');
+            } else {
+                content.classList.remove('focused');
+                content.classList.add('normal');
+            }
+            this.content_changed();
+        });
+
+        setTimeout(function () {
+            marker.setMap(self.map);
+        }, 200 * this.addMarkerCount);
+
+        if (this.addMarkerTimer) {
+            clearTimeout(this.addMarkerTimer);
+        }
+        this.addMarkerTimer = setTimeout(function () {
+            self.addMarkerCount = 0;
+            self.addMarkerTimer = null;
+        }, 2000);
+
+        this.markers.push(marker);
+        this.addMarkerCount++;
+        return marker;
     }
 }

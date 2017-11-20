@@ -10538,10 +10538,6 @@ a.text-dark:hover {
           align-items: center;
   position: relative;
   z-index: 1;
-  width: 40px;
-  height: 47px;
-  -webkit-transform-origin: 20px 47px;
-          transform-origin: 20px 47px;
 }
 
 .map-marker:before {
@@ -10638,124 +10634,72 @@ a.text-dark:hover {
           transform: translate(-50%, -50%);
 }
 
-.map-marker:before,
-.map-marker > div,
-.map-marker > div > div {
+.map-marker.normal {
+  width: 20px;
+  height: 26px;
+  -webkit-transform-origin: 10px 26px;
+          transform-origin: 10px 26px;
+}
+
+.map-marker.normal:before,
+.map-marker.normal > div,
+.map-marker.normal > div > div {
+  width: 20px;
+  height: 20px;
+}
+
+.map-marker.normal > div:before {
+  width: 18px;
+  height: 18px;
+}
+
+.map-marker.normal > div > div {
+  font-size: 0.8rem;
+}
+
+.map-marker.normal:after {
+  width: 8px;
+  height: 8px;
+  margin-bottom: -6px;
+}
+
+.map-marker.focused {
+  width: 40px;
+  height: 47px;
+  -webkit-transform-origin: 20px 47px;
+          transform-origin: 20px 47px;
+}
+
+.map-marker.focused:before,
+.map-marker.focused > div,
+.map-marker.focused > div > div {
   width: 40px;
   height: 40px;
 }
 
-.map-marker > div:before {
+.map-marker.focused > div:before {
   width: 38px;
   height: 38px;
 }
 
-.map-marker > div > div {
+.map-marker.focused > div > div {
   font-size: 0.9rem;
 }
 
-.map-marker:after {
+.map-marker.focused:after {
   width: 10px;
   height: 10px;
   margin-bottom: -7px;
 }
 
-@media (min-width: 576px) {
-  .map-marker {
-    width: 40px;
-    height: 47px;
-    -webkit-transform-origin: 20px 47px;
-            transform-origin: 20px 47px;
-  }
-
-  .map-marker:before,
-  .map-marker > div,
-  .map-marker > div > div {
-    width: 40px;
-    height: 40px;
-  }
-
-  .map-marker > div:before {
-    width: 38px;
-    height: 38px;
-  }
-
-  .map-marker > div > div {
-    font-size: 0.9rem;
-  }
-
-  .map-marker:after {
-    width: 10px;
-    height: 10px;
-    margin-bottom: -7px;
-  }
-}
-
-@media (min-width: 768px) {
-  .map-marker {
-    width: 34px;
-    height: 40px;
-    -webkit-transform-origin: 17px 40px;
-            transform-origin: 17px 40px;
-  }
-
-  .map-marker:before,
-  .map-marker > div,
-  .map-marker > div > div {
-    width: 34px;
-    height: 34px;
-  }
-
-  .map-marker > div:before {
-    width: 32px;
-    height: 32px;
-  }
-
-  .map-marker > div > div {
-    font-size: 0.8rem;
-  }
-
-  .map-marker:after {
-    width: 8px;
-    height: 8px;
-    margin-bottom: -6px;
-  }
-}
-
-@media (min-width: 992px) {
-  .map-marker {
-    width: 34px;
-    height: 40px;
-    -webkit-transform-origin: 17px 40px;
-            transform-origin: 17px 40px;
-  }
-
-  .map-marker:before,
-  .map-marker > div,
-  .map-marker > div > div {
-    width: 34px;
-    height: 34px;
-  }
-
-  .map-marker > div:before {
-    width: 32px;
-    height: 32px;
-  }
-
-  .map-marker > div > div {
-    font-size: 0.8rem;
-  }
-
-  .map-marker:after {
-    width: 8px;
-    height: 8px;
-    margin-bottom: -6px;
-  }
-}
-
 .map-marker.ready {
   -webkit-animation: mapMarkerReady 3s 1 ease-in-out;
           animation: mapMarkerReady 3s 1 ease-in-out;
+}
+
+.map-marker.focused {
+  -webkit-animation: mapMarkerFocused 3s ease-in-out;
+          animation: mapMarkerFocused 3s ease-in-out;
 }
 
 .map-marker.dragging:before,
@@ -10812,6 +10756,80 @@ a.text-dark:hover {
 
   4% {
     top: 0;
+    -webkit-transform: scale(0.9, 0.9);
+            transform: scale(0.9, 0.9);
+  }
+
+  6% {
+    -webkit-transform: scale(1.1, 0.4);
+            transform: scale(1.1, 0.4);
+  }
+
+  9% {
+    -webkit-transform: scale(0.9, 1.1);
+            transform: scale(0.9, 1.1);
+  }
+
+  13% {
+    -webkit-transform: scale(1.1, 0.9);
+            transform: scale(1.1, 0.9);
+  }
+
+  18% {
+    -webkit-transform: scale(1, 1);
+            transform: scale(1, 1);
+  }
+
+  100% {
+    -webkit-transform: scale(1, 1);
+            transform: scale(1, 1);
+  }
+}
+
+@-webkit-keyframes mapMarkerFocused {
+  0% {
+    -webkit-transform: scale(0.9, 0.9);
+            transform: scale(0.9, 0.9);
+  }
+
+  4% {
+    -webkit-transform: scale(0.9, 0.9);
+            transform: scale(0.9, 0.9);
+  }
+
+  6% {
+    -webkit-transform: scale(1.1, 0.4);
+            transform: scale(1.1, 0.4);
+  }
+
+  9% {
+    -webkit-transform: scale(0.9, 1.1);
+            transform: scale(0.9, 1.1);
+  }
+
+  13% {
+    -webkit-transform: scale(1.1, 0.9);
+            transform: scale(1.1, 0.9);
+  }
+
+  18% {
+    -webkit-transform: scale(1, 1);
+            transform: scale(1, 1);
+  }
+
+  100% {
+    -webkit-transform: scale(1, 1);
+            transform: scale(1, 1);
+  }
+}
+
+@keyframes mapMarkerFocused {
+  0% {
+    -webkit-transform: scale(0.9, 0.9);
+            transform: scale(0.9, 0.9);
+  }
+
+  4% {
     -webkit-transform: scale(0.9, 0.9);
             transform: scale(0.9, 0.9);
   }
@@ -10923,10 +10941,7 @@ body.map > .page {
   height: 100%;
 }
 
-body.map main > .map {
-  -webkit-box-flex: 1;
-      -ms-flex-positive: 1;
-          flex-grow: 1;
+body.map main {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -10936,33 +10951,50 @@ body.map main > .map {
           flex-direction: column;
 }
 
-body.map main > .map > div {
+body.map main > article {
+  display: none;
+}
+
+body.map main > .map {
   -webkit-box-flex: 1;
       -ms-flex-positive: 1;
           flex-grow: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+body.map main > .map > .canvas {
+  width: 100%;
+  height: 100%;
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  z-index: 1;
   background: #ddd;
 }
 
-body.map main > .spot-list {
+body.map main > .map > .cards {
   width: 100%;
   position: absolute;
+  left: 0;
   bottom: 0;
+  z-index: 2;
   -webkit-transition: -webkit-transform .3s ease-in-out;
   transition: -webkit-transform .3s ease-in-out;
   transition: transform .3s ease-in-out;
   transition: transform .3s ease-in-out, -webkit-transform .3s ease-in-out;
 }
 
-body.map main > .spot-list .card {
+body.map main > .map > .cards .card {
   -webkit-box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
           box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
 }
 
-body.map main > .spot-list .card-title {
+body.map main > .map > .cards .card-title {
   font-size: 1.1em;
 }
 
-body.map main > .spot-list .swiper-container {
+body.map main > .map > .cards .swiper-container {
   padding-top: 0.5rem;
   padding-bottom: 1rem;
   opacity: 0;
@@ -10972,11 +11004,11 @@ body.map main > .spot-list .swiper-container {
   transition: opacity .2s linear,box-shadow .2s linear,-webkit-box-shadow .2s linear;
 }
 
-body.map main > .spot-list .swiper-container.ready {
+body.map main > .map > .cards .swiper-container.ready {
   opacity: 1;
 }
 
-body.map main > .spot-list .swiper-container > button {
+body.map main > .map > .cards .swiper-container > button {
   width: 2rem;
   height: 2rem;
   background-color: #fff;
@@ -10984,14 +11016,14 @@ body.map main > .spot-list .swiper-container > button {
   border-radius: 50%;
 }
 
-body.map main > .spot-list .swiper-slide {
+body.map main > .map > .cards .swiper-slide {
   -webkit-transition: opacity .5s linear;
   transition: opacity .5s linear;
 }
 
 @media (max-width: 991px) {
-  body.map main > .spot-list .swiper-slide-prev,
-  body.map main > .spot-list .swiper-slide-next {
+  body.map main > .map > .cards .swiper-slide-prev,
+  body.map main > .map > .cards .swiper-slide-next {
     opacity: .7;
     -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
             box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
@@ -10999,21 +11031,17 @@ body.map main > .spot-list .swiper-slide {
 }
 
 @media (max-width: 575px) {
-  body.map main > .spot-list .swiper-container > button {
+  body.map main > .map > .cards .swiper-container > button {
     display: none;
   }
 
-  body.map main > .spot-list .swiper-slide {
+  body.map main > .map > .cards .swiper-slide {
     width: calc(100% - 80px) !important;
   }
 }
 
-body.map main > .spot-list[aria-hidden="true"] {
+body.map main > .map > .cards[aria-hidden="true"] {
   -webkit-transform: translateY(100%);
           transform: translateY(100%);
-}
-
-body.map main > article {
-  display: none;
 }
 

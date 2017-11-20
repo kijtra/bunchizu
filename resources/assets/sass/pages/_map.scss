@@ -8,21 +8,35 @@ body.map {
     }
 
     main {
-        >.map {
-            flex-grow:1;
-            display:flex;
-            flex-direction:column;
+        display:flex;
+        flex-direction:column;
+    }
+
+    main>article {
+        display:none;
+    }
+
+    main>.map {
+        flex-grow:1;
+        position:relative;
+        overflow:hidden;
+
+        >.canvas {
+            width:100%;
+            height:100%;
+            position:absolute !important;
+            top:0;
+            left:0;
+            z-index:1;
+            background:#ddd;
+        }// >.canvas
     
-            >div {
-                flex-grow:1;
-                background:#ddd;
-            }
-        }
-    
-        >.spot-list {
+        >.cards {
             width:100%;
             position:absolute;
+            left:0;
             bottom:0;
+            z-index:2;
             transition:transform .3s ease-in-out;
     
             .card {
@@ -84,11 +98,9 @@ body.map {
             &[aria-hidden="true"] {
                 transform:translateY(100%);
             }
-        }
+        }// >.cards
     
-        >article {
-            display:none;
-        }
+        
     }
     
 }

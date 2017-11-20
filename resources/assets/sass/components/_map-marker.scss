@@ -93,11 +93,13 @@ $marker-shadow:0 1px 4px rgba(0,0,0,.6);
         }
     }
 
-    @each $breakpoint, $size in $marker-sizes {
-        $arrow:map-get($marker-arrows, $breakpoint);
+    @each $name, $values in $marker-sizes {
+        $size: map-get($values, size);
+        $arrow: map-get($values, arrow);
+        $text: map-get($values, text);
         $diagonal:round(sqrt(pow(strip-unit($arrow), 2) + pow(strip-unit($arrow), 2))) + 0px;
 
-        @include media-breakpoint-up($breakpoint) {
+        &.#{$name} {
             width:$size;
             height:#{$size + round($diagonal / 2)};
             transform-origin:#{round($size / 2)} #{$size + round($diagonal / 2)};
@@ -113,7 +115,7 @@ $marker-shadow:0 1px 4px rgba(0,0,0,.6);
             }
 
             >div>div {
-                font-size:map-get($marker-texts, $breakpoint);
+                font-size: $text;
             }
 
             &:after {
@@ -128,6 +130,10 @@ $marker-shadow:0 1px 4px rgba(0,0,0,.6);
         animation: mapMarkerReady 3s 1 ease-in-out;
     }
 
+    &.focused {
+        animation: mapMarkerFocused 3s ease-in-out;
+    }
+
     &.dragging {
         &:before, &:after {
             box-shadow:0 10px 4px rgba(0,0,0,.6);
@@ -139,6 +145,16 @@ $marker-shadow:0 1px 4px rgba(0,0,0,.6);
 @keyframes mapMarkerReady {
     0% { top:-15px;transform: scale(.9, .9); }
     4% { top:0;transform: scale(.9, .9); }
+    6% { transform: scale(1.1, .4); }
+    9% { transform: scale(.9, 1.1); }
+    13% { transform: scale(1.1, .9); }
+    18% { transform: scale(1, 1); }
+    100% { transform: scale(1, 1); }
+}
+
+@keyframes mapMarkerFocused {
+    0% { transform: scale(.9, .9); }
+    4% { transform: scale(.9, .9); }
     6% { transform: scale(1.1, .4); }
     9% { transform: scale(.9, 1.1); }
     13% { transform: scale(1.1, .9); }
