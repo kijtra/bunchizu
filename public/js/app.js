@@ -7284,7 +7284,7 @@ Swiper$1.components = [
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(11);
-module.exports = __webpack_require__(47);
+module.exports = __webpack_require__(48);
 
 
 /***/ }),
@@ -7312,7 +7312,7 @@ __webpack_require__(12);
 // });
 
 
-__webpack_require__(46)(function () {
+__webpack_require__(47)(function () {
     Uni.Map.initCards();
     // console.log(Uni.schema.getData('spots'));
 });
@@ -54243,8 +54243,8 @@ function scroll(...args) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Elements__ = __webpack_require__(42);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Schema__ = __webpack_require__(53);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Map__ = __webpack_require__(43);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Schema__ = __webpack_require__(43);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Map__ = __webpack_require__(44);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -54404,7 +54404,64 @@ var Elements = function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Map_Cards__ = __webpack_require__(44);
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Schema = function () {
+    function Schema() {
+        _classCallCheck(this, Schema);
+
+        this.datas = null;
+    }
+
+    _createClass(Schema, [{
+        key: 'getDatas',
+        value: function getDatas() {
+            if (null !== this.datas) {
+                return this.datas;
+            }
+
+            this.datas = {};
+
+            var els = document.querySelectorAll('script[type="application/ld+json"][data-name]');
+            var l = els.length;
+            if (l) {
+                var i = void 0,
+                    el = void 0,
+                    name = void 0,
+                    data = void 0;
+                for (i = 0, l = els.length; i < l; i++) {
+                    el = els[i];
+                    name = el.getAttribute('data-name');
+                    data = JSON.parse(el.innerText);
+                    this.datas[name] = data;
+                }
+            }
+
+            return this.datas;
+        }
+    }, {
+        key: 'getData',
+        value: function getData(name) {
+            var datas = this.getDatas();
+            if (datas.hasOwnProperty(name)) {
+                return datas[name];
+            }
+        }
+    }]);
+
+    return Schema;
+}();
+
+/* harmony default export */ __webpack_exports__["a"] = (Schema);
+
+/***/ }),
+/* 44 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Map_Cards__ = __webpack_require__(45);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -54572,7 +54629,7 @@ var Map = function () {
             var self = this;
 
             if (!this.richMarker) {
-                this.RichMarker = __webpack_require__(45).RichMarker;
+                this.RichMarker = __webpack_require__(46).RichMarker;
             }
 
             if (position && !(position instanceof google.maps.LatLng)) {
@@ -54632,7 +54689,7 @@ var Map = function () {
 /* harmony default export */ __webpack_exports__["a"] = (Map);
 
 /***/ }),
-/* 44 */
+/* 45 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -54740,7 +54797,7 @@ var Cards = function () {
 /* harmony default export */ __webpack_exports__["a"] = (Cards);
 
 /***/ }),
-/* 45 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -55648,7 +55705,7 @@ var RichMarkerPosition = exports.RichMarkerPosition = {
 };
 
 /***/ }),
-/* 46 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
@@ -55684,72 +55741,10 @@ var RichMarkerPosition = exports.RichMarkerPosition = {
 
 
 /***/ }),
-/* 47 */
+/* 48 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 48 */,
-/* 49 */,
-/* 50 */,
-/* 51 */,
-/* 52 */,
-/* 53 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Schema = function () {
-    function Schema() {
-        _classCallCheck(this, Schema);
-
-        this.datas = null;
-    }
-
-    _createClass(Schema, [{
-        key: 'getDatas',
-        value: function getDatas() {
-            if (null !== this.datas) {
-                return this.datas;
-            }
-
-            this.datas = {};
-
-            var els = document.querySelectorAll('script[type="application/ld+json"][data-name]');
-            var l = els.length;
-            if (l) {
-                var i = void 0,
-                    el = void 0,
-                    name = void 0,
-                    data = void 0;
-                for (i = 0, l = els.length; i < l; i++) {
-                    el = els[i];
-                    name = el.getAttribute('data-name');
-                    data = JSON.parse(el.innerText);
-                    this.datas[name] = data;
-                }
-            }
-
-            return this.datas;
-        }
-    }, {
-        key: 'getData',
-        value: function getData(name) {
-            var datas = this.getDatas();
-            if (datas.hasOwnProperty(name)) {
-                return datas[name];
-            }
-        }
-    }]);
-
-    return Schema;
-}();
-
-/* harmony default export */ __webpack_exports__["a"] = (Schema);
 
 /***/ })
 /******/ ]);

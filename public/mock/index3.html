@@ -33,8 +33,56 @@
                                     <div class="card">
                                             <div class="card-body">
                                                     <h4 class="card-title">Card title</h4>
-                                                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                                    <a href="#" class="btn btn-primary">Go somewhere</a>
+<button id="bt">mini</button>
+<button id="rd">ready</button>
+<div class="map-marker2 mini" id="mk">
+    <div>
+        <span></span>
+        <span></span>
+        <div>111111</div>
+    </div>
+</div>
+
+<script>
+var bt = document.getElementById('bt');
+var rd = document.getElementById('rd');
+var mk = document.getElementById('mk');
+var flag = 0;
+rd.addEventListener('click', function (e) {
+    e.preventDefault();
+    if (mk.classList.contains('ready')) {
+        mk.classList.remove('ready');
+    } else {
+        mk.classList.add('ready');
+    }
+});
+bt.addEventListener('click', function (e) {
+    e.preventDefault();
+    if (0 === flag) {
+        mk.classList.remove('mini');
+        mk.classList.add('focus');
+        mk.classList.remove('active');
+        bt.innerText = 'focus';
+        flag = 1;
+    } else if (1 === flag) {
+        mk.classList.remove('focus');
+        mk.classList.add('active');
+        bt.innerText = 'active';
+        flag = 2;
+    } else if (2 === flag) {
+        mk.classList.add('focus');
+        mk.classList.remove('active');
+        bt.innerText = 'focus';
+        flag = 3;
+    } else if (3 === flag) {
+        mk.classList.add('mini');
+        mk.classList.remove('focus');
+        mk.classList.remove('active');
+        bt.innerText = 'mini';
+        flag = 0;
+    }
+});
+</script>
                                             </div>
                                     </div>
                                 </div>
