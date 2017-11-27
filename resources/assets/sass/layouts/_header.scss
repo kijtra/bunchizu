@@ -1,5 +1,5 @@
 
-#app>header {
+#page>header {
     border-bottom: 1px solid $border-color;
     @each $breakpoint, $header-height in $header-heights {
         @include media-breakpoint-up($breakpoint, $grid-breakpoints) {

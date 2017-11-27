@@ -7307,18 +7307,16 @@ __webpack_require__(12);
 
 // Vue.component('example', require('./components/Example.vue'));
 
-// const app = new Vue({
-//     el: '#app'
-// });
-
 
 __webpack_require__(47)(function () {
-    Uni.Map.initCards();
+
     // console.log(Uni.schema.getData('spots'));
 });
 
 window.initMap = function () {
+
     Uni.Map.initMap();
+    Uni.Map.initCards();
     // window.AbstractInfoBox = require('./lib/AbstractInfoBox');
     // window.Baloon = require('./lib/Baloon');
     // window.Marker = require('./lib/Marker');
@@ -54310,7 +54308,8 @@ var Elements = function () {
 
         this.cached = {
             map: this.byId('js-map'),
-            mapCards: this.byId('js-map-cards')
+            mapCards: this.byId('js-map-cards'),
+            mapItems: this.byId('js-spot-items')
         };
     }
 
@@ -54520,15 +54519,6 @@ var Map = function () {
             });
 
             this.initZoomControl_();
-
-            var marker;
-            for (var i = 0; i < 10; i++) {
-                var p = {
-                    lat: this.currentCenter.lat,
-                    lng: this.currentCenter.lng + 0.002 * i
-                };
-                marker = this.addMarker(p);
-            }
         }
     }, {
         key: 'initCards',
@@ -54737,23 +54727,95 @@ var Cards = function () {
             }
         };
 
+        var me = this;
+
+        this.items = null;
+
+        var json = Uni.el.get('mapItems');
+        json = JSON.parse(json.innerText);
+        this.json = json.itemListElement;
+
         this.el = Uni.el.get('mapCards');
         this.swiper = null;
+
+        this.vue = new Vue({
+            el: this.el,
+            data: {
+                cards: []
+            },
+            mounted: function mounted() {
+                console.log('mounted');
+                // Uni.Map.map.fitBounds(bounds);
+
+                var swiperOptions = me.options;
+                swiperOptions.on = {
+                    init: me.onInit_,
+                    tap: me.onTap_
+                };
+                me.swiper = new __WEBPACK_IMPORTED_MODULE_0_swiper__["default"](me.el.querySelector('.swiper-container'), swiperOptions);
+            }
+        });
     }
 
     _createClass(Cards, [{
         key: 'init',
         value: function init() {
+
             this.el.setAttribute('aria-hidden', 'true');
+
             var container = this.el.querySelector('.swiper-container');
 
-            var options = this.options;
-            options.on = {
+            var swiperOptions = this.options;
+            swiperOptions.on = {
                 init: this.onInit_,
                 tap: this.onTap_
             };
 
-            this.swiper = new __WEBPACK_IMPORTED_MODULE_0_swiper__["default"](container, options);
+            var bounds = new google.maps.LatLngBounds();
+            var items = this.getItems_();
+            var i = void 0,
+                l = items.length,
+                item = void 0,
+                marker = void 0;
+            for (i = 0; i < l; i++) {
+                item = items[i];
+
+                this.vue.cards.push(item);
+
+                bounds.extend(new google.maps.LatLng(item.point));
+                marker = Uni.Map.addMarker(item.point);
+
+                if (i + 1 >= l) {
+                    Uni.Map.map.fitBounds(bounds);
+                    // this.swiper = new Swiper(container, swiperOptions);
+                }
+            }
+        }
+    }, {
+        key: 'getItems_',
+        value: function getItems_() {
+            if (this.items) {
+                return this.items;
+            }
+
+            this.items = [];
+            var i = void 0,
+                l = this.json.length,
+                item = void 0,
+                data = void 0;
+            for (i = 0; i < l; i++) {
+                item = this.json[i].item;
+                data = {
+                    name: item.name,
+                    addr: item.address.addressLocality + item.address.streetAddress,
+                    point: {
+                        lat: parseFloat(item.geo.latitude),
+                        lng: parseFloat(item.geo.longitude)
+                    }
+                };
+                this.items.push(data);
+            }
+            return this.items;
         }
     }, {
         key: 'onInit_',

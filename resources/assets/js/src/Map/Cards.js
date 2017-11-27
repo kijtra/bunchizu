@@ -1,4 +1,5 @@
-import Swiper from 'swiper';
+// import Swiper from 'swiper';
+import Swiper from 'vue-swiper'
 // const Swiper = require('swiper').default;
 
 export default class Cards {
@@ -35,21 +36,78 @@ export default class Cards {
             }
         };
 
+        let me = this;
+
+        this.items = null;
+
+        let json = Uni.el.get('mapItems');
+        json = JSON.parse(json.innerText);
+        this.json = json.itemListElement;
+
         this.el = Uni.el.get('mapCards');
         this.swiper = null;
+
+        this.vue = new Vue({
+            el: this.el,
+            components: {Swiper},
+            data: {
+                cards: []
+            }
+        });
     }
 
     init () {
-        this.el.setAttribute('aria-hidden', 'true');
-        let container = this.el.querySelector('.swiper-container');
 
-        let options = this.options;
-        options.on = {
+        this.el.setAttribute('aria-hidden', 'true');
+
+        let container = this.el.querySelector('.swiper-container');
+        
+        let swiperOptions = this.options;
+        swiperOptions.on = {
             init: this.onInit_,
             tap: this.onTap_
         };
+        this.swiper = new Swiper(container, swiperOptions);
 
-        this.swiper = new Swiper(container, options);
+        let bounds = new google.maps.LatLngBounds();
+        let items = this.getItems_();
+        let i, l = items.length, item, marker;
+        for (i = 0; i < l; i++) {
+            item = items[i];
+
+            this.vue.cards.push(item);
+
+            bounds.extend(new google.maps.LatLng(item.point));
+            marker = Uni.Map.addMarker(item.point);
+
+            if (i + 1 >= l) {
+                Uni.Map.map.fitBounds(bounds);
+                container.classList.add('ready');
+                this.swiper.reInit();
+            }
+        }
+    }
+
+    getItems_ () {
+        if (this.items) {
+            return this.items;
+        }
+
+        this.items = [];
+        let i, l = this.json.length, item, data;
+        for (i = 0; i < l; i++) {
+            item = this.json[i].item;
+            data = {
+                name: item.name,
+                addr: item.address.addressLocality + item.address.streetAddress,
+                point: {
+                    lat: parseFloat(item.geo.latitude),
+                    lng: parseFloat(item.geo.longitude)
+                }
+            };
+            this.items.push(data);
+        }
+        return this.items;
     }
 
     onInit_ () {

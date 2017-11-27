@@ -16,18 +16,19 @@ require('./bootstrap');
 
 // Vue.component('example', require('./components/Example.vue'));
 
-// const app = new Vue({
-//     el: '#app'
-// });
+
 
 
 require('domready')(function () {
-    Uni.Map.initCards();
+    
     // console.log(Uni.schema.getData('spots'));
 });
 
 window.initMap = () => {
+    
+
     Uni.Map.initMap();
+    Uni.Map.initCards();
     // window.AbstractInfoBox = require('./lib/AbstractInfoBox');
     // window.Baloon = require('./lib/Baloon');
     // window.Marker = require('./lib/Marker');

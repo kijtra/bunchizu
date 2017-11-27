@@ -48,15 +48,6 @@ export default class Map {
         });
 
         this.initZoomControl_();
-
-        var marker;
-        for (var i = 0; i < 10;i++) {
-            var p = {
-                lat: this.currentCenter.lat,
-                lng: this.currentCenter.lng + (0.002 * i)
-            };
-            marker = this.addMarker(p);
-        }
     }
 
     initCards () {
