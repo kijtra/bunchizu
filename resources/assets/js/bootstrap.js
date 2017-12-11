@@ -53,7 +53,9 @@ if (token) {
 // });
 
 window.Vue = require('vue');
-window.Swiper = require('swiper').default;
+
+// @see https://github.com/JeffreyWay/laravel-mix/issues/1244#issuecomment-336452713
+// window.Swiper = require('swiper').default;
 
 import Unify from './src/Unify';
 window.Uni = new Unify;

@@ -1,6 +1,6 @@
 // import Swiper from 'swiper';
-import Swiper from 'vue-swiper'
-// const Swiper = require('swiper').default;
+// import Swiper from 'vue-swiper'
+const Swiper = require('swiper').default;
 
 export default class Cards {
     constructor () {
@@ -46,46 +46,48 @@ export default class Cards {
 
         this.el = Uni.el.get('mapCards');
         this.swiper = null;
-
-        this.vue = new Vue({
-            el: this.el,
-            components: {Swiper},
-            data: {
-                cards: []
-            }
-        });
     }
 
     init () {
+        var me = this;
+        this.vue = new Vue({
+            el: this.el,
+            // components: {Swiper},
+            data: {
+                cards: []
+            },
+            mounted () {
+                me.el.setAttribute('aria-hidden', 'false');
 
-        this.el.setAttribute('aria-hidden', 'true');
+                let container = me.el.querySelector('.swiper-container');
+                
+                let swiperOptions = me.options;
+                swiperOptions.on = {
+                    init: me.onInit_,
+                    tap: me.onTap_
+                };
 
-        let container = this.el.querySelector('.swiper-container');
-        
-        let swiperOptions = this.options;
-        swiperOptions.on = {
-            init: this.onInit_,
-            tap: this.onTap_
-        };
-        this.swiper = new Swiper(container, swiperOptions);
+                let bounds = new google.maps.LatLngBounds();
+                let items = me.getItems_();
+                let i, l = items.length, item, marker;
+                for (i = 0; i < l; i++) {
+                    item = items[i];
 
-        let bounds = new google.maps.LatLngBounds();
-        let items = this.getItems_();
-        let i, l = items.length, item, marker;
-        for (i = 0; i < l; i++) {
-            item = items[i];
+                    // me.vue.cards.push(item);
 
-            this.vue.cards.push(item);
+                    bounds.extend(new google.maps.LatLng(item.point));
+                    marker = Uni.Map.addMarker(item.point);
 
-            bounds.extend(new google.maps.LatLng(item.point));
-            marker = Uni.Map.addMarker(item.point);
-
-            if (i + 1 >= l) {
-                Uni.Map.map.fitBounds(bounds);
-                container.classList.add('ready');
-                this.swiper.reInit();
+                    if (i + 1 >= l) {
+                        Uni.Map.map.fitBounds(bounds);
+                        console.log('itemed');
+                        me.swiper = new Swiper(container, swiperOptions);
+                        container.classList.add('ready');
+                        // this.swiper.reInit();
+                    }
+                }
             }
-        }
+        });
     }
 
     getItems_ () {

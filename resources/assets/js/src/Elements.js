@@ -2,8 +2,8 @@ export default class Elements {
     constructor () {
         this.cached = {
             map: this.byId('js-map'),
-            mapCards: this.byId('js-map-cards'),
-            mapItems: this.byId('js-spot-items')
+            mapCard: this.byId('js-map-card'),
+            mapSpotData: this.byId('js-spot-data')
         };
     }
 

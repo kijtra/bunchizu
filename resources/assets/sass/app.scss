@@ -49,12 +49,12 @@
 @import "~mathsass/dist/math";
 
 // Swiper
-@import "~swiper/dist/css/swiper.css";
+// @see https://github.com/JeffreyWay/laravel-mix/issues/1244#issuecomment-336452713
+// @import "~swiper/dist/css/swiper.css";
 
 // Components
 @import "components/social-icons";
-@import "components/popper";
-@import "components/map";
+@import "components/map-zoom-buttons";
 @import "components/map-marker";
 
 // layouts

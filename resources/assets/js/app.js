@@ -27,8 +27,8 @@ require('domready')(function () {
 window.initMap = () => {
     
 
-    Uni.Map.initMap();
-    Uni.Map.initCards();
+    Uni.Map.init();
+    // Uni.Map.initCards();
     // window.AbstractInfoBox = require('./lib/AbstractInfoBox');
     // window.Baloon = require('./lib/Baloon');
     // window.Marker = require('./lib/Marker');

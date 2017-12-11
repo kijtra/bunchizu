@@ -1,4 +1,4 @@
-import Cards from './Map/Cards';
+// import Cards from './Map/Cards';
 // import Marker from './Map/Marker';
 
 export default class Map {
@@ -32,9 +32,14 @@ export default class Map {
         this.addMarkerCount = 0;
         this.addMarkerTimer = null;
         this.markers = [];
+        this.currentMarker;
     }
 
-    initMap () {
+    init () {
+        let me = this;
+
+        this.RichMarker = require('js-rich-marker/lib/richmarker').RichMarker;
+
         this.map = new google.maps.Map(this.el, {
             zoom: this.opts.defaultZoom,
             minZoom: this.opts.zoomMin,
@@ -44,34 +49,45 @@ export default class Map {
             fullscreenControl: false,
             streetViewControl: false,
             rotateControl: false,
-            zoomControl: false
+            zoomControl: false,
+            clickableIcons: false
         });
 
-        this.initZoomControl_();
-    }
+        this.bounds = new google.maps.LatLngBounds();
 
-    initCards () {
-        let cards = new Cards;
-        cards.init();
-        cards.toggle();
+        this.initZoomControl_();
+        this.initVue_();
+
+        this.eachSpots_(function (item, isLast) {
+            let position = new google.maps.LatLng(
+                parseFloat(item.geo.latitude),
+                parseFloat(item.geo.longitude)
+            );
+            me.bounds.extend(position);
+            me.addMarker(position, item);
+
+            if (isLast) {
+                me.map.fitBounds(me.bounds);
+            }
+        });
     }
 
     initZoomControl_() {
-        let self = this;
-        let pos = google.maps.ControlPosition.RIGHT_TOP;
-        let zoom = this.map.getZoom();
+        var me = this;
+        var pos = google.maps.ControlPosition.RIGHT_TOP;
+        var zoom = this.map.getZoom();
 
-        let container = document.createElement('div');
-        container.setAttribute('class', 'zoom-buttons btn-group-vertical');
+        var container = document.createElement('div');
+        container.setAttribute('class', 'map-zoom-buttons btn-group-vertical');
 
-        let zoomIn = document.createElement('button');
+        var zoomIn = document.createElement('button');
         zoomIn.setAttribute('class', 'btn btn-light btn-sm zoom-in');
         zoomIn.innerHTML = '<i class="material-icons">&#xE145;</i>';
         if (zoom >= this.opts.zoomMax) {
             zoomIn.setAttribute('disabled', true);
         }
 
-        let zoomOut = document.createElement('button');
+        var zoomOut = document.createElement('button');
         zoomOut.setAttribute('class', 'btn btn-light btn-sm zoom-out');
         zoomOut.innerHTML = '<i class="material-icons">&#xE15B;</i>';
         if (zoom <= this.opts.zoomMin) {
@@ -79,16 +95,16 @@ export default class Map {
         }
 
         zoomIn.addEventListener('click', function () {
-            let zoom = self.map.getZoom();
-            if (zoom <= self.opts.zoomMax) {
-                self.map.setZoom(zoom + 1);
+            var zoom = me.map.getZoom();
+            if (zoom <= me.opts.zoomMax) {
+                me.map.setZoom(zoom + 1);
             }
         });
 
         zoomOut.addEventListener('click', function () {
-            let zoom = self.map.getZoom();
-            if (zoom >= self.opts.zoomMin) {
-                self.map.setZoom(zoom - 1);
+            var zoom = me.map.getZoom();
+            if (zoom >= me.opts.zoomMin) {
+                me.map.setZoom(zoom - 1);
             }
         });
 
@@ -98,22 +114,22 @@ export default class Map {
         this.map.controls[pos].push(container);
 
         this.map.addListener('zoom_changed', function (e) {
-            self.beforeZoom = self.currentZoom;
-            self.currentZoom = this.getZoom();
+            me.beforeZoom = me.currentZoom;
+            me.currentZoom = this.getZoom();
 
-            if (self.beforeZoom < self.currentZoom) {
-                self.onZoomIn(self.beforeZoom, self.currentZoom);
-            } else if (self.beforeZoom > self.currentZoom) {
-                self.onZoomOut(self.beforeZoom, self.currentZoom);
+            if (me.beforeZoom < me.currentZoom) {
+                me.onZoomIn_(me.beforeZoom, me.currentZoom);
+            } else if (me.beforeZoom > me.currentZoom) {
+                me.onZoomOut_(me.beforeZoom, me.currentZoom);
             }
 
-            if (self.currentZoom > self.opts.zoomMin) {
+            if (me.currentZoom > me.opts.zoomMin) {
                 zoomOut.removeAttribute('disabled');
             } else {
                 zoomOut.setAttribute('disabled', true);
             }
 
-            if (self.currentZoom < self.opts.zoomMax) {
+            if (me.currentZoom < me.opts.zoomMax) {
                 zoomIn.removeAttribute('disabled');
             } else {
                 zoomIn.setAttribute('disabled', true);
@@ -121,7 +137,70 @@ export default class Map {
         });
     }
 
-    onZoomIn(from, to) {
+    initVue_ () {
+        this.vue = new Vue({
+            el: Uni.el.get('mapCard'),
+            data: {
+                current: 0,
+                timer: null,
+                items: []
+            },
+            methods: {
+                show (data) {
+                    if (!data) {
+                        return;
+                    }
+
+                    var len = this.items.length;
+                    if (len > 1) {
+                        if (0 === this.current) {
+                            this.items.pop();
+                            this.items.push(data);
+                            this.current = 1;
+                        } else {
+                            this.items.shift();
+                            this.items.unshift(data);
+                            this.current = 0;
+                        }
+                    } else if (1 === len) {
+                        this.items.push(data);
+                        this.current = 1;
+                    } else {
+                        this.items.push(data);
+                    }
+                },
+
+                hide () {
+                    var nodes = this.$el.childNodes;
+                    var i, l = nodes.length;
+                    for (i = 0; i < l; i++) {
+                        nodes[i].classList.remove('ready');
+                    }
+                }
+            },
+            updated () {
+                var nodes = this.$el.childNodes;
+                var len = this.items.length;
+                var open = this.current;
+                var close = (1 === open ? 0 : 1);
+
+                if (this.timer) {
+                    clearTimeout(this.timer);
+                }
+
+                this.timer = setTimeout(function () {
+                    if (nodes[open]) {
+                        nodes[open].classList.add('ready');
+                    }
+                    if (nodes[close]) {
+                        nodes[close].classList.remove('ready');
+                    }
+                }, 30);
+            }
+        });
+    }
+
+    onZoomIn_(from, to) {
         // if (this.opts.debug) {
         //     console.log('zoomIn', {
         //         from: from,
@@ -130,7 +209,7 @@ export default class Map {
         // }
     }
 
-    onZoomOut(from, to) {
+    onZoomOut_(from, to) {
         // if (this.opts.debug) {
         //     console.log('zoomOut', {
         //         from: from,
@@ -139,56 +218,71 @@ export default class Map {
         // }
     }
 
-    addMarker (position, content) {
-        let self = this;
+    eachSpots_ (callback) {
+        let json = Uni.el.get('mapSpotData');
+        json = JSON.parse(json.innerText);
+        json = json.itemListElement;
 
-        if (!this.richMarker) {
-            this.RichMarker = require('js-rich-marker/lib/richmarker').RichMarker;
+        let i, l = json.length, item, data;
+        if (!l) {
+            return;
         }
 
-        if (position && !(position instanceof google.maps.LatLng)) {
-            position = new google.maps.LatLng(position);
+        for (i = 0; i < l; i++) {
+            callback(json[i].item, (i === l - 1));
         }
+    }
 
-        let container = document.createElement('div');
+    addMarker (position, option) {
+        var me = this;
+
+        var content = '<div><div>' + (option.content || '') +'</div></div>';
+        var container = document.createElement('div');
         container.classList.add('map-marker', 'normal');
-        container.innerHTML = '<div><div>' + (content || '') +'</div></div>';
+        container.innerHTML = content;
 
-        let opts = {
-            // map: this.map,
+        var marker = new this.RichMarker({
             position: position,
             content: container,
             shadow: false
-        };
-
-        let marker = new this.RichMarker(opts);
+        });
 
         marker.addListener('ready', function () {
-            this.getContent().classList.add('ready');
+            container.classList.add('ready');
         });
 
         marker.addListener('click', function () {
-            var content = this.getContent();
-            if (content.classList.contains('normal')) {
-                content.classList.remove('normal');
-                content.classList.add('focused');
+            if (me.currentMarker && me.currentMarker != this) {
+                let cmContent = me.currentMarker.getContent();
+                cmContent.classList.remove('focused');
+                cmContent.classList.add('normal');
+                me.currentMarker.content_changed();
+            }
+
+            if (container.classList.contains('normal')) {
+                container.classList.remove('normal');
+                container.classList.add('focused');
+                me.vue.show(option);
+                me.currentMarker = this;
             } else {
-                content.classList.remove('focused');
-                content.classList.add('normal');
+                container.classList.remove('focused');
+                container.classList.add('normal');
+                me.vue.hide();
+                me.currentMarker = null;
             }
             this.content_changed();
         });
 
         setTimeout(function () {
-            marker.setMap(self.map);
+            marker.setMap(me.map);
         }, 200 * this.addMarkerCount);
 
         if (this.addMarkerTimer) {
             clearTimeout(this.addMarkerTimer);
         }
         this.addMarkerTimer = setTimeout(function () {
-            self.addMarkerCount = 0;
-            self.addMarkerTimer = null;
+            me.addMarkerCount = 0;
+            me.addMarkerTimer = null;
         }, 2000);
 
         this.markers.push(marker);
