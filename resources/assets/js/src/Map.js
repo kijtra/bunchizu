@@ -33,6 +33,7 @@ export default class Map {
         this.addMarkerTimer = null;
         this.markers = [];
         this.currentMarker;
+        this.currentSpot;
     }
 
     init () {
@@ -81,14 +82,14 @@ export default class Map {
         container.setAttribute('class', 'map-zoom-buttons btn-group-vertical');
 
         var zoomIn = document.createElement('button');
-        zoomIn.setAttribute('class', 'btn btn-light btn-sm zoom-in');
+        zoomIn.setAttribute('class', 'btn btn-light zoom-in');
         zoomIn.innerHTML = '<i class="material-icons">&#xE145;</i>';
         if (zoom >= this.opts.zoomMax) {
             zoomIn.setAttribute('disabled', true);
         }
 
         var zoomOut = document.createElement('button');
-        zoomOut.setAttribute('class', 'btn btn-light btn-sm zoom-out');
+        zoomOut.setAttribute('class', 'btn btn-light zoom-out');
         zoomOut.innerHTML = '<i class="material-icons">&#xE15B;</i>';
         if (zoom <= this.opts.zoomMin) {
             zoomOut.setAttribute('disabled', true);
@@ -135,9 +136,22 @@ export default class Map {
                 zoomIn.setAttribute('disabled', true);
             }
         });
+
+        this.map.addListener('bounds_changed', function (e) {
+            if (me.currentMarker && me.currentSpot) {
+                let position = me.currentMarker.getPosition();
+                let bounds = this.getBounds();
+                if (!bounds.contains(position)) {
+                    me.currentSpot.classList.remove('ready');
+                } else {
+                    me.currentSpot.classList.add('ready');
+                }
+            }
+        });
     }
 
     initVue_ () {
+        var me = this;
         this.vue = new Vue({
             el: Uni.el.get('mapCard'),
             data: {
@@ -176,6 +190,7 @@ export default class Map {
                     for (i = 0; i < l; i++) {
                         nodes[i].classList.remove('ready');
                     }
+                    me.currentSpot = null;
                 }
             },
             updated () {
@@ -191,6 +206,7 @@ export default class Map {
                 this.timer = setTimeout(function () {
                     if (nodes[open]) {
                         nodes[open].classList.add('ready');
+                        me.currentSpot = nodes[open];
                     }
                     if (nodes[close]) {
                         nodes[close].classList.remove('ready');

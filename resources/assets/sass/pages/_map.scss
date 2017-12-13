@@ -61,12 +61,40 @@ body.map {
                     transform:translate(-50%, 0%);
                 }
             }
+
+            .card-body {
+                padding:#{map-get($spacers, 3)};
+            }
+
+            .card-title {
+                margin:0;
+                padding:0;
+                font-size:1.25em;
+                font-weight:$font-weight-bold;
+            }
+
+            .card-text {
+                margin:#{map-get($spacers, 1)} 0 0;
+                padding:0;
+            }
         }// >.spot
 
         @include media-breakpoint-up(md) {
             >.spot {
                 .card {
                     max-width:500px;
+                }
+
+                .card-body {
+                    padding:#{map-get($spacers, 4)};
+                }
+    
+                .card-title {
+                    font-size:1.4em;
+                }
+    
+                .card-text {
+                    margin-top:#{map-get($spacers, 2)};
                 }
             }
         }

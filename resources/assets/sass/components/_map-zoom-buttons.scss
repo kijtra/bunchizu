@@ -1,13 +1,13 @@
 
 .map-zoom-buttons {
     margin-top: map-get($spacers, 3);
-    margin-right: #{map-get($spacers, 2) - 0.1};
+    margin-right: #{map-get($spacers, 2)};
     @include border-radius($border-radius);
     box-shadow: 0 1px 2px rgba(0, 0, 0, .2);
 
     .btn {
-        width: 27px;
-        height: 28px;
+        width: 2.5em;
+        height: 2.5em;
         display: block;
         padding: 0;
         line-height: .8;
@@ -21,7 +21,7 @@
             color: $gray-500;
         }
         .material-icons {
-            font-size: 18px;
+            font-size: 24px;
             margin-bottom: -1px;
         }
     }

@@ -2,7 +2,14 @@
 $body-bg:$white;
 $font-size-base:1rem;
 
-$header-heights: ( xs: 2.5rem, sm: 2.5rem, md: 2.75rem, lg: 3rem, xl: 3rem);
+$border-radius:.15rem;
+$border-radius-sm:.1rem;
+
+$btn-border-radius:$border-radius;
+$btn-border-radius-sm:$border-radius-sm;
+$card-border-radius:$border-radius;
+
+$header-heights: ( xs: 2.75rem, sm: 3rem, md: 3rem, lg: 3rem, xl: 3rem);
 $shadowed-box-radius:$border-radius;
 $shadowed-box-shadow-x:0;
 $shadowed-box-shadow-y:.1rem;
@@ -12,21 +19,28 @@ $toggle-map-anime-speed:.2s;
 $map-zoombutton-anime-speed:.4s;
 
 
-$marker-sizes: (
-    normal: (
+$markers: (
+    mini: (
         size: 20px,
         arrow: 8px,
-        text: .8rem
+        text: .8rem,
+        color: #F75850
     ),
-    focused: (
+    normal: (
         size: 40px,
         arrow: 10px,
-        text: .9rem
+        text: .9rem,
+        color: #F75850
+    ),
+    focused: (
+        size: 56px,
+        arrow: 12px,
+        text: .9rem,
+        color: #3ce412
     ),
 );
 
-$marker-color:#F75850;
 $marker-radius:50%;
 $marker-arrow-thin:.75;
 $marker-border-width:1px;
-$marker-border-color:#B73830;
+$marker-shadow:0 1px 4px rgba(0,0,0,.6);
