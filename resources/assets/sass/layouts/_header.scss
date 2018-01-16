@@ -6,7 +6,6 @@
     position:relative;
     z-index:2;
     border-bottom: 1px solid $border-color;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, .2);
 
     @each $breakpoint, $header-height in $header-heights {
         @include media-breakpoint-up($breakpoint, $grid-breakpoints) {
@@ -15,7 +14,7 @@
         }
     }
 
-    label, .logo {
+    >label, .logo {
         display:flex;
         justify-content:center;
         align-items:center;
@@ -31,6 +30,14 @@
     .logo {
         font-weight:bold;
         color:$black;
+    }
+
+    >label {
+        cursor:pointer;
+
+        &:hover {
+            background-color:$gray-100;
+        }
     }
 
     & + main {
